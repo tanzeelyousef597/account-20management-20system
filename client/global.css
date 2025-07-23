@@ -9,44 +9,44 @@
    * A different format will require also updating the theme in tailwind.config.ts.
   */
   :root {
-    --background: 220 13% 3%;
-    --foreground: 220 13% 98%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-    --card: 220 13% 5%;
-    --card-foreground: 220 13% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 220 13% 5%;
-    --popover-foreground: 220 13% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 266 83% 58%;
-    --primary-foreground: 220 13% 3%;
+    --primary: 214 100% 47%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 220 13% 8%;
-    --secondary-foreground: 220 13% 95%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 220 13% 8%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 220 13% 10%;
-    --accent-foreground: 220 13% 95%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 13% 12%;
-    --input: 220 13% 12%;
-    --ring: 266 83% 58%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 214 100% 47%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    --sidebar-background: 220 13% 4%;
-    --sidebar-foreground: 220 13% 95%;
-    --sidebar-primary: 266 83% 58%;
-    --sidebar-primary-foreground: 220 13% 3%;
-    --sidebar-accent: 220 13% 8%;
-    --sidebar-accent-foreground: 220 13% 95%;
-    --sidebar-border: 220 13% 12%;
-    --sidebar-ring: 266 83% 58%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 214 100% 47%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 214 100% 47%;
   }
 
   .dark {
