@@ -52,10 +52,7 @@ const App = () => (
             <Route path="/invoices" element={
               <ProtectedRoute requiredRole="Admin">
                 <Layout>
-                  <div className="text-center py-12">
-                    <h2 className="text-xl font-semibold mb-2">Invoices</h2>
-                    <p className="text-gray-600">This page is under development. Please continue prompting to fill in this content.</p>
-                  </div>
+                  <Invoices />
                 </Layout>
               </ProtectedRoute>
             } />
