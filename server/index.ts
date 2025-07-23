@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { handleLogin, handleLogout } from "./routes/auth";
+import { handleDashboardStats } from "./routes/dashboard";
 
 export function createServer() {
   const app = express();
@@ -16,6 +18,13 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Authentication routes
+  app.post("/api/auth/login", handleLogin);
+  app.post("/api/auth/logout", handleLogout);
+
+  // Dashboard routes
+  app.get("/api/dashboard/stats", handleDashboardStats);
 
   return app;
 }
