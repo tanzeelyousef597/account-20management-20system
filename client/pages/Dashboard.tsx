@@ -1,33 +1,108 @@
 import { useAuth } from '@/contexts/AuthContext';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar, TrendingUp } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  FileText,
+  CheckCircle,
+  Clock,
+  XCircle,
+  Calendar,
+  BarChart3
+} from 'lucide-react';
 
-const chartData = [
-  { category: 'Napoleon Link Building', submissions: 0 },
-  { category: 'AI Content Writing', submissions: 0 },
-  { category: 'Blog Writing', submissions: 0 },
-  { category: 'SEO Optimization', submissions: 0 },
-  { category: 'Social Media', submissions: 0 },
-];
+interface DashboardData {
+  totalSubmissions: number;
+  approvedSubmissions: number;
+  rejectedSubmissions: number;
+  ordersInQA: number;
+  ordersInWork: number;
+  categories: { category: string; submissions: number }[];
+}
 
-// Simple custom chart component to replace recharts and fix warnings
-const SimpleBarChart = ({ data }: { data: typeof chartData }) => {
-  const maxValue = Math.max(...data.map(d => d.submissions), 1);
+export default function Dashboard() {
+  const { user } = useAuth();
+  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
+  const [dashboardData, setDashboardData] = useState<DashboardData>({
+    totalSubmissions: 0,
+    approvedSubmissions: 0,
+    rejectedSubmissions: 0,
+    ordersInQA: 0,
+    ordersInWork: 0,
+    categories: []
+  });
 
-  return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 gap-4">
+  useEffect(() => {
+    fetchDashboardData();
+  }, [selectedMonth]);
+
+  const fetchDashboardData = async () => {
+    try {
+      const response = await fetch(`/api/dashboard/data?month=${selectedMonth}`);
+      if (response.ok) {
+        const data = await response.json();
+        setDashboardData(data);
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    }
+  };
+
+  const MetricCard = ({
+    icon: Icon,
+    title,
+    value,
+    bgColor
+  }: {
+    icon: any,
+    title: string,
+    value: number,
+    bgColor: string
+  }) => (
+    <div className={`${bgColor} rounded-lg p-6 text-white shadow-lg`}>
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-white/80 text-sm font-medium">{title}</p>
+          <p className="text-3xl font-bold mt-1">{value}</p>
+        </div>
+        <Icon className="h-8 w-8 text-white/80" />
+      </div>
+    </div>
+  );
+
+  const CustomBarChart = ({ data }: { data: { category: string; submissions: number }[] }) => {
+    const maxValue = Math.max(...data.map(d => d.submissions), 1);
+
+    if (data.length === 0 || data.every(item => item.submissions === 0)) {
+      return (
+        <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
+          <div className="text-center space-y-2">
+            <BarChart3 className="h-12 w-12 text-gray-400 mx-auto" />
+            <p className="text-gray-500 font-medium">No data available</p>
+            <p className="text-sm text-gray-400">
+              {user?.role === 'Admin'
+                ? 'Data will appear when workers submit orders'
+                : 'Submit work orders to see your progress'
+              }
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-4">
         {data.map((item, index) => (
           <div key={index} className="space-y-2">
-            <div className="flex justify-between items-center text-sm">
-              <span className="font-medium text-gray-700 truncate">{item.category}</span>
-              <span className="text-blue-600 font-bold">{item.submissions}</span>
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium text-gray-700">{item.category}</span>
+              <span className="text-sm font-bold text-blue-600">{item.submissions}</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-3">
+            <div className="w-full bg-gray-200 rounded-full h-4">
               <div
-                className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500 ease-out"
+                className="bg-gradient-to-r from-green-400 to-green-500 h-4 rounded-full transition-all duration-700 ease-out"
                 style={{
-                  width: maxValue > 0 ? `${(item.submissions / maxValue) * 100}%` : '0%',
+                  width: `${(item.submissions / maxValue) * 100}%`,
                   minWidth: item.submissions > 0 ? '8px' : '0px'
                 }}
               />
@@ -35,84 +110,87 @@ const SimpleBarChart = ({ data }: { data: typeof chartData }) => {
           </div>
         ))}
       </div>
-    </div>
-  );
-};
-
-export default function Dashboard() {
-  const { user } = useAuth();
+    );
+  };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="space-y-2">
-        <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
-          Welcome back, {user?.name}
-        </h2>
-        <p className="text-gray-600 text-lg">
-          {user?.role === 'Admin'
-            ? 'Manage your team and oversee all operations from here'
-            : 'Track your submissions and monitor your progress'
-          }
-        </p>
+    <div className="space-y-6">
+      {/* Header with Month Selector */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
+          <p className="text-gray-600">Overview of submissions and performance</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Calendar className="h-4 w-4 text-gray-400" />
+          <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+            <SelectTrigger className="w-40">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Array.from({ length: 12 }, (_, i) => {
+                const date = new Date();
+                date.setMonth(date.getMonth() - i);
+                const value = date.toISOString().slice(0, 7);
+                const label = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+                return (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
-      {/* Submission Trends Chart - Full Width */}
-      <Card className="shadow-lg border-0 bg-gradient-to-br from-white to-blue-50/30">
-        <CardHeader className="pb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <TrendingUp className="h-5 w-5 text-blue-600" />
-            </div>
-            <div>
-              <CardTitle className="text-xl">Submission Trends by Category</CardTitle>
-              <CardDescription className="text-base">
-                Real-time breakdown of submissions across work categories
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className="h-80 flex flex-col justify-center">
-            <SimpleBarChart data={chartData} />
-            {chartData.every(item => item.submissions === 0) && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-lg">
-                <div className="text-center space-y-2">
-                  <Calendar className="h-12 w-12 text-gray-400 mx-auto" />
-                  <p className="text-gray-500 font-medium">No submissions yet</p>
-                  <p className="text-sm text-gray-400">
-                    {user?.role === 'Admin'
-                      ? 'Data will appear when workers submit their orders'
-                      : 'Start submitting work orders to see your progress here'
-                    }
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+      {/* Metric Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <MetricCard
+          icon={FileText}
+          title="Total Submissions"
+          value={dashboardData.totalSubmissions}
+          bgColor="bg-gradient-to-br from-blue-500 to-blue-600"
+        />
+        <MetricCard
+          icon={CheckCircle}
+          title="Approved Submissions"
+          value={dashboardData.approvedSubmissions}
+          bgColor="bg-gradient-to-br from-green-500 to-green-600"
+        />
+        <MetricCard
+          icon={Clock}
+          title="Orders in QA"
+          value={dashboardData.ordersInQA}
+          bgColor="bg-gradient-to-br from-yellow-500 to-yellow-600"
+        />
+        <MetricCard
+          icon={XCircle}
+          title="Rejected Orders"
+          value={dashboardData.rejectedSubmissions}
+          bgColor="bg-gradient-to-br from-red-500 to-red-600"
+        />
+        <MetricCard
+          icon={Clock}
+          title="Orders in Work"
+          value={dashboardData.ordersInWork}
+          bgColor="bg-gradient-to-br from-purple-500 to-purple-600"
+        />
+      </div>
 
-      {/* Welcome Message */}
-      <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl border-0">
-        <CardContent className="p-8">
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <h3 className="text-2xl font-bold">
-                {user?.role === 'Admin' ? 'System Overview' : 'Your Workspace'}
-              </h3>
-              <p className="text-blue-100 text-lg">
-                {user?.role === 'Admin'
-                  ? 'All metrics will populate dynamically as your team submits work orders and completes tasks.'
-                  : 'Your dashboard will show real-time updates as you submit orders and track your progress.'
-                }
-              </p>
-            </div>
-            <div className="hidden md:block">
-              <div className="p-4 bg-white/10 rounded-full">
-                <TrendingUp className="h-8 w-8" />
-              </div>
-            </div>
-          </div>
+      {/* Work Categories Chart */}
+      <Card className="shadow-lg">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <BarChart3 className="h-5 w-5" />
+            Work categories / submissions by time
+          </CardTitle>
+          <CardDescription>
+            Breakdown of submissions across different work categories
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <CustomBarChart data={dashboardData.categories} />
         </CardContent>
       </Card>
     </div>
