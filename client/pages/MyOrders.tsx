@@ -187,14 +187,13 @@ export default function MyOrders() {
               </div>
               
               <div>
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">Description (Optional)</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
                   rows={3}
                   placeholder="Describe the work completed..."
-                  required
                 />
               </div>
               
