@@ -17,7 +17,10 @@ export const handleGetWorkOrders: RequestHandler = (req, res) => {
 };
 
 export const handleCreateWorkOrder: RequestHandler = (req, res) => {
-  const { folderName, businessName, workCategory, totalSubmissions, submissionDate, description, assignedTo } = req.body;
+  const { folderName, businessName, workCategory, totalSubmissions, submissionDate, description, assignedTo, attachmentUrl, attachmentName } = req.body;
+
+  // Find assigned user name
+  const assignedUser = assignedTo ? users.find(user => user.id === assignedTo) : null;
 
   const newOrder: WorkOrder = {
     id: nextId.toString(),
@@ -26,11 +29,13 @@ export const handleCreateWorkOrder: RequestHandler = (req, res) => {
     description,
     status: 'Under QA',
     assignedTo,
-    assignedToName: 'User Name', // In production, fetch from user ID
+    assignedToName: assignedUser?.name || undefined,
     createdBy: 'admin',
     createdAt: new Date().toISOString(),
     dueDate: submissionDate,
     payRate: parseInt(totalSubmissions),
+    attachmentUrl,
+    attachmentName,
   };
 
   workOrders.push(newOrder);
