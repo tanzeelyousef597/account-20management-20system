@@ -105,8 +105,9 @@ export const handleDeleteUser: RequestHandler = (req, res) => {
 
 export const handleUploadProfilePhoto: RequestHandler = (req, res) => {
   // Mock file upload - In production, use proper file upload service
-  // Generate a proper avatar URL or return actual uploaded image URL
-  const mockUrl = `https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face`;
+  // Generate a unique URL for each upload to ensure different images
+  const uniqueId = Date.now() + Math.random().toString(36).substr(2, 9);
+  const mockUrl = `https://picsum.photos/seed/${uniqueId}/400/400`;
   res.json({ url: mockUrl });
 };
 
