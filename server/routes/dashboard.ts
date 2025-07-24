@@ -10,16 +10,24 @@ export const updateWorkOrdersReference = (orders: any[]) => {
 
 export const handleDashboardStats: RequestHandler = (req, res) => {
   // Calculate dynamic statistics from actual work orders
+  const totalSubmissions = workOrders.reduce((sum, order) => sum + (order.payRate || 0), 0);
+  const approvedSubmissions = workOrders
+    .filter(order => order.status === 'Approved')
+    .reduce((sum, order) => sum + (order.payRate || 0), 0);
+
+  const thisMonthOrders = workOrders.filter(order => {
+    const orderDate = new Date(order.createdAt);
+    const now = new Date();
+    return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
+  });
+  const thisMonthSubmissions = thisMonthOrders.reduce((sum, order) => sum + (order.payRate || 0), 0);
+
   const stats = {
-    totalSubmissions: workOrders.length,
-    approvedSubmissions: workOrders.filter(order => order.status === 'Approved').length,
+    totalSubmissions,
+    approvedSubmissions,
     ordersInQA: workOrders.filter(order => order.status === 'Under QA').length,
     totalOrders: workOrders.length,
-    thisMonthSubmissions: workOrders.filter(order => {
-      const orderDate = new Date(order.createdAt);
-      const now = new Date();
-      return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
-    }).length,
+    thisMonthSubmissions,
     pendingInvoices: 0, // Would be calculated from invoice data
   };
 
