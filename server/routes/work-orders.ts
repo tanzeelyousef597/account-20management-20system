@@ -135,6 +135,10 @@ export const handleWorkerSubmitOrder: RequestHandler = (req, res) => {
     createdAt: new Date().toISOString(),
     dueDate: submissionDate,
     payRate: parseInt(totalSubmissions),
+    attachmentUrl: submissionFileUrl,
+    attachmentName: submissionFileName,
+    attachmentUrls: submissionFileUrl ? [submissionFileUrl] : [],
+    attachmentNames: submissionFileName ? [submissionFileName] : [],
   };
 
   workOrders.push(newOrder);
