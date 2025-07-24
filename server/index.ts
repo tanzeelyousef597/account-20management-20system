@@ -102,5 +102,9 @@ export function createServer() {
   app.get("/api/invoices/worker/:workerId", handleGetWorkerInvoices);
   app.post("/api/invoices", handleCreateInvoice);
 
+  // Settings routes
+  app.get("/api/settings/whatsapp", handleGetWhatsAppSettings);
+  app.post("/api/settings/whatsapp", handleUpdateWhatsAppSettings);
+
   return app;
 }
