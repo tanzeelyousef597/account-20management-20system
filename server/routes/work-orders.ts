@@ -46,6 +46,24 @@ export const handleCreateWorkOrder: RequestHandler = async (req, res) => {
   nextId++;
   updateDashboard();
 
+  // Send WhatsApp message if worker is assigned
+  if (assignedTo && assignedUser?.whatsappNumber) {
+    try {
+      await WhatsAppService.sendOrderAssignmentMessage({
+        to: assignedUser.whatsappNumber,
+        message: '', // Will use template from settings
+        adminName: 'Admin User', // In production, get from auth context
+        dueDate: submissionDate || 'Not specified',
+        workerName: assignedUser.name,
+        orderTitle: folderName
+      });
+      console.log(`WhatsApp message sent to ${assignedUser.name} (${assignedUser.whatsappNumber})`);
+    } catch (error) {
+      console.error('Failed to send WhatsApp message:', error);
+      // Don't fail the order creation if WhatsApp fails
+    }
+  }
+
   res.json(newOrder);
 };
 
