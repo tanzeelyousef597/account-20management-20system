@@ -460,6 +460,41 @@ export default function WorkOrders() {
                       </div>
                     </TableCell>
                     <TableCell>
+                      {(order.attachmentUrls && order.attachmentUrls.length > 0) || order.attachmentUrl ? (
+                        <div className="space-y-1">
+                          {/* Show multiple files if available */}
+                          {order.attachmentUrls && order.attachmentUrls.length > 0 ? (
+                            order.attachmentUrls.map((url, index) => (
+                              <div key={index} className="flex items-center gap-2">
+                                <button
+                                  onClick={() => handleFileDownload(url, order.attachmentNames?.[index] || `attachment-${index + 1}`)}
+                                  className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded text-xs font-medium transition-colors cursor-pointer"
+                                >
+                                  <FileText className="h-3 w-3" />
+                                  {order.attachmentNames?.[index] || `File ${index + 1}`}
+                                </button>
+                              </div>
+                            ))
+                          ) : (
+                            /* Show single file for backward compatibility */
+                            order.attachmentUrl && (
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => handleFileDownload(order.attachmentUrl, order.attachmentName || 'attachment')}
+                                  className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-md text-sm font-medium transition-colors cursor-pointer"
+                                >
+                                  <FileText className="h-4 w-4" />
+                                  Download File
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-gray-400 text-sm">No files</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
                       <div className="flex items-center gap-2 text-sm text-gray-500">
                         <Calendar className="h-4 w-4" />
                         {new Date(order.createdAt).toLocaleDateString()}
