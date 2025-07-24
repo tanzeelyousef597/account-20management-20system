@@ -179,6 +179,7 @@ export default function WorkOrders() {
       description: '',
       assignedTo: '',
     });
+    setAttachmentFile(null);
   };
 
   const openEditDialog = (order: WorkOrder) => {
