@@ -8,7 +8,9 @@ import {
   handleCreateWorkOrder,
   handleUpdateWorkOrder,
   handleUpdateWorkOrderStatus,
-  handleDeleteWorkOrder
+  handleDeleteWorkOrder,
+  handleGetWorkerOrders,
+  handleWorkerSubmitOrder
 } from "./routes/work-orders";
 import {
   handleGetUsers,
@@ -28,6 +30,12 @@ import {
   handleCreateFine
 } from "./routes/fines";
 import { handleGetActivityLogs } from "./routes/activity-logs";
+import {
+  handleGetInvoices,
+  handleGetWorkerInvoices,
+  handleCreateInvoice,
+  handleGetUserStats
+} from "./routes/invoices";
 
 export function createServer() {
   const app = express();
