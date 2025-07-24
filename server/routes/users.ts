@@ -108,3 +108,6 @@ export const handleUploadProfilePhoto: RequestHandler = (req, res) => {
   const mockUrl = `https://api.dicebear.com/7.x/initials/svg?seed=${Date.now()}`;
   res.json({ url: mockUrl });
 };
+
+// Export for auth route
+export { users, userPasswords };
