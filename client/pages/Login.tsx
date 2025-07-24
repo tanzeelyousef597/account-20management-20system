@@ -83,12 +83,6 @@ export default function Login() {
               )}
             </Button>
           </form>
-          
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <p className="text-sm text-blue-700 font-medium leading-relaxed">
-              <strong>Admin users can create new accounts from the User Management page. Contact your system administrator for login credentials.</strong>
-            </p>
-          </div>
         </CardContent>
       </Card>
     </div>
