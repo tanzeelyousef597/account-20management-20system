@@ -269,6 +269,7 @@ export default function MyOrders() {
                   <TableHead>Order Details</TableHead>
                   <TableHead>Category</TableHead>
                   <TableHead>Due Date</TableHead>
+                  <TableHead>Attachment</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
