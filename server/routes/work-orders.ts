@@ -63,13 +63,14 @@ export const handleUpdateWorkOrder: RequestHandler = (req, res) => {
 export const handleUpdateWorkOrderStatus: RequestHandler = (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
-  
+
   const orderIndex = workOrders.findIndex(order => order.id === id);
   if (orderIndex === -1) {
     return res.status(404).json({ error: 'Work order not found' });
   }
-  
+
   workOrders[orderIndex].status = status;
+  updateDashboard();
   res.json(workOrders[orderIndex]);
 };
 
