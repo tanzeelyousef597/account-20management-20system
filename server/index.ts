@@ -37,6 +37,10 @@ import {
   handleCreateInvoice,
   handleGetUserStats
 } from "./routes/invoices";
+import {
+  handleGetWhatsAppSettings,
+  handleUpdateWhatsAppSettings
+} from "./routes/settings";
 
 export function createServer() {
   const app = express();
