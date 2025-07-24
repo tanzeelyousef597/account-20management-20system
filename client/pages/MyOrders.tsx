@@ -341,7 +341,8 @@ export default function MyOrders() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Table>
+            <div className="overflow-x-auto">
+              <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Order Details</TableHead>
@@ -413,7 +414,8 @@ export default function MyOrders() {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       )}
@@ -431,7 +433,8 @@ export default function MyOrders() {
         </CardHeader>
         <CardContent>
           {submittedOrders.length > 0 ? (
-            <Table>
+            <div className="overflow-x-auto">
+              <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Order Details</TableHead>
@@ -467,7 +470,8 @@ export default function MyOrders() {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
+              </Table>
+            </div>
           ) : (
             <div className="text-center py-12">
               <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
