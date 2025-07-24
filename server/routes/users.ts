@@ -115,10 +115,11 @@ export const handleUploadProfilePhoto: RequestHandler = (req, res) => {
 
 export const handleUploadWorkOrderFile: RequestHandler = (req, res) => {
   // Mock file upload for work orders - In production, use proper file upload service
-  // Return a downloadable URL
+  // Return a local downloadable URL that bypasses CORS
   const fileName = `sample-document-${Date.now()}.pdf`;
-  const mockUrl = `https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf`;
-  res.json({ url: mockUrl });
+  const fileId = Date.now().toString();
+  const localUrl = `/api/download/${fileId}?filename=${encodeURIComponent(fileName)}`;
+  res.json({ url: localUrl });
 };
 
 // Export for auth route
