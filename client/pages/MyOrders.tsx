@@ -33,6 +33,7 @@ export default function MyOrders() {
     submissionDate: '',
     description: '',
   });
+  const [submissionFile, setSubmissionFile] = useState<File | null>(null);
 
   const handleFileDownload = async (url: string, filename: string) => {
     try {
