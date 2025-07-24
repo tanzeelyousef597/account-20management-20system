@@ -100,6 +100,24 @@ export default function MyOrders() {
     e.preventDefault();
 
     try {
+      let submissionFileUrl = '';
+
+      // Upload file if provided
+      if (submissionFile) {
+        const fileFormData = new FormData();
+        fileFormData.append('file', submissionFile);
+
+        const uploadResponse = await fetch('/api/upload/work-order-file', {
+          method: 'POST',
+          body: fileFormData,
+        });
+
+        if (uploadResponse.ok) {
+          const uploadData = await uploadResponse.json();
+          submissionFileUrl = uploadData.url;
+        }
+      }
+
       const response = await fetch('/api/work-orders/worker-submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -107,9 +125,11 @@ export default function MyOrders() {
           ...formData,
           submittedBy: user?.id,
           submittedByName: user?.name,
+          submissionFileUrl,
+          submissionFileName: submissionFile?.name || '',
         }),
       });
-      
+
       if (response.ok) {
         fetchMyOrders();
         setIsCreateDialogOpen(false);
