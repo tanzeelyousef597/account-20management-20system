@@ -123,7 +123,7 @@ export const handleGetWorkerOrders: RequestHandler = (req, res) => {
 };
 
 export const handleWorkerSubmitOrder: RequestHandler = (req, res) => {
-  const { folderName, businessName, workCategory, totalSubmissions, submissionDate, description, submittedBy, submittedByName } = req.body;
+  const { folderName, businessName, workCategory, totalSubmissions, submissionDate, description, submittedBy, submittedByName, submissionFileUrl, submissionFileName } = req.body;
 
   const newOrder: WorkOrder = {
     id: nextId.toString(),
