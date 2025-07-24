@@ -340,7 +340,7 @@ export default function Invoices() {
                   <TableHead>Amount Breakdown</TableHead>
                   <TableHead>Total Amount</TableHead>
                   <TableHead>Type</TableHead>
-                  <TableHead>Actions</TableHead>
+
                 </TableRow>
               </TableHeader>
               <TableBody>
