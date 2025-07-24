@@ -41,7 +41,7 @@ export default function WorkOrders() {
     description: '',
     assignedTo: '',
   });
-  const [attachmentFile, setAttachmentFile] = useState<File | null>(null);
+  const [attachmentFiles, setAttachmentFiles] = useState<File[]>([]);
 
   useEffect(() => {
     fetchWorkOrders();
