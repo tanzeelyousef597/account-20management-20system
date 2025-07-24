@@ -35,6 +35,7 @@ export default function UserManagement() {
     password: '',
     role: 'Worker' as 'Admin' | 'Worker',
     profilePhoto: '',
+    whatsappNumber: '',
   });
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string>('');
