@@ -60,6 +60,7 @@ export function createServer() {
   // Dashboard routes
   app.get("/api/dashboard/stats", handleDashboardStats);
   app.get("/api/dashboard/data", handleDashboardData);
+  app.get("/api/dashboard/worker/:workerId", handleWorkerDashboardData);
 
   // Work orders routes
   app.get("/api/work-orders", handleGetWorkOrders);
