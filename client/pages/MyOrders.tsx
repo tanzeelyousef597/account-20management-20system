@@ -295,14 +295,21 @@ export default function MyOrders() {
                     </TableCell>
                     <TableCell>
                       {order.attachmentUrl ? (
-                        <a
-                          href={order.attachmentUrl}
-                          download={order.attachmentName}
-                          className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
+                        <button
+                          onClick={() => {
+                            const link = document.createElement('a');
+                            link.href = order.attachmentUrl;
+                            link.download = order.attachmentName || 'file';
+                            link.target = '_blank';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }}
+                          className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1 underline"
                         >
                           <FileText className="h-4 w-4" />
                           Download
-                        </a>
+                        </button>
                       ) : (
                         <span className="text-gray-400 text-sm">No file</span>
                       )}
