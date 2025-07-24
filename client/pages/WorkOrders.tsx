@@ -343,19 +343,42 @@ export default function WorkOrders() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="assignedTo">Assign User</Label>
-                  <Select value={formData.assignedTo} onValueChange={(value) => setFormData({...formData, assignedTo: value})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a worker" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {users.map((user) => (
-                        <SelectItem key={user.id} value={user.id}>
-                          {user.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="assignedTo">Assign Users (Optional)</Label>
+                  <div className="border rounded-md p-3 max-h-32 overflow-y-auto">
+                    {users.filter(user => user.role === 'Worker').length > 0 ? (
+                      users.filter(user => user.role === 'Worker').map((user) => (
+                        <div key={user.id} className="flex items-center space-x-2 py-1">
+                          <input
+                            type="checkbox"
+                            id={`worker-${user.id}`}
+                            checked={formData.assignedTo.includes(user.id)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setFormData({
+                                  ...formData,
+                                  assignedTo: [...formData.assignedTo, user.id]
+                                });
+                              } else {
+                                setFormData({
+                                  ...formData,
+                                  assignedTo: formData.assignedTo.filter(id => id !== user.id)
+                                });
+                              }
+                            }}
+                            className="rounded border-gray-300"
+                          />
+                          <label htmlFor={`worker-${user.id}`} className="text-sm font-medium">
+                            {user.name}
+                          </label>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-gray-500">No workers available</p>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Select one or more workers. Leave unselected to create unassigned order.
+                  </p>
                 </div>
               </div>
               
