@@ -17,7 +17,7 @@ export const handleGetWorkOrders: RequestHandler = (req, res) => {
 };
 
 export const handleCreateWorkOrder: RequestHandler = (req, res) => {
-  const { folderName, businessName, workCategory, totalSubmissions, submissionDate, description, assignedTo, attachmentUrl, attachmentName } = req.body;
+  const { folderName, businessName, workCategory, totalSubmissions, submissionDate, description, assignedTo, attachmentUrls, attachmentNames } = req.body;
 
   // Find assigned user name
   const assignedUser = assignedTo ? users.find(user => user.id === assignedTo) : null;
@@ -34,8 +34,11 @@ export const handleCreateWorkOrder: RequestHandler = (req, res) => {
     createdAt: new Date().toISOString(),
     dueDate: submissionDate,
     payRate: parseInt(totalSubmissions),
-    attachmentUrl,
-    attachmentName,
+    attachmentUrls: attachmentUrls || [],
+    attachmentNames: attachmentNames || [],
+    // Keep backward compatibility
+    attachmentUrl: attachmentUrls?.[0],
+    attachmentName: attachmentNames?.[0],
   };
 
   workOrders.push(newOrder);
