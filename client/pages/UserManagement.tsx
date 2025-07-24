@@ -175,6 +175,7 @@ export default function UserManagement() {
       password: '', // Don't pre-fill password for security
       role: user.role,
       profilePhoto: user.profilePhoto || '',
+      whatsappNumber: user.whatsappNumber || '',
     });
     setPhotoPreview(user.profilePhoto || '');
     setIsEditDialogOpen(true);
