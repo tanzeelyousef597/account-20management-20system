@@ -110,5 +110,12 @@ export const handleUploadProfilePhoto: RequestHandler = (req, res) => {
   res.json({ url: mockUrl });
 };
 
+export const handleUploadWorkOrderFile: RequestHandler = (req, res) => {
+  // Mock file upload for work orders - In production, use proper file upload service
+  // Return a mock download URL
+  const mockUrl = `https://filebin.net/mock/${Date.now()}/sample-file.pdf`;
+  res.json({ url: mockUrl });
+};
+
 // Export for auth route
 export { users, userPasswords };
