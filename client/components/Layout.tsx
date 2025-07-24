@@ -75,16 +75,37 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Mobile menu overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg">
+      <div className={cn(
+        "fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out",
+        "lg:translate-x-0",
+        isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+      )}>
         <div className="flex h-full flex-col">
           {/* Header */}
-          <div className="flex h-16 items-center border-b px-6">
-            <Building2 className="h-8 w-8 text-primary" />
-            <div className="ml-3">
-              <div className="text-lg font-semibold text-gray-900">MT Web Experts</div>
-              <div className="text-xs text-gray-500">Accounts Management</div>
+          <div className="flex h-16 items-center justify-between border-b px-6">
+            <div className="flex items-center">
+              <Building2 className="h-8 w-8 text-primary" />
+              <div className="ml-3">
+                <div className="text-lg font-semibold text-gray-900">MT Web Experts</div>
+                <div className="text-xs text-gray-500">Accounts Management</div>
+              </div>
             </div>
+            {/* Close button for mobile */}
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
 
           {/* Navigation */}
@@ -92,11 +113,12 @@ export default function Layout({ children }: LayoutProps) {
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.href;
-              
+
               return (
                 <Link
                   key={item.name}
                   to={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)} // Close menu on mobile after click
                   className={cn(
                     'flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                     isActive
@@ -141,13 +163,22 @@ export default function Layout({ children }: LayoutProps) {
       </div>
 
       {/* Main Content */}
-      <div className="pl-64">
+      <div className="lg:pl-64">
         <header className="bg-white shadow-sm border-b">
-          <div className="flex h-16 items-center justify-between px-6">
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900">
-                {user.role === 'Admin' ? 'Administrator' : 'Worker'}
-              </h1>
+          <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+            <div className="flex items-center">
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 mr-3"
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+              <div>
+                <h1 className="text-xl font-semibold text-gray-900">
+                  {user.role === 'Admin' ? 'Administrator' : 'Worker'}
+                </h1>
+              </div>
             </div>
             {user.role === 'Worker' && (
               <div className="flex items-center space-x-3">
@@ -157,13 +188,13 @@ export default function Layout({ children }: LayoutProps) {
                     {getUserInitials(user.name)}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-sm font-medium text-gray-700">{user.name}</span>
+                <span className="text-sm font-medium text-gray-700 hidden sm:inline">{user.name}</span>
               </div>
             )}
           </div>
         </header>
 
-        <main className="p-6">
+        <main className="p-4 sm:p-6">
           {children}
         </main>
       </div>
