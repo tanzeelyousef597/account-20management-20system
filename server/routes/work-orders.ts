@@ -68,12 +68,41 @@ export const handleUpdateWorkOrderStatus: RequestHandler = (req, res) => {
 
 export const handleDeleteWorkOrder: RequestHandler = (req, res) => {
   const { id } = req.params;
-  
+
   const orderIndex = workOrders.findIndex(order => order.id === id);
   if (orderIndex === -1) {
     return res.status(404).json({ error: 'Work order not found' });
   }
-  
+
   workOrders.splice(orderIndex, 1);
   res.json({ message: 'Work order deleted successfully' });
+};
+
+export const handleGetWorkerOrders: RequestHandler = (req, res) => {
+  const { workerId } = req.params;
+  const workerOrders = workOrders.filter(order =>
+    order.assignedTo === workerId || order.createdBy === workerId
+  );
+  res.json(workerOrders);
+};
+
+export const handleWorkerSubmitOrder: RequestHandler = (req, res) => {
+  const { folderName, businessName, workCategory, totalSubmissions, submissionDate, description, submittedBy, submittedByName } = req.body;
+
+  const newOrder: WorkOrder = {
+    id: nextId.toString(),
+    title: folderName,
+    category: workCategory,
+    description,
+    status: 'Under QA',
+    createdBy: submittedBy,
+    createdAt: new Date().toISOString(),
+    dueDate: submissionDate,
+    payRate: parseInt(totalSubmissions),
+  };
+
+  workOrders.push(newOrder);
+  nextId++;
+
+  res.json(newOrder);
 };
