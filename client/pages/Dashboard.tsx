@@ -72,58 +72,23 @@ export default function Dashboard() {
           </div>
         </CardHeader>
         <CardContent className="pt-0">
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-              <XAxis
-                dataKey="category"
-                tick={{ fontSize: 12, fill: '#64748b' }}
-                angle={-45}
-                textAnchor="end"
-                height={80}
-                stroke="#cbd5e1"
-              />
-              <YAxis
-                tick={{ fontSize: 12, fill: '#64748b' }}
-                stroke="#cbd5e1"
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: '#1e293b',
-                  border: 'none',
-                  borderRadius: '8px',
-                  color: 'white'
-                }}
-              />
-              <Bar
-                dataKey="submissions"
-                fill="url(#gradient)"
-                radius={[6, 6, 0, 0]}
-                stroke="#2563eb"
-                strokeWidth={1}
-              />
-              <defs>
-                <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.9}/>
-                  <stop offset="95%" stopColor="#1d4ed8" stopOpacity={0.7}/>
-                </linearGradient>
-              </defs>
-            </BarChart>
-          </ResponsiveContainer>
-          {chartData.every(item => item.submissions === 0) && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-lg">
-              <div className="text-center space-y-2">
-                <Calendar className="h-12 w-12 text-gray-400 mx-auto" />
-                <p className="text-gray-500 font-medium">No submissions yet</p>
-                <p className="text-sm text-gray-400">
-                  {user?.role === 'Admin'
-                    ? 'Data will appear when workers submit their orders'
-                    : 'Start submitting work orders to see your progress here'
-                  }
-                </p>
+          <div className="h-80 flex flex-col justify-center">
+            <SimpleBarChart data={chartData} />
+            {chartData.every(item => item.submissions === 0) && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-lg">
+                <div className="text-center space-y-2">
+                  <Calendar className="h-12 w-12 text-gray-400 mx-auto" />
+                  <p className="text-gray-500 font-medium">No submissions yet</p>
+                  <p className="text-sm text-gray-400">
+                    {user?.role === 'Admin'
+                      ? 'Data will appear when workers submit their orders'
+                      : 'Start submitting work orders to see your progress here'
+                    }
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </CardContent>
       </Card>
 
