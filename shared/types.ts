@@ -90,6 +90,7 @@ export interface CreateUserRequest {
   password: string;
   role: 'Admin' | 'Worker';
   profilePhoto?: string;
+  whatsappNumber?: string;
 }
 
 export interface DashboardStats {
