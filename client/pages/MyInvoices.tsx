@@ -135,7 +135,6 @@ export default function MyInvoices() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Month/Year</TableHead>
-                  <TableHead>Submissions</TableHead>
                   <TableHead>Payment Breakdown</TableHead>
                   <TableHead>Adjustments</TableHead>
                   <TableHead>Total Amount</TableHead>
