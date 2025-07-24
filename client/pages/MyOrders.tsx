@@ -295,6 +295,20 @@ export default function MyOrders() {
                       </div>
                     </TableCell>
                     <TableCell>
+                      {order.attachmentUrl ? (
+                        <a
+                          href={order.attachmentUrl}
+                          download={order.attachmentName}
+                          className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
+                        >
+                          <FileText className="h-4 w-4" />
+                          Download
+                        </a>
+                      ) : (
+                        <span className="text-gray-400 text-sm">No file</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
                       {getStatusBadge(order.status)}
                     </TableCell>
                   </TableRow>
