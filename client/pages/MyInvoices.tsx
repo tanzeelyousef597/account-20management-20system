@@ -109,8 +109,8 @@ export default function MyInvoices() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-yellow-700">Total Submissions</p>
-                <p className="text-2xl font-bold text-yellow-900">{totalSubmissions}</p>
+                <p className="text-sm font-medium text-yellow-700">Approved Submissions</p>
+                <p className="text-2xl font-bold text-yellow-900">{totalApprovedSubmissions}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-yellow-600" />
             </div>
