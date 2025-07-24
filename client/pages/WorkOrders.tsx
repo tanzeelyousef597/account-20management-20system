@@ -466,7 +466,8 @@ export default function WorkOrders() {
         </CardHeader>
         <CardContent>
           {workOrders.length > 0 ? (
-            <Table>
+            <div className="overflow-x-auto">
+              <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Order Details</TableHead>
@@ -580,7 +581,8 @@ export default function WorkOrders() {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
+              </Table>
+            </div>
           ) : (
             <div className="text-center py-12">
               <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
