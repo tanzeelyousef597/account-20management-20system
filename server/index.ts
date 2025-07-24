@@ -66,6 +66,8 @@ export function createServer() {
   app.put("/api/work-orders/:id", handleUpdateWorkOrder);
   app.put("/api/work-orders/:id/status", handleUpdateWorkOrderStatus);
   app.delete("/api/work-orders/:id", handleDeleteWorkOrder);
+  app.get("/api/work-orders/worker/:workerId", handleGetWorkerOrders);
+  app.post("/api/work-orders/worker-submit", handleWorkerSubmitOrder);
 
   // Users routes
   app.get("/api/users", handleGetUsers);
@@ -73,6 +75,7 @@ export function createServer() {
   app.put("/api/users/:id", handleUpdateUser);
   app.delete("/api/users/:id", handleDeleteUser);
   app.post("/api/upload/profile-photo", handleUploadProfilePhoto);
+  app.get("/api/users/:id/stats", handleGetUserStats);
 
   // Bonuses routes
   app.get("/api/bonuses", handleGetBonuses);
@@ -87,15 +90,10 @@ export function createServer() {
   // Activity logs routes
   app.get("/api/activity-logs", handleGetActivityLogs);
 
-  // Mock routes for development
-  app.get("/api/invoices", (req, res) => res.json([]));
-  app.post("/api/invoices", (req, res) => res.json({ id: Date.now().toString(), ...req.body }));
-  app.get("/api/users/:id/stats", (req, res) => res.json({
-    totalSubmissions: 0,
-    approvedSubmissions: 0,
-    fines: 0,
-    bonuses: 0
-  }));
+  // Invoices routes
+  app.get("/api/invoices", handleGetInvoices);
+  app.get("/api/invoices/worker/:workerId", handleGetWorkerInvoices);
+  app.post("/api/invoices", handleCreateInvoice);
 
   return app;
 }
