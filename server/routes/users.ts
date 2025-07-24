@@ -18,6 +18,13 @@ let users: User[] = [
     createdAt: new Date().toISOString(),
   }
 ];
+
+// Mock password storage - In production, use proper password hashing
+let userPasswords: Record<string, string> = {
+  'admin@mtwebexperts.com': 'admin123',
+  'worker@mtwebexperts.com': 'worker123',
+};
+
 let nextUserId = 3;
 
 export const handleGetUsers: RequestHandler = (req, res) => {
