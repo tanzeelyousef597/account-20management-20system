@@ -75,3 +75,49 @@ export const handleDashboardData: RequestHandler = (req, res) => {
 
   res.json(data);
 };
+
+export const handleWorkerDashboardData: RequestHandler = (req, res) => {
+  const { workerId } = req.params;
+  const { month } = req.query;
+
+  // Filter orders for this specific worker
+  let workerOrders = workOrders.filter(order =>
+    order.assignedTo === workerId || order.createdBy === workerId
+  );
+
+  if (month) {
+    const [year, monthNum] = month.toString().split('-');
+    workerOrders = workerOrders.filter(order => {
+      const orderDate = new Date(order.createdAt);
+      return orderDate.getFullYear() === parseInt(year) &&
+             (orderDate.getMonth() + 1) === parseInt(monthNum);
+    });
+  }
+
+  // Calculate category statistics for worker
+  const categoryMap = new Map();
+  workerOrders.forEach(order => {
+    const category = order.category || 'Uncategorized';
+    categoryMap.set(category, (categoryMap.get(category) || 0) + (order.payRate || 0));
+  });
+
+  const categories = Array.from(categoryMap.entries()).map(([category, submissions]) => ({
+    category,
+    submissions
+  }));
+
+  const data = {
+    totalSubmissions: workerOrders.reduce((sum, order) => sum + (order.payRate || 0), 0),
+    approvedSubmissions: workerOrders
+      .filter(order => order.status === 'Approved')
+      .reduce((sum, order) => sum + (order.payRate || 0), 0),
+    rejectedSubmissions: workerOrders
+      .filter(order => order.status === 'Rejected')
+      .reduce((sum, order) => sum + (order.payRate || 0), 0),
+    ordersInQA: workerOrders.filter(order => order.status === 'Under QA').length,
+    ordersInWork: workerOrders.filter(order => order.assignedTo === workerId && order.status !== 'Completed').length,
+    categories
+  };
+
+  res.json(data);
+};
