@@ -196,7 +196,7 @@ export default function MyOrders() {
               <DialogDescription>Submit your completed work for review</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmitOrder} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="folderName">Folder Name</Label>
                   <Input
@@ -217,7 +217,7 @@ export default function MyOrders() {
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="workCategory">Work Category</Label>
                   <Input
