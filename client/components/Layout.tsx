@@ -22,7 +22,8 @@ import {
   Activity,
   LogOut,
   User,
-  ChevronDown
+  ChevronDown,
+  Settings
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
