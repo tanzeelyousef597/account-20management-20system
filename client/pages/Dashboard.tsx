@@ -172,7 +172,7 @@ export default function Dashboard() {
         />
         <MetricCard
           icon={Clock}
-          title="Orders in Work"
+          title={user?.role === 'Admin' ? "Orders in Work" : "Orders in Work"}
           value={dashboardData.ordersInWork}
           bgColor="bg-gradient-to-br from-purple-500 to-purple-600"
         />
