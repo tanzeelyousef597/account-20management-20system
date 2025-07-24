@@ -170,7 +170,7 @@ export default function Dashboard() {
         />
         <MetricCard
           icon={XCircle}
-          title="Rejected Orders"
+          title="Rejected Submissions"
           value={dashboardData.rejectedSubmissions}
           bgColor="bg-gradient-to-br from-red-500 to-red-600"
         />
