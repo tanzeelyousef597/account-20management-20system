@@ -240,7 +240,21 @@ export default function MyOrders() {
                   placeholder="Describe the work completed..."
                 />
               </div>
-              
+
+              <div>
+                <Label htmlFor="submissionFile">Upload File</Label>
+                <Input
+                  id="submissionFile"
+                  type="file"
+                  onChange={(e) => setSubmissionFile(e.target.files?.[0] || null)}
+                  accept=".pdf,.doc,.docx,.xlsx,.zip,.rar"
+                  required
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Accepted formats: PDF, DOC, DOCX, XLSX, ZIP, RAR
+                </p>
+              </div>
+
               <div className="flex justify-end space-x-3">
                 <Button type="button" variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                   Cancel
