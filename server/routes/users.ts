@@ -59,12 +59,14 @@ export const handleCreateUser: RequestHandler = (req, res) => {
 export const handleUpdateUser: RequestHandler = (req, res) => {
   const { id } = req.params;
   const { name, email, password, role, profilePhoto } = req.body;
-  
+
   const userIndex = users.findIndex(user => user.id === id);
   if (userIndex === -1) {
     return res.status(404).json({ error: 'User not found' });
   }
-  
+
+  const oldEmail = users[userIndex].email;
+
   users[userIndex] = {
     ...users[userIndex],
     name,
@@ -72,12 +74,20 @@ export const handleUpdateUser: RequestHandler = (req, res) => {
     role,
     profilePhoto: profilePhoto || users[userIndex].profilePhoto,
   };
-  
-  // In production, handle password update if provided
+
+  // Update password if provided
   if (password) {
-    console.log(`Updated password for user ${id}: ${password}`);
+    userPasswords[email] = password;
+    // Remove old email key if email changed
+    if (email !== oldEmail) {
+      delete userPasswords[oldEmail];
+    }
+  } else if (email !== oldEmail) {
+    // If email changed but password not provided, move the password to new email
+    userPasswords[email] = userPasswords[oldEmail];
+    delete userPasswords[oldEmail];
   }
-  
+
   res.json(users[userIndex]);
 };
 
