@@ -284,7 +284,19 @@ export default function UserManagement() {
                   </Select>
                 </div>
               </div>
-              
+
+              <div>
+                <Label htmlFor="whatsappNumber">WhatsApp Number (Optional)</Label>
+                <Input
+                  id="whatsappNumber"
+                  type="tel"
+                  placeholder="+923189046142"
+                  value={formData.whatsappNumber}
+                  onChange={(e) => setFormData({...formData, whatsappNumber: e.target.value})}
+                />
+                <p className="text-sm text-gray-500 mt-1">Format: +country code + number</p>
+              </div>
+
               <div className="flex justify-end space-x-3">
                 <Button type="button" variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                   Cancel
