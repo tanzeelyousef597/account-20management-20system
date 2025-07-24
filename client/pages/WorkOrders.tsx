@@ -315,13 +315,13 @@ export default function WorkOrders() {
               </div>
               
               <div>
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">Description (Optional)</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
                   rows={3}
-                  required
+                  placeholder="Add a description for this work order..."
                 />
               </div>
 
