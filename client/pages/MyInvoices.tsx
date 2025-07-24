@@ -217,16 +217,12 @@ export default function MyInvoices() {
       {invoices.length > 0 && (
         <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
           <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="text-center">
                 <p className="text-blue-100 text-sm font-medium">Average Monthly Earnings</p>
                 <p className="text-2xl font-bold">
                   {formatCurrency(Math.round(totalEarnings / Math.max(invoices.length, 1)))}
                 </p>
-              </div>
-              <div className="text-center">
-                <p className="text-blue-100 text-sm font-medium">Total Submissions Approved</p>
-                <p className="text-2xl font-bold">{totalApprovedSubmissions}</p>
               </div>
               <div className="text-center">
                 <p className="text-blue-100 text-sm font-medium">Working Months</p>
