@@ -17,7 +17,7 @@ export const handleGetWorkOrders: RequestHandler = (req, res) => {
 
 export const handleCreateWorkOrder: RequestHandler = (req, res) => {
   const { folderName, businessName, workCategory, totalSubmissions, submissionDate, description, assignedTo } = req.body;
-  
+
   const newOrder: WorkOrder = {
     id: nextId.toString(),
     title: folderName,
@@ -31,10 +31,11 @@ export const handleCreateWorkOrder: RequestHandler = (req, res) => {
     dueDate: submissionDate,
     payRate: parseInt(totalSubmissions),
   };
-  
+
   workOrders.push(newOrder);
   nextId++;
-  
+  updateDashboard();
+
   res.json(newOrder);
 };
 
