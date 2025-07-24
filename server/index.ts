@@ -17,7 +17,8 @@ import {
   handleCreateUser,
   handleUpdateUser,
   handleDeleteUser,
-  handleUploadProfilePhoto
+  handleUploadProfilePhoto,
+  handleUploadWorkOrderFile
 } from "./routes/users";
 import {
   handleGetBonuses,
