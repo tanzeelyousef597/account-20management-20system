@@ -151,14 +151,6 @@ export default function MyInvoices() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-1">
-                          <CheckCircle className="h-4 w-4 text-green-600" />
-                          <span className="text-green-600 font-medium">{invoice.submissionCount} approved</span>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span>Fixed Pay:</span>
