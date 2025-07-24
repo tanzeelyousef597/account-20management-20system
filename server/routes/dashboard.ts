@@ -61,11 +61,15 @@ export const handleDashboardData: RequestHandler = (req, res) => {
   }));
 
   const data = {
-    totalSubmissions: filteredOrders.length,
-    approvedSubmissions: filteredOrders.filter(order => order.status === 'Approved').length,
-    rejectedSubmissions: filteredOrders.filter(order => order.status === 'Rejected').length,
+    totalSubmissions: filteredOrders.reduce((sum, order) => sum + (order.payRate || 0), 0),
+    approvedSubmissions: filteredOrders
+      .filter(order => order.status === 'Approved')
+      .reduce((sum, order) => sum + (order.payRate || 0), 0),
+    rejectedSubmissions: filteredOrders
+      .filter(order => order.status === 'Rejected')
+      .reduce((sum, order) => sum + (order.payRate || 0), 0),
     ordersInQA: filteredOrders.filter(order => order.status === 'Under QA').length,
-    ordersInWork: filteredOrders.filter(order => order.status === 'In Progress').length,
+    ordersInWork: filteredOrders.filter(order => order.status === 'In Progress' || order.assignedTo).length,
     categories
   };
 
