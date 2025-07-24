@@ -19,6 +19,8 @@ export interface WorkOrder {
   createdAt: string;
   dueDate?: string;
   payRate?: number;
+  attachmentUrl?: string;
+  attachmentName?: string;
 }
 
 export interface Invoice {
