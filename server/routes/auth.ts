@@ -10,7 +10,7 @@ export const handleLogin: RequestHandler = (req, res) => {
   }
 
   const user = users.find(u => u.email === email);
-  if (!user || passwords[email] !== password) {
+  if (!user || userPasswords[email] !== password) {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
 
