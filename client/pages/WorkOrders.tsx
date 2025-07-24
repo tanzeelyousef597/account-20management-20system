@@ -323,6 +323,21 @@ export default function WorkOrders() {
                   required
                 />
               </div>
+
+              <div>
+                <Label htmlFor="attachment">Attachment (Optional, Max 2GB)</Label>
+                <Input
+                  id="attachment"
+                  type="file"
+                  onChange={(e) => setAttachmentFile(e.target.files?.[0] || null)}
+                  accept="*/*"
+                />
+                {attachmentFile && (
+                  <p className="text-sm text-gray-500 mt-1">
+                    Selected: {attachmentFile.name} ({(attachmentFile.size / 1024 / 1024).toFixed(2)} MB)
+                  </p>
+                )}
+              </div>
               
               <div className="flex justify-end space-x-3">
                 <Button type="button" variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
