@@ -105,7 +105,8 @@ export const handleDeleteUser: RequestHandler = (req, res) => {
 
 export const handleUploadProfilePhoto: RequestHandler = (req, res) => {
   // Mock file upload - In production, use proper file upload service
-  const mockUrl = `https://api.dicebear.com/7.x/initials/svg?seed=${Date.now()}`;
+  // Generate a proper avatar URL or return actual uploaded image URL
+  const mockUrl = `https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face`;
   res.json({ url: mockUrl });
 };
 
