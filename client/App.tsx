@@ -85,6 +85,13 @@ const App = () => (
                 </Layout>
               </ProtectedRoute>
             } />
+            <Route path="/settings" element={
+              <ProtectedRoute requiredRole="Admin">
+                <Layout>
+                  <Settings />
+                </Layout>
+              </ProtectedRoute>
+            } />
             <Route path="/my-orders" element={
               <ProtectedRoute requiredRole="Worker">
                 <Layout>
