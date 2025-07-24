@@ -388,10 +388,14 @@ export default function WorkOrders() {
                       <Badge variant="outline">{order.category}</Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-gray-400" />
-                        {order.assignedToName || 'Unassigned'}
-                      </div>
+                      {order.assignedToName ? (
+                        <div className="flex items-center gap-2">
+                          <User className="h-4 w-4 text-gray-400" />
+                          {order.assignedToName}
+                        </div>
+                      ) : (
+                        <span className="text-gray-400 text-sm">Unassigned</span>
+                      )}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
