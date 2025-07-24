@@ -50,8 +50,8 @@ export default function MyInvoices() {
   };
 
   const totalEarnings = invoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0);
-  const totalSubmissions = invoices.reduce((sum, invoice) => sum + invoice.submissionCount, 0);
-  const thisMonthInvoices = invoices.filter(invoice => 
+  const totalApprovedSubmissions = invoices.reduce((sum, invoice) => sum + invoice.submissionCount, 0);
+  const thisMonthInvoices = invoices.filter(invoice =>
     invoice.month === new Date().toISOString().slice(0, 7)
   );
   const thisMonthEarnings = thisMonthInvoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0);
