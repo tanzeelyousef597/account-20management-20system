@@ -17,7 +17,7 @@ export const handleGetWorkOrders: RequestHandler = (req, res) => {
   res.json(workOrders);
 };
 
-export const handleCreateWorkOrder: RequestHandler = (req, res) => {
+export const handleCreateWorkOrder: RequestHandler = async (req, res) => {
   const { folderName, businessName, workCategory, totalSubmissions, submissionDate, description, assignedTo, attachmentUrls, attachmentNames } = req.body;
 
   // Find assigned user name
