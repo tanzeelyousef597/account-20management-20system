@@ -161,6 +161,7 @@ export default function UserManagement() {
       password: '',
       role: 'Worker',
       profilePhoto: '',
+      whatsappNumber: '',
     });
     setPhotoFile(null);
     setPhotoPreview('');
