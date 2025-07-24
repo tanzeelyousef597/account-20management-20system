@@ -59,7 +59,7 @@ export const handleCreateUser: RequestHandler = (req, res) => {
 
 export const handleUpdateUser: RequestHandler = (req, res) => {
   const { id } = req.params;
-  const { name, email, password, role, profilePhoto } = req.body;
+  const { name, email, password, role, profilePhoto, whatsappNumber } = req.body;
 
   const userIndex = users.findIndex(user => user.id === id);
   if (userIndex === -1) {
