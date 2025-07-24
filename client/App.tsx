@@ -17,6 +17,8 @@ import Invoices from "./pages/Invoices";
 import Bonuses from "./pages/Bonuses";
 import Fines from "./pages/Fines";
 import ActivityLogs from "./pages/ActivityLogs";
+import MyOrders from "./pages/MyOrders";
+import MyInvoices from "./pages/MyInvoices";
 import MyBonuses from "./pages/MyBonuses";
 import MyFines from "./pages/MyFines";
 import NotFound from "./pages/NotFound";
