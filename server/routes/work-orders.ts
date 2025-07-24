@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { WorkOrder } from "@shared/types";
 import { updateWorkOrdersReference } from "./dashboard";
+import { users } from "./users";
 
 // Mock database - In production, use a real database
 let workOrders: WorkOrder[] = [];
