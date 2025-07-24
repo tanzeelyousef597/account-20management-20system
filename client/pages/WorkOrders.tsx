@@ -140,21 +140,45 @@ export default function WorkOrders() {
         }
       }
 
-      const response = await fetch('/api/work-orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          attachmentUrls,
-          attachmentNames,
-        }),
-      });
+      // If no workers assigned, create one unassigned order
+      if (formData.assignedTo.length === 0) {
+        const response = await fetch('/api/work-orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            assignedTo: '',
+            attachmentUrls,
+            attachmentNames,
+          }),
+        });
 
-      if (response.ok) {
-        fetchWorkOrders();
-        setIsCreateDialogOpen(false);
-        resetForm();
+        if (!response.ok) {
+          throw new Error('Failed to create unassigned order');
+        }
+      } else {
+        // Create separate order for each assigned worker
+        for (const workerId of formData.assignedTo) {
+          const response = await fetch('/api/work-orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              ...formData,
+              assignedTo: workerId,
+              attachmentUrls,
+              attachmentNames,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`Failed to create order for worker ${workerId}`);
+          }
+        }
       }
+
+      fetchWorkOrders();
+      setIsCreateDialogOpen(false);
+      resetForm();
     } catch (error) {
       console.error('Error creating work order:', error);
     }
