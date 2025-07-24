@@ -235,7 +235,7 @@ export default function MyInvoices() {
               </div>
               <div className="text-center">
                 <p className="text-blue-100 text-sm font-medium">Total Submissions Approved</p>
-                <p className="text-2xl font-bold">{totalSubmissions}</p>
+                <p className="text-2xl font-bold">{totalApprovedSubmissions}</p>
               </div>
               <div className="text-center">
                 <p className="text-blue-100 text-sm font-medium">Working Months</p>
