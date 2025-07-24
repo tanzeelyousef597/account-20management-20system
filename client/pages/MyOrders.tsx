@@ -129,6 +129,7 @@ export default function MyOrders() {
       submissionDate: '',
       description: '',
     });
+    setSubmissionFile(null);
   };
 
   const getStatusBadge = (status: string) => {
