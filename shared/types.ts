@@ -21,6 +21,8 @@ export interface WorkOrder {
   payRate?: number;
   attachmentUrl?: string;
   attachmentName?: string;
+  attachmentUrls?: string[];
+  attachmentNames?: string[];
 }
 
 export interface Invoice {
