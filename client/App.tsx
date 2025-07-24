@@ -14,6 +14,11 @@ import Dashboard from "./pages/Dashboard";
 import WorkOrders from "./pages/WorkOrders";
 import UserManagement from "./pages/UserManagement";
 import Invoices from "./pages/Invoices";
+import Bonuses from "./pages/Bonuses";
+import Fines from "./pages/Fines";
+import ActivityLogs from "./pages/ActivityLogs";
+import MyBonuses from "./pages/MyBonuses";
+import MyFines from "./pages/MyFines";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
