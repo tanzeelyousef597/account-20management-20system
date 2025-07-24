@@ -64,30 +64,21 @@ const App = () => (
             <Route path="/bonuses" element={
               <ProtectedRoute requiredRole="Admin">
                 <Layout>
-                  <div className="text-center py-12">
-                    <h2 className="text-xl font-semibold mb-2">Bonus Management</h2>
-                    <p className="text-gray-600">This page is under development. Please continue prompting to fill in this content.</p>
-                  </div>
+                  <Bonuses />
                 </Layout>
               </ProtectedRoute>
             } />
             <Route path="/fines" element={
               <ProtectedRoute requiredRole="Admin">
                 <Layout>
-                  <div className="text-center py-12">
-                    <h2 className="text-xl font-semibold mb-2">Fine Management</h2>
-                    <p className="text-gray-600">This page is under development. Please continue prompting to fill in this content.</p>
-                  </div>
+                  <Fines />
                 </Layout>
               </ProtectedRoute>
             } />
             <Route path="/logs" element={
               <ProtectedRoute requiredRole="Admin">
                 <Layout>
-                  <div className="text-center py-12">
-                    <h2 className="text-xl font-semibold mb-2">Activity Logs</h2>
-                    <p className="text-gray-600">This page is under development. Please continue prompting to fill in this content.</p>
-                  </div>
+                  <ActivityLogs />
                 </Layout>
               </ProtectedRoute>
             } />
@@ -114,20 +105,14 @@ const App = () => (
             <Route path="/my-bonuses" element={
               <ProtectedRoute requiredRole="Worker">
                 <Layout>
-                  <div className="text-center py-12">
-                    <h2 className="text-xl font-semibold mb-2">My Bonuses</h2>
-                    <p className="text-gray-600">This page is under development. Please continue prompting to fill in this content.</p>
-                  </div>
+                  <MyBonuses />
                 </Layout>
               </ProtectedRoute>
             } />
             <Route path="/my-fines" element={
               <ProtectedRoute requiredRole="Worker">
                 <Layout>
-                  <div className="text-center py-12">
-                    <h2 className="text-xl font-semibold mb-2">My Fines</h2>
-                    <p className="text-gray-600">This page is under development. Please continue prompting to fill in this content.</p>
-                  </div>
+                  <MyFines />
                 </Layout>
               </ProtectedRoute>
             } />
