@@ -75,23 +75,25 @@ export default function WorkOrders() {
   const handleCreateOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      let attachmentUrl = '';
-      let attachmentName = '';
+      let attachmentUrls: string[] = [];
+      let attachmentNames: string[] = [];
 
-      // Upload file if provided
-      if (attachmentFile) {
-        const fileFormData = new FormData();
-        fileFormData.append('file', attachmentFile);
+      // Upload files if provided
+      if (attachmentFiles.length > 0) {
+        for (const file of attachmentFiles) {
+          const fileFormData = new FormData();
+          fileFormData.append('file', file);
 
-        const uploadResponse = await fetch('/api/upload/work-order-file', {
-          method: 'POST',
-          body: fileFormData,
-        });
+          const uploadResponse = await fetch('/api/upload/work-order-file', {
+            method: 'POST',
+            body: fileFormData,
+          });
 
-        if (uploadResponse.ok) {
-          const uploadData = await uploadResponse.json();
-          attachmentUrl = uploadData.url;
-          attachmentName = attachmentFile.name;
+          if (uploadResponse.ok) {
+            const uploadData = await uploadResponse.json();
+            attachmentUrls.push(uploadData.url);
+            attachmentNames.push(file.name);
+          }
         }
       }
 
@@ -100,8 +102,8 @@ export default function WorkOrders() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          attachmentUrl,
-          attachmentName,
+          attachmentUrls,
+          attachmentNames,
         }),
       });
 
