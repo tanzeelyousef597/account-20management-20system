@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { WorkOrder } from "@shared/types";
 import { updateWorkOrdersReference } from "./dashboard";
 import { users } from "./users";
+import WhatsAppService from "../services/whatsapp";
 
 // Mock database - In production, use a real database
 let workOrders: WorkOrder[] = [];
