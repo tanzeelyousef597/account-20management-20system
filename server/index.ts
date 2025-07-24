@@ -50,6 +50,7 @@ export function createServer() {
 
   // Dashboard routes
   app.get("/api/dashboard/stats", handleDashboardStats);
+  app.get("/api/dashboard/data", handleDashboardData);
 
   // Work orders routes
   app.get("/api/work-orders", handleGetWorkOrders);
@@ -64,6 +65,29 @@ export function createServer() {
   app.put("/api/users/:id", handleUpdateUser);
   app.delete("/api/users/:id", handleDeleteUser);
   app.post("/api/upload/profile-photo", handleUploadProfilePhoto);
+
+  // Bonuses routes
+  app.get("/api/bonuses", handleGetBonuses);
+  app.get("/api/bonuses/worker/:workerId", handleGetWorkerBonuses);
+  app.post("/api/bonuses", handleCreateBonus);
+
+  // Fines routes
+  app.get("/api/fines", handleGetFines);
+  app.get("/api/fines/worker/:workerId", handleGetWorkerFines);
+  app.post("/api/fines", handleCreateFine);
+
+  // Activity logs routes
+  app.get("/api/activity-logs", handleGetActivityLogs);
+
+  // Mock routes for development
+  app.get("/api/invoices", (req, res) => res.json([]));
+  app.post("/api/invoices", (req, res) => res.json({ id: Date.now().toString(), ...req.body }));
+  app.get("/api/users/:id/stats", (req, res) => res.json({
+    totalSubmissions: 0,
+    approvedSubmissions: 0,
+    fines: 0,
+    bonuses: 0
+  }));
 
   return app;
 }
