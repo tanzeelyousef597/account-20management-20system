@@ -294,24 +294,44 @@ export default function MyOrders() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      {order.attachmentUrl ? (
-                        <div className="flex items-center gap-2">
-                          <a
-                            href={order.attachmentUrl}
-                            download={order.attachmentName || 'attachment'}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-md text-sm font-medium transition-colors"
-                          >
-                            <FileText className="h-4 w-4" />
-                            Download File
-                          </a>
-                          {order.attachmentName && (
-                            <span className="text-xs text-gray-500">{order.attachmentName}</span>
+                      {(order.attachmentUrls && order.attachmentUrls.length > 0) || order.attachmentUrl ? (
+                        <div className="space-y-1">
+                          {/* Show multiple files if available */}
+                          {order.attachmentUrls && order.attachmentUrls.length > 0 ? (
+                            order.attachmentUrls.map((url, index) => (
+                              <div key={index} className="flex items-center gap-2">
+                                <a
+                                  href={url}
+                                  download={order.attachmentNames?.[index] || `attachment-${index + 1}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded text-xs font-medium transition-colors"
+                                >
+                                  <FileText className="h-3 w-3" />
+                                  {order.attachmentNames?.[index] || `File ${index + 1}`}
+                                </a>
+                              </div>
+                            ))
+                          ) : (
+                            /* Show single file for backward compatibility */
+                            order.attachmentUrl && (
+                              <div className="flex items-center gap-2">
+                                <a
+                                  href={order.attachmentUrl}
+                                  download={order.attachmentName || 'attachment'}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-md text-sm font-medium transition-colors"
+                                >
+                                  <FileText className="h-4 w-4" />
+                                  Download File
+                                </a>
+                              </div>
+                            )
                           )}
                         </div>
                       ) : (
-                        <span className="text-gray-400 text-sm">No file attached</span>
+                        <span className="text-gray-400 text-sm">No files attached</span>
                       )}
                     </TableCell>
                     <TableCell>
