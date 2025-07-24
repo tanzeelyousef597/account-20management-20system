@@ -32,7 +32,7 @@ export const handleGetUsers: RequestHandler = (req, res) => {
 };
 
 export const handleCreateUser: RequestHandler = (req, res) => {
-  const { name, email, password, role, profilePhoto } = req.body as CreateUserRequest;
+  const { name, email, password, role, profilePhoto, whatsappNumber } = req.body as CreateUserRequest;
 
   // Check if email already exists
   if (users.some(user => user.email === email)) {
