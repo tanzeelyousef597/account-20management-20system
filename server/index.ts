@@ -18,7 +18,8 @@ import {
   handleUpdateUser,
   handleDeleteUser,
   handleUploadProfilePhoto,
-  handleUploadWorkOrderFile
+  handleUploadWorkOrderFile,
+  handleDownloadFile
 } from "./routes/users";
 import {
   handleGetBonuses,
