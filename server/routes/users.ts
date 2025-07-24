@@ -33,12 +33,12 @@ export const handleGetUsers: RequestHandler = (req, res) => {
 
 export const handleCreateUser: RequestHandler = (req, res) => {
   const { name, email, password, role, profilePhoto } = req.body as CreateUserRequest;
-  
+
   // Check if email already exists
   if (users.some(user => user.email === email)) {
     return res.status(400).json({ error: 'Email already exists' });
   }
-  
+
   const newUser: User = {
     id: nextUserId.toString(),
     email,
@@ -47,13 +47,12 @@ export const handleCreateUser: RequestHandler = (req, res) => {
     profilePhoto,
     createdAt: new Date().toISOString(),
   };
-  
+
   users.push(newUser);
+  // Store password for authentication
+  userPasswords[email] = password;
   nextUserId++;
-  
-  // In production, hash password and store separately
-  console.log(`Created user with password: ${password}`);
-  
+
   res.json(newUser);
 };
 
