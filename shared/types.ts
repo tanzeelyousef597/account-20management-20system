@@ -4,6 +4,7 @@ export interface User {
   name: string;
   role: 'Admin' | 'Worker';
   profilePhoto?: string;
+  whatsappNumber?: string;
   createdAt: string;
 }
 
