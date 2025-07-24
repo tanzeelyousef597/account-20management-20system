@@ -120,7 +120,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header with Month Selector */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
           <p className="text-gray-600">Overview of submissions and performance</p>
