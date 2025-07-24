@@ -188,7 +188,7 @@ export default function Invoices() {
               <DialogDescription>Generate an invoice for a worker with custom amounts</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleCreateInvoice} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="worker">Select Worker</Label>
                   <Select value={selectedUserId} onValueChange={setSelectedUserId}>
@@ -223,7 +223,7 @@ export default function Invoices() {
                       <TrendingUp className="h-4 w-4 text-blue-600" />
                       Worker Statistics
                     </h4>
-                    <div className="grid grid-cols-4 gap-4 text-sm">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
                       <div>
                         <p className="text-gray-600">Total Submissions</p>
                         <p className="font-bold text-blue-600">{userStats.totalSubmissions}</p>
@@ -245,7 +245,7 @@ export default function Invoices() {
                 </Card>
               )}
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="fixedPay">Fixed Pay (PKR)</Label>
                   <Input
@@ -268,7 +268,7 @@ export default function Invoices() {
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="fine">Fine Amount (PKR)</Label>
                   <Input
