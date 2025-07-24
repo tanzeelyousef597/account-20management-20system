@@ -113,8 +113,9 @@ export const handleUploadProfilePhoto: RequestHandler = (req, res) => {
 
 export const handleUploadWorkOrderFile: RequestHandler = (req, res) => {
   // Mock file upload for work orders - In production, use proper file upload service
-  // Return a mock download URL
-  const mockUrl = `https://filebin.net/mock/${Date.now()}/sample-file.pdf`;
+  // Return a downloadable URL
+  const fileName = `sample-document-${Date.now()}.pdf`;
+  const mockUrl = `https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf`;
   res.json({ url: mockUrl });
 };
 
