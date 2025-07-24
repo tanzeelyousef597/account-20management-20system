@@ -87,20 +87,14 @@ const App = () => (
             <Route path="/my-orders" element={
               <ProtectedRoute requiredRole="Worker">
                 <Layout>
-                  <div className="text-center py-12">
-                    <h2 className="text-xl font-semibold mb-2">My Orders</h2>
-                    <p className="text-gray-600">This page is under development. Please continue prompting to fill in this content.</p>
-                  </div>
+                  <MyOrders />
                 </Layout>
               </ProtectedRoute>
             } />
             <Route path="/my-invoices" element={
               <ProtectedRoute requiredRole="Worker">
                 <Layout>
-                  <div className="text-center py-12">
-                    <h2 className="text-xl font-semibold mb-2">My Invoices</h2>
-                    <p className="text-gray-600">This page is under development. Please continue prompting to fill in this content.</p>
-                  </div>
+                  <MyInvoices />
                 </Layout>
               </ProtectedRoute>
             } />
