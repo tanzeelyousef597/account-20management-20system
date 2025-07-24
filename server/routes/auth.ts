@@ -1,29 +1,6 @@
 import { RequestHandler } from "express";
-import { LoginRequest, LoginResponse, User } from "@shared/types";
-
-// Mock database - In production, use a real database
-const users: User[] = [
-  {
-    id: '1',
-    email: 'admin@mtwebexperts.com',
-    name: 'Admin User',
-    role: 'Admin',
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: '2',
-    email: 'worker@mtwebexperts.com',
-    name: 'John Worker',
-    role: 'Worker',
-    createdAt: new Date().toISOString(),
-  }
-];
-
-// Mock password storage - In production, use proper password hashing
-const passwords: Record<string, string> = {
-  'admin@mtwebexperts.com': 'admin123',
-  'worker@mtwebexperts.com': 'worker123',
-};
+import { LoginRequest, LoginResponse } from "@shared/types";
+import { users, userPasswords } from "./users";
 
 export const handleLogin: RequestHandler = (req, res) => {
   const { email, password } = req.body as LoginRequest;
