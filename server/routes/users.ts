@@ -74,6 +74,7 @@ export const handleUpdateUser: RequestHandler = (req, res) => {
     email,
     role,
     profilePhoto: profilePhoto || users[userIndex].profilePhoto,
+    whatsappNumber: whatsappNumber !== undefined ? whatsappNumber : users[userIndex].whatsappNumber,
   };
 
   // Update password if provided
