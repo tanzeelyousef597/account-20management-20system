@@ -39,7 +39,7 @@ export default function WorkOrders() {
     totalSubmissions: '',
     submissionDate: '',
     description: '',
-    assignedTo: '',
+    assignedTo: [] as string[],
   });
   const [attachmentFiles, setAttachmentFiles] = useState<File[]>([]);
 
@@ -222,7 +222,7 @@ export default function WorkOrders() {
       totalSubmissions: '',
       submissionDate: '',
       description: '',
-      assignedTo: '',
+      assignedTo: [],
     });
     setAttachmentFiles([]);
   };
