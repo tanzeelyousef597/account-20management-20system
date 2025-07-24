@@ -39,6 +39,7 @@ const adminNavItems = [
   { name: 'Bonuses', href: '/bonuses', icon: TrendingUp },
   { name: 'Fines', href: '/fines', icon: AlertCircle },
   { name: 'Activity Logs', href: '/logs', icon: Activity },
+  { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
 const workerNavItems = [
