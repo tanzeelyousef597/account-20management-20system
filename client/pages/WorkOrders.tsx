@@ -328,17 +328,27 @@ export default function WorkOrders() {
               </div>
 
               <div>
-                <Label htmlFor="attachment">Attachment (Optional, Max 2GB)</Label>
+                <Label htmlFor="attachment">Attachments (Optional, Max 2GB per file)</Label>
                 <Input
                   id="attachment"
                   type="file"
-                  onChange={(e) => setAttachmentFile(e.target.files?.[0] || null)}
+                  multiple
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    setAttachmentFiles(files);
+                  }}
                   accept="*/*"
                 />
-                {attachmentFile && (
-                  <p className="text-sm text-gray-500 mt-1">
-                    Selected: {attachmentFile.name} ({(attachmentFile.size / 1024 / 1024).toFixed(2)} MB)
-                  </p>
+                {attachmentFiles.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    <p className="text-sm font-medium text-gray-700">Selected files:</p>
+                    {attachmentFiles.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between text-sm text-gray-500 bg-gray-50 p-2 rounded">
+                        <span>{file.name}</span>
+                        <span>({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
               
