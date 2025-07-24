@@ -83,6 +83,7 @@ export function createServer() {
   app.delete("/api/users/:id", handleDeleteUser);
   app.post("/api/upload/profile-photo", handleUploadProfilePhoto);
   app.post("/api/upload/work-order-file", handleUploadWorkOrderFile);
+  app.get("/api/download/:fileId", handleDownloadFile);
   app.get("/api/users/:id/stats", handleGetUserStats);
 
   // Bonuses routes
