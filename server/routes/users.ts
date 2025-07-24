@@ -122,5 +122,33 @@ export const handleUploadWorkOrderFile: RequestHandler = (req, res) => {
   res.json({ url: localUrl });
 };
 
+export const handleDownloadFile: RequestHandler = async (req, res) => {
+  const { fileId } = req.params;
+  const { filename } = req.query;
+
+  try {
+    // For demo purposes, we'll fetch the dummy PDF and serve it with proper headers
+    const response = await fetch('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+
+    if (!response.ok) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+
+    const buffer = await response.arrayBuffer();
+    const finalFilename = filename || `document-${fileId}.pdf`;
+
+    // Set proper headers for file download
+    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader('Content-Disposition', `attachment; filename="${finalFilename}"`);
+    res.setHeader('Content-Length', buffer.byteLength);
+    res.setHeader('Cache-Control', 'no-cache');
+
+    res.send(Buffer.from(buffer));
+  } catch (error) {
+    console.error('Download error:', error);
+    res.status(500).json({ error: 'Download failed' });
+  }
+};
+
 // Export for auth route
 export { users, userPasswords };
