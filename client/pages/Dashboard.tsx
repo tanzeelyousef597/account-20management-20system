@@ -1,6 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Calendar, TrendingUp } from 'lucide-react';
 
 const chartData = [
@@ -10,6 +9,35 @@ const chartData = [
   { category: 'SEO Optimization', submissions: 0 },
   { category: 'Social Media', submissions: 0 },
 ];
+
+// Simple custom chart component to replace recharts and fix warnings
+const SimpleBarChart = ({ data }: { data: typeof chartData }) => {
+  const maxValue = Math.max(...data.map(d => d.submissions), 1);
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 gap-4">
+        {data.map((item, index) => (
+          <div key={index} className="space-y-2">
+            <div className="flex justify-between items-center text-sm">
+              <span className="font-medium text-gray-700 truncate">{item.category}</span>
+              <span className="text-blue-600 font-bold">{item.submissions}</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-3">
+              <div
+                className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500 ease-out"
+                style={{
+                  width: maxValue > 0 ? `${(item.submissions / maxValue) * 100}%` : '0%',
+                  minWidth: item.submissions > 0 ? '8px' : '0px'
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default function Dashboard() {
   const { user } = useAuth();
