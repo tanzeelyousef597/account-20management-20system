@@ -111,6 +111,7 @@ export const handleWorkerSubmitOrder: RequestHandler = (req, res) => {
 
   workOrders.push(newOrder);
   nextId++;
+  updateDashboard();
 
   res.json(newOrder);
 };
