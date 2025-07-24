@@ -75,12 +75,36 @@ export default function WorkOrders() {
   const handleCreateOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      let attachmentUrl = '';
+      let attachmentName = '';
+
+      // Upload file if provided
+      if (attachmentFile) {
+        const fileFormData = new FormData();
+        fileFormData.append('file', attachmentFile);
+
+        const uploadResponse = await fetch('/api/upload/work-order-file', {
+          method: 'POST',
+          body: fileFormData,
+        });
+
+        if (uploadResponse.ok) {
+          const uploadData = await uploadResponse.json();
+          attachmentUrl = uploadData.url;
+          attachmentName = attachmentFile.name;
+        }
+      }
+
       const response = await fetch('/api/work-orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          attachmentUrl,
+          attachmentName,
+        }),
       });
-      
+
       if (response.ok) {
         fetchWorkOrders();
         setIsCreateDialogOpen(false);
