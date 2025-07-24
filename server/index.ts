@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { handleLogin, handleLogout } from "./routes/auth";
-import { handleDashboardStats } from "./routes/dashboard";
+import { handleDashboardStats, handleDashboardData } from "./routes/dashboard";
 import {
   handleGetWorkOrders,
   handleCreateWorkOrder,
@@ -17,6 +17,17 @@ import {
   handleDeleteUser,
   handleUploadProfilePhoto
 } from "./routes/users";
+import {
+  handleGetBonuses,
+  handleGetWorkerBonuses,
+  handleCreateBonus
+} from "./routes/bonuses";
+import {
+  handleGetFines,
+  handleGetWorkerFines,
+  handleCreateFine
+} from "./routes/fines";
+import { handleGetActivityLogs } from "./routes/activity-logs";
 
 export function createServer() {
   const app = express();
