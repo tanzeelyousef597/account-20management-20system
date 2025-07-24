@@ -295,23 +295,23 @@ export default function MyOrders() {
                     </TableCell>
                     <TableCell>
                       {order.attachmentUrl ? (
-                        <button
-                          onClick={() => {
-                            const link = document.createElement('a');
-                            link.href = order.attachmentUrl;
-                            link.download = order.attachmentName || 'file';
-                            link.target = '_blank';
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                          }}
-                          className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1 underline"
-                        >
-                          <FileText className="h-4 w-4" />
-                          Download
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <a
+                            href={order.attachmentUrl}
+                            download={order.attachmentName || 'attachment'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-md text-sm font-medium transition-colors"
+                          >
+                            <FileText className="h-4 w-4" />
+                            Download File
+                          </a>
+                          {order.attachmentName && (
+                            <span className="text-xs text-gray-500">{order.attachmentName}</span>
+                          )}
+                        </div>
                       ) : (
-                        <span className="text-gray-400 text-sm">No file</span>
+                        <span className="text-gray-400 text-sm">No file attached</span>
                       )}
                     </TableCell>
                     <TableCell>
