@@ -1,9 +1,15 @@
 import { RequestHandler } from "express";
 import { WorkOrder } from "@shared/types";
+import { updateWorkOrdersReference } from "./dashboard";
 
 // Mock database - In production, use a real database
 let workOrders: WorkOrder[] = [];
 let nextId = 1;
+
+// Update dashboard reference whenever work orders change
+const updateDashboard = () => {
+  updateWorkOrdersReference(workOrders);
+};
 
 export const handleGetWorkOrders: RequestHandler = (req, res) => {
   res.json(workOrders);
