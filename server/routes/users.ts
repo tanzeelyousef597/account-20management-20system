@@ -45,6 +45,7 @@ export const handleCreateUser: RequestHandler = (req, res) => {
     name,
     role,
     profilePhoto,
+    whatsappNumber,
     createdAt: new Date().toISOString(),
   };
 
