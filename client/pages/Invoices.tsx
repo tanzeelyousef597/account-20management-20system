@@ -384,16 +384,7 @@ export default function Invoices() {
                         {invoice.isManual ? 'Manual' : 'Auto'}
                       </Badge>
                     </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDownloadInvoice(invoice.id)}
-                      >
-                        <Download className="h-4 w-4 mr-2" />
-                        Download
-                      </Button>
-                    </TableCell>
+
                   </TableRow>
                 ))}
               </TableBody>
