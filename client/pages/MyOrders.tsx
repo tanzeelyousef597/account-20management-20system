@@ -36,24 +36,44 @@ export default function MyOrders() {
 
   const handleFileDownload = async (url: string, filename: string) => {
     try {
-      const response = await fetch(url);
-      const blob = await response.blob();
+      // Try fetch first for same-origin or CORS-enabled URLs
+      const response = await fetch(url, { mode: 'cors' });
+      if (response.ok) {
+        const blob = await response.blob();
 
-      // Create a temporary URL for the blob
-      const blobUrl = window.URL.createObjectURL(blob);
+        // Create a temporary URL for the blob
+        const blobUrl = window.URL.createObjectURL(blob);
 
-      // Create a temporary anchor element and trigger download
+        // Create a temporary anchor element and trigger download
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+        return;
+      }
+    } catch (error) {
+      console.warn('Fetch download failed, trying direct download:', error);
+    }
+
+    // Fallback: Try direct download with window.open
+    try {
       const link = document.createElement('a');
-      link.href = blobUrl;
+      link.href = url;
       link.download = filename;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
       document.body.appendChild(link);
       link.click();
-
-      // Clean up
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
-      console.error('Download failed:', error);
+      console.error('Direct download also failed:', error);
+      // Last resort: open in new tab
+      window.open(url, '_blank');
     }
   };
 
