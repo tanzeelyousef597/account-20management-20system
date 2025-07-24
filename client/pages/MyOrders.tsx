@@ -303,8 +303,6 @@ export default function MyOrders() {
                                 <a
                                   href={url}
                                   download={order.attachmentNames?.[index] || `attachment-${index + 1}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded text-xs font-medium transition-colors"
                                 >
                                   <FileText className="h-3 w-3" />
@@ -319,8 +317,6 @@ export default function MyOrders() {
                                 <a
                                   href={order.attachmentUrl}
                                   download={order.attachmentName || 'attachment'}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-md text-sm font-medium transition-colors"
                                 >
                                   <FileText className="h-4 w-4" />
