@@ -21,6 +21,7 @@ import MyOrders from "./pages/MyOrders";
 import MyInvoices from "./pages/MyInvoices";
 import MyBonuses from "./pages/MyBonuses";
 import MyFines from "./pages/MyFines";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
