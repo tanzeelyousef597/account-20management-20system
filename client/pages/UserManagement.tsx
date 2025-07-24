@@ -240,7 +240,7 @@ export default function UserManagement() {
                 <p className="text-sm text-gray-500 mt-2">Click to upload profile photo</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="name">Full Name</Label>
                   <Input
@@ -262,7 +262,7 @@ export default function UserManagement() {
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="password">Password</Label>
                   <Input
