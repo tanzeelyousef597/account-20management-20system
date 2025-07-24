@@ -323,28 +323,26 @@ export default function MyOrders() {
                           {order.attachmentUrls && order.attachmentUrls.length > 0 ? (
                             order.attachmentUrls.map((url, index) => (
                               <div key={index} className="flex items-center gap-2">
-                                <a
-                                  href={url}
-                                  download={order.attachmentNames?.[index] || `attachment-${index + 1}`}
-                                  className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded text-xs font-medium transition-colors"
+                                <button
+                                  onClick={() => handleFileDownload(url, order.attachmentNames?.[index] || `attachment-${index + 1}`)}
+                                  className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded text-xs font-medium transition-colors cursor-pointer"
                                 >
                                   <FileText className="h-3 w-3" />
                                   {order.attachmentNames?.[index] || `File ${index + 1}`}
-                                </a>
+                                </button>
                               </div>
                             ))
                           ) : (
                             /* Show single file for backward compatibility */
                             order.attachmentUrl && (
                               <div className="flex items-center gap-2">
-                                <a
-                                  href={order.attachmentUrl}
-                                  download={order.attachmentName || 'attachment'}
-                                  className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-md text-sm font-medium transition-colors"
+                                <button
+                                  onClick={() => handleFileDownload(order.attachmentUrl, order.attachmentName || 'attachment')}
+                                  className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-md text-sm font-medium transition-colors cursor-pointer"
                                 >
                                   <FileText className="h-4 w-4" />
                                   Download File
-                                </a>
+                                </button>
                               </div>
                             )
                           )}
