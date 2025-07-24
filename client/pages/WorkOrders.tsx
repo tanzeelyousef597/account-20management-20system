@@ -383,6 +383,7 @@ export default function WorkOrders() {
                   <TableHead>Category</TableHead>
                   <TableHead>Assigned To</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Files</TableHead>
                   <TableHead>Created</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
