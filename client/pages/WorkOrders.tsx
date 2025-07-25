@@ -596,7 +596,7 @@ export default function WorkOrders() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {workOrders.length > 0 ? (
+          {workOrders.filter(order => order.assignedTo && (order.status === 'Under QA' || order.status === 'In Progress')).length > 0 ? (
             <div className="overflow-x-auto">
               <Table>
               <TableHeader>
@@ -611,7 +611,7 @@ export default function WorkOrders() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {workOrders.map((order) => (
+                {workOrders.filter(order => order.assignedTo && (order.status === 'Under QA' || order.status === 'In Progress')).map((order) => (
                   <TableRow key={order.id}>
                     <TableCell>
                       <div className="space-y-1">
