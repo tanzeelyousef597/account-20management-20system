@@ -397,7 +397,7 @@ export default function WorkOrders() {
                 </div>
                 <div>
                   <Label htmlFor="assignedTo">Assign Users (Optional)</Label>
-                  <div className="relative">
+                  <div className="relative" ref={dropdownRef}>
                     <Button
                       variant="outline"
                       className="w-full justify-between font-normal"
