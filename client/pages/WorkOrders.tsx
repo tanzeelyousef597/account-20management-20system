@@ -45,6 +45,7 @@ export default function WorkOrders() {
     assignedTo: [] as string[],
   });
   const [attachmentFiles, setAttachmentFiles] = useState<File[]>([]);
+  const [isAssignPopoverOpen, setIsAssignPopoverOpen] = useState(false);
 
   const handleFileDownload = async (url: string, filename: string) => {
     try {
