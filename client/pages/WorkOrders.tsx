@@ -278,6 +278,7 @@ export default function WorkOrders() {
       assignedTo: [],
     });
     setAttachmentFiles([]);
+    setIsAssignPopoverOpen(false);
   };
 
   const openEditDialog = (order: WorkOrder) => {
