@@ -60,6 +60,13 @@ const App = () => (
                 </Layout>
               </ProtectedRoute>
             } />
+            <Route path="/monthly-report" element={
+              <ProtectedRoute requiredRole="Admin">
+                <Layout>
+                  <MonthlyReport />
+                </Layout>
+              </ProtectedRoute>
+            } />
             <Route path="/work-orders" element={
               <ProtectedRoute requiredRole="Admin">
                 <Layout>
