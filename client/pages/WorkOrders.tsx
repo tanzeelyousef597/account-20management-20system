@@ -104,6 +104,22 @@ export default function WorkOrders() {
     fetchUsers();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsAssignPopoverOpen(false);
+      }
+    };
+
+    if (isAssignPopoverOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isAssignPopoverOpen]);
+
   const fetchWorkOrders = async () => {
     try {
       const response = await fetch('/api/work-orders');
