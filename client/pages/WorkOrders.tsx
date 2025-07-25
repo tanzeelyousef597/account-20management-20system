@@ -371,38 +371,72 @@ export default function WorkOrders() {
                 </div>
                 <div>
                   <Label htmlFor="assignedTo">Assign Users (Optional)</Label>
-                  <div className="border rounded-md p-3 max-h-32 overflow-y-auto">
-                    {users.filter(user => user.role === 'Worker').length > 0 ? (
-                      users.filter(user => user.role === 'Worker').map((user) => (
-                        <div key={user.id} className="flex items-center space-x-2 py-1">
-                          <input
-                            type="checkbox"
-                            id={`worker-${user.id}`}
-                            checked={formData.assignedTo.includes(user.id)}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setFormData({
-                                  ...formData,
-                                  assignedTo: [...formData.assignedTo, user.id]
-                                });
-                              } else {
-                                setFormData({
-                                  ...formData,
-                                  assignedTo: formData.assignedTo.filter(id => id !== user.id)
-                                });
-                              }
-                            }}
-                            className="rounded border-gray-300"
-                          />
-                          <label htmlFor={`worker-${user.id}`} className="text-sm font-medium">
-                            {user.name}
-                          </label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between font-normal"
+                        type="button"
+                      >
+                        {formData.assignedTo.length > 0
+                          ? `${formData.assignedTo.length} worker${formData.assignedTo.length > 1 ? 's' : ''} selected`
+                          : "Select workers..."
+                        }
+                        <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0" align="start">
+                      <div className="p-3">
+                        <h4 className="font-medium text-sm mb-3">Select Workers</h4>
+                        <div className="space-y-2 max-h-48 overflow-y-auto">
+                          {users.filter(user => user.role === 'Worker').length > 0 ? (
+                            users.filter(user => user.role === 'Worker').map((user) => (
+                              <div key={user.id} className="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded">
+                                <Checkbox
+                                  id={`worker-${user.id}`}
+                                  checked={formData.assignedTo.includes(user.id)}
+                                  onCheckedChange={(checked) => {
+                                    if (checked) {
+                                      setFormData({
+                                        ...formData,
+                                        assignedTo: [...formData.assignedTo, user.id]
+                                      });
+                                    } else {
+                                      setFormData({
+                                        ...formData,
+                                        assignedTo: formData.assignedTo.filter(id => id !== user.id)
+                                      });
+                                    }
+                                  }}
+                                />
+                                <label
+                                  htmlFor={`worker-${user.id}`}
+                                  className="text-sm font-medium cursor-pointer flex-1"
+                                >
+                                  {user.name}
+                                </label>
+                              </div>
+                            ))
+                          ) : (
+                            <p className="text-sm text-gray-500 text-center py-4">No workers available</p>
+                          )}
                         </div>
-                      ))
-                    ) : (
-                      <p className="text-sm text-gray-500">No workers available</p>
-                    )}
-                  </div>
+                        {formData.assignedTo.length > 0 && (
+                          <div className="mt-3 pt-3 border-t">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setFormData({...formData, assignedTo: []})}
+                              className="w-full"
+                              type="button"
+                            >
+                              Clear all selections
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                   <p className="text-sm text-gray-500 mt-1">
                     Select one or more workers. Leave unselected to create unassigned order.
                   </p>
