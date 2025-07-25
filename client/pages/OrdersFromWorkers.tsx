@@ -540,21 +540,21 @@ export default function OrdersFromWorkers() {
         </TabsContent>
         
         <TabsContent value="approved">
-          <ApprovedOrders 
+          <ApprovedOrders
             workOrders={workOrders}
             users={users}
             onStatusChange={handleStatusChange}
-            onDeleteOrder={handleStatusChange}
+            onDeleteOrder={(orderId) => handleStatusChange(orderId, 'Deleted')}
             onFileDownload={handleFileDownload}
           />
         </TabsContent>
-        
+
         <TabsContent value="rejected">
-          <RejectedOrders 
+          <RejectedOrders
             workOrders={workOrders}
             users={users}
             onStatusChange={handleStatusChange}
-            onDeleteOrder={handleStatusChange}
+            onDeleteOrder={(orderId) => handleStatusChange(orderId, 'Deleted')}
             onFileDownload={handleFileDownload}
           />
         </TabsContent>
