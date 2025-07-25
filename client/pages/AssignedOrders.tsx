@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,12 +11,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Checkbox } from '@/components/ui/checkbox';
-import { 
-  Plus, 
-  Edit, 
-  MoreHorizontal, 
-  Calendar, 
-  User, 
+import {
+  Plus,
+  Edit,
+  MoreHorizontal,
+  Calendar,
+  User,
   Folder,
   Building,
   Tag,
@@ -28,7 +28,8 @@ import {
   ChevronDown,
   ClipboardList,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Search
 } from 'lucide-react';
 import { WorkOrder, User as UserType } from '@shared/types';
 
@@ -54,6 +55,9 @@ export default function AssignedOrders() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 100;
+
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleFileDownload = async (url: string, filename: string) => {
     try {
@@ -326,10 +330,26 @@ export default function AssignedOrders() {
     }
   };
 
-  // Filter assigned orders
-  const assignedOrders = workOrders.filter(order => 
-    order.assignedTo && (order.status === 'Under QA' || order.status === 'In Progress')
-  );
+  // Filter assigned orders (all orders created by admin or assigned to workers)
+  const assignedOrders = useMemo(() => {
+    let filtered = workOrders.filter(order =>
+      order.assignedTo || order.createdBy === 'admin'
+    );
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(order =>
+        order.title?.toLowerCase().includes(query) ||
+        order.description?.toLowerCase().includes(query) ||
+        order.category?.toLowerCase().includes(query) ||
+        order.assignedToName?.toLowerCase().includes(query) ||
+        order.status?.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
+  }, [workOrders, searchQuery]);
 
   // Pagination logic
   const totalPages = Math.ceil(assignedOrders.length / itemsPerPage);
@@ -345,7 +365,7 @@ export default function AssignedOrders() {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">Assigned Orders</h2>
-          <p className="text-gray-600 mt-1">Orders assigned to workers for completion</p>
+          <p className="text-gray-600 mt-1">All orders created by admin and assigned to workers</p>
         </div>
         
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -553,6 +573,21 @@ export default function AssignedOrders() {
         </Dialog>
       </div>
 
+      {/* Search Bar */}
+      <Card>
+        <CardContent className="p-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Search orders by title, description, category, worker, or status..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Summary Card */}
       <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
         <CardContent className="p-6">
@@ -576,7 +611,7 @@ export default function AssignedOrders() {
             Assigned Orders
           </CardTitle>
           <CardDescription>
-            Orders assigned to workers for completion
+            All orders created by admin and assigned to workers
           </CardDescription>
         </CardHeader>
         <CardContent>
