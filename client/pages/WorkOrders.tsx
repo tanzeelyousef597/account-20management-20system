@@ -533,15 +533,66 @@ export default function WorkOrders() {
         </Dialog>
       </div>
 
-      {/* Work Orders Table */}
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-blue-100 rounded-full">
+                <ClipboardList className="h-6 w-6 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-blue-600 font-medium">Assigned Orders</p>
+                <p className="text-2xl font-bold text-blue-800">
+                  {workOrders.filter(order => order.assignedTo && (order.status === 'Under QA' || order.status === 'In Progress')).length}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-yellow-100 rounded-full">
+                <FileText className="h-6 w-6 text-yellow-600" />
+              </div>
+              <div>
+                <p className="text-yellow-600 font-medium">Orders from Workers</p>
+                <p className="text-2xl font-bold text-yellow-800">
+                  {workOrders.filter(order => order.createdBy !== 'admin' && order.status === 'Under QA').length}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-green-100 rounded-full">
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              </div>
+              <div>
+                <p className="text-green-600 font-medium">Total Approved</p>
+                <p className="text-2xl font-bold text-green-800">
+                  {workOrders.filter(order => order.status === 'Approved').length}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Assigned Orders Section */}
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
-            All Work Orders
+            <ClipboardList className="h-5 w-5 text-blue-600" />
+            Assigned Orders
           </CardTitle>
           <CardDescription>
-            View and manage all submitted work orders
+            Orders assigned to workers for completion
           </CardDescription>
         </CardHeader>
         <CardContent>
