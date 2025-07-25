@@ -11,12 +11,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Checkbox } from '@/components/ui/checkbox';
-import { 
-  Plus, 
-  Edit, 
-  MoreHorizontal, 
-  Calendar, 
-  User, 
+import {
+  Plus,
+  Edit,
+  MoreHorizontal,
+  Calendar,
+  User,
   Folder,
   Building,
   Tag,
@@ -25,7 +25,8 @@ import {
   XCircle,
   Clock,
   Trash2,
-  ChevronDown
+  ChevronDown,
+  ClipboardList
 } from 'lucide-react';
 import { WorkOrder, User as UserType } from '@shared/types';
 
