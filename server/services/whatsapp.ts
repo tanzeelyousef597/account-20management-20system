@@ -45,19 +45,27 @@ export class WhatsAppService {
       );
 
       // For now, we'll log the message (in production, integrate with WhatsApp Business API)
-      console.log('📱 WhatsApp Message would be sent:');
-      console.log(`From: ${whatsappSettings.adminWhatsAppNumber}`);
-      console.log(`To: ${params.to}`);
-      console.log(`Message: ${formattedMessage}`);
+      console.log('🚀 WHATSAPP MESSAGE SENDING:');
+      console.log('=================================');
+      console.log(`📞 From: ${whatsappSettings.adminWhatsAppNumber}`);
+      console.log(`📱 To: ${params.to}`);
+      console.log(`👤 Worker: ${params.workerName}`);
+      console.log(`📝 Order: ${params.orderTitle}`);
+      console.log(`📅 Due Date: ${params.dueDate}`);
+      console.log(`💬 Message: ${formattedMessage}`);
+      console.log('=================================');
 
       // TODO: Integrate with actual WhatsApp Business API
       // Example integration options:
-      // 1. WhatsApp Business API (Official)
-      // 2. Twilio WhatsApp API
-      // 3. 360Dialog
-      // 4. Chatfuel
-      
-      // Simulate API call
+      // 1. WhatsApp Business API (Official) - Most reliable
+      // 2. Twilio WhatsApp API - Easy integration
+      // 3. 360Dialog - Good for business use
+      // 4. Meta WhatsApp Cloud API - Official cloud solution
+
+      // For production, uncomment and configure one of these:
+      await this.sendWhatsAppMessage(params.to, formattedMessage);
+
+      // Simulate API call for development
       await this.simulateWhatsAppAPI(params.to, formattedMessage);
 
       return true;
