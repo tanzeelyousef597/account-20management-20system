@@ -8,6 +8,7 @@ let users: User[] = [
     email: 'admin@mtwebexperts.com',
     name: 'Admin User',
     role: 'Admin',
+    whatsappNumber: '+923189046142',
     createdAt: new Date().toISOString(),
   },
   {
@@ -15,6 +16,7 @@ let users: User[] = [
     email: 'worker@mtwebexperts.com',
     name: 'John Worker',
     role: 'Worker',
+    whatsappNumber: '+923280909654',
     createdAt: new Date().toISOString(),
   }
 ];
