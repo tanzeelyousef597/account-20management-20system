@@ -63,11 +63,12 @@ export default function AIInvoiceGenerator({
              order.status === 'Approved';
     });
 
-    // Group by categories
+    // Group by categories and sum submissions
     const categoryMap: { [category: string]: number } = {};
     approvedSubmissions.forEach(order => {
       const category = order.category || 'Uncategorized';
-      categoryMap[category] = (categoryMap[category] || 0) + 1;
+      const submissions = order.payRate || 1; // payRate stores the number of submissions
+      categoryMap[category] = (categoryMap[category] || 0) + submissions;
     });
 
     // Convert to CategoryData array
