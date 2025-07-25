@@ -445,6 +445,88 @@ export default function OrdersFromWorkers() {
           )}
         </CardContent>
       </Card>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Edit Worker Submission</DialogTitle>
+            <DialogDescription>Update the worker submission details</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleUpdateOrder} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="editFolderName">Folder Name</Label>
+                <Input
+                  id="editFolderName"
+                  value={formData.folderName}
+                  onChange={(e) => setFormData({...formData, folderName: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="editBusinessName">Business Name</Label>
+                <Input
+                  id="editBusinessName"
+                  value={formData.businessName}
+                  onChange={(e) => setFormData({...formData, businessName: e.target.value})}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="editWorkCategory">Work Category</Label>
+                <Input
+                  id="editWorkCategory"
+                  value={formData.workCategory}
+                  onChange={(e) => setFormData({...formData, workCategory: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="editTotalSubmissions">Total Submissions</Label>
+                <Input
+                  id="editTotalSubmissions"
+                  type="number"
+                  value={formData.totalSubmissions}
+                  onChange={(e) => setFormData({...formData, totalSubmissions: e.target.value})}
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="editSubmissionDate">Submission Date</Label>
+              <Input
+                id="editSubmissionDate"
+                type="date"
+                value={formData.submissionDate}
+                onChange={(e) => setFormData({...formData, submissionDate: e.target.value})}
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="editDescription">Description</Label>
+              <Textarea
+                id="editDescription"
+                value={formData.description}
+                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                rows={3}
+              />
+            </div>
+
+            <div className="flex justify-end space-x-3">
+              <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit">Update Order</Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
