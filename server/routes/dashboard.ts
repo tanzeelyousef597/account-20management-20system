@@ -69,7 +69,12 @@ export const handleDashboardData: RequestHandler = (req, res) => {
       .filter(order => order.status === 'Rejected')
       .reduce((sum, order) => sum + (order.payRate || 0), 0),
     ordersInQA: filteredOrders.filter(order => order.status === 'Under QA').length,
-    ordersInWork: filteredOrders.filter(order => order.status === 'In Progress' || order.assignedTo).length,
+    ordersInWork: filteredOrders.filter(order =>
+      (order.status === 'In Progress' || order.status === 'Under QA') &&
+      order.assignedTo &&
+      order.status !== 'Approved' &&
+      order.status !== 'Rejected'
+    ).length,
     categories
   };
 
