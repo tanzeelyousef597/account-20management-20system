@@ -37,6 +37,7 @@ const adminNavItems = [
   { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
   { name: 'Assigned Orders', href: '/assigned-orders', icon: ClipboardList },
   { name: 'Orders from Workers', href: '/orders-from-workers', icon: FileText },
+  { name: 'Monthly Report', href: '/monthly-report', icon: TrendingUp },
   { name: 'User Management', href: '/users', icon: Users },
   { name: 'Invoices', href: '/invoices', icon: DollarSign },
   { name: 'Bonuses', href: '/bonuses', icon: TrendingUp },
