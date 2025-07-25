@@ -128,13 +128,75 @@ export default function OrdersFromWorkers() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
       });
-      
+
       if (response.ok) {
         fetchWorkOrders();
       }
     } catch (error) {
       console.error('Error updating status:', error);
     }
+  };
+
+  const handleUpdateOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedOrder) return;
+
+    try {
+      const response = await fetch(`/api/work-orders/${selectedOrder.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        fetchWorkOrders();
+        setIsEditDialogOpen(false);
+        setSelectedOrder(null);
+        resetForm();
+      }
+    } catch (error) {
+      console.error('Error updating work order:', error);
+    }
+  };
+
+  const handleDeleteOrder = async (orderId: string) => {
+    if (confirm('Are you sure you want to delete this worker submission? This action cannot be undone.')) {
+      try {
+        const response = await fetch(`/api/work-orders/${orderId}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          fetchWorkOrders();
+        }
+      } catch (error) {
+        console.error('Error deleting work order:', error);
+      }
+    }
+  };
+
+  const openEditDialog = (order: WorkOrder) => {
+    setSelectedOrder(order);
+    setFormData({
+      folderName: order.title,
+      businessName: '',
+      workCategory: order.category,
+      totalSubmissions: order.payRate?.toString() || '',
+      submissionDate: order.dueDate || '',
+      description: order.description,
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const resetForm = () => {
+    setFormData({
+      folderName: '',
+      businessName: '',
+      workCategory: '',
+      totalSubmissions: '',
+      submissionDate: '',
+      description: '',
+    });
   };
 
   const getStatusBadge = (status: string) => {
