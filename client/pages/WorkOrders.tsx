@@ -24,7 +24,8 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  Trash2
+  Trash2,
+  ChevronDown
 } from 'lucide-react';
 import { WorkOrder, User as UserType } from '@shared/types';
 
