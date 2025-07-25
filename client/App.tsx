@@ -14,6 +14,7 @@ import Dashboard from "./pages/Dashboard";
 import WorkOrders from "./pages/WorkOrders";
 import AssignedOrders from "./pages/AssignedOrders";
 import OrdersFromWorkers from "./pages/OrdersFromWorkers";
+import MonthlyReport from "./pages/MonthlyReport";
 import UserManagement from "./pages/UserManagement";
 import Invoices from "./pages/Invoices";
 import Bonuses from "./pages/Bonuses";
