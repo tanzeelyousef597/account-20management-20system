@@ -47,7 +47,13 @@ export const handleCreateWorkOrder: RequestHandler = async (req, res) => {
   updateDashboard();
 
   // Send WhatsApp message if worker is assigned
+  console.log('🔍 Checking WhatsApp messaging conditions:');
+  console.log(`   - Assigned To: ${assignedTo}`);
+  console.log(`   - Assigned User: ${assignedUser ? assignedUser.name : 'Not found'}`);
+  console.log(`   - WhatsApp Number: ${assignedUser?.whatsappNumber || 'Not set'}`);
+
   if (assignedTo && assignedUser?.whatsappNumber) {
+    console.log('✅ All conditions met. Sending WhatsApp message...');
     try {
       await WhatsAppService.sendOrderAssignmentMessage({
         to: assignedUser.whatsappNumber,
@@ -57,11 +63,16 @@ export const handleCreateWorkOrder: RequestHandler = async (req, res) => {
         workerName: assignedUser.name,
         orderTitle: folderName
       });
-      console.log(`WhatsApp message sent to ${assignedUser.name} (${assignedUser.whatsappNumber})`);
+      console.log(`✅ WhatsApp message sent successfully to ${assignedUser.name} (${assignedUser.whatsappNumber})`);
     } catch (error) {
-      console.error('Failed to send WhatsApp message:', error);
+      console.error('❌ Failed to send WhatsApp message:', error);
       // Don't fail the order creation if WhatsApp fails
     }
+  } else {
+    console.log('❌ WhatsApp message not sent. Reason:');
+    if (!assignedTo) console.log('   - No worker assigned');
+    if (!assignedUser) console.log('   - Assigned user not found');
+    if (!assignedUser?.whatsappNumber) console.log('   - Worker has no WhatsApp number');
   }
 
   res.json(newOrder);
