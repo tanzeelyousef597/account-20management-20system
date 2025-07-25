@@ -13,7 +13,7 @@ export interface WorkOrder {
   title: string;
   category: string;
   description: string;
-  status: 'Under QA' | 'Approved' | 'Rejected' | 'In Progress' | 'Completed';
+  status: 'Under QA' | 'Approved' | 'Rejected' | 'In Progress' | 'Completed' | 'Deleted';
   assignedTo?: string;
   assignedToName?: string;
   createdBy: string;
