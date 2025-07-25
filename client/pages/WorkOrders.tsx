@@ -46,6 +46,7 @@ export default function WorkOrders() {
   });
   const [attachmentFiles, setAttachmentFiles] = useState<File[]>([]);
   const [isAssignPopoverOpen, setIsAssignPopoverOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleFileDownload = async (url: string, filename: string) => {
     try {
