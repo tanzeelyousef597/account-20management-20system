@@ -35,9 +35,10 @@ interface LayoutProps {
 
 const adminNavItems = [
   { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
-  { name: 'Work Orders', href: '/work-orders', icon: ClipboardList },
+  { name: 'Assigned Orders', href: '/assigned-orders', icon: ClipboardList },
+  { name: 'Orders from Workers', href: '/orders-from-workers', icon: FileText },
   { name: 'User Management', href: '/users', icon: Users },
-  { name: 'Invoices', href: '/invoices', icon: FileText },
+  { name: 'Invoices', href: '/invoices', icon: DollarSign },
   { name: 'Bonuses', href: '/bonuses', icon: TrendingUp },
   { name: 'Fines', href: '/fines', icon: AlertCircle },
   { name: 'Activity Logs', href: '/logs', icon: Activity },
