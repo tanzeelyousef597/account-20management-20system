@@ -26,6 +26,16 @@ import { WorkOrder, User as UserType } from '@shared/types';
 export default function OrdersFromWorkers() {
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
   const [users, setUsers] = useState<UserType[]>([]);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<WorkOrder | null>(null);
+  const [formData, setFormData] = useState({
+    folderName: '',
+    businessName: '',
+    workCategory: '',
+    totalSubmissions: '',
+    submissionDate: '',
+    description: '',
+  });
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
