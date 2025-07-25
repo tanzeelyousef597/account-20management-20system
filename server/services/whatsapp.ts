@@ -96,6 +96,52 @@ export class WhatsAppService {
   }
 
   /**
+   * Send actual WhatsApp message (production method)
+   */
+  private async sendWhatsAppMessage(to: string, message: string): Promise<void> {
+    // This is where you would integrate with actual WhatsApp API
+    // For production, implement one of these options:
+
+    // Option 1: WhatsApp Business Cloud API (Meta)
+    /*
+    const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+
+    const response = await fetch(`https://graph.facebook.com/v18.0/${phoneNumberId}/messages`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        messaging_product: 'whatsapp',
+        to: to.replace('+', ''),
+        type: 'text',
+        text: { body: message }
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`WhatsApp API error: ${response.statusText}`);
+    }
+    */
+
+    // Option 2: Twilio WhatsApp API
+    /*
+    const twilio = require('twilio');
+    const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
+    await client.messages.create({
+      from: `whatsapp:${whatsappSettings.adminWhatsAppNumber}`,
+      to: `whatsapp:${to}`,
+      body: message
+    });
+    */
+
+    console.log('🔧 Production WhatsApp API not configured. Using simulation mode.');
+  }
+
+  /**
    * Simulate WhatsApp API call (replace with actual API integration)
    */
   private async simulateWhatsAppAPI(to: string, message: string): Promise<void> {
