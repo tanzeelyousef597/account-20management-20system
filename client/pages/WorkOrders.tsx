@@ -728,6 +728,129 @@ export default function WorkOrders() {
         </CardContent>
       </Card>
 
+      {/* Orders from Workers Section */}
+      <Card className="shadow-lg">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5 text-yellow-600" />
+            Orders from Workers
+          </CardTitle>
+          <CardDescription>
+            Submissions from workers pending review and approval
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {workOrders.filter(order => order.createdBy !== 'admin' && order.status === 'Under QA').length > 0 ? (
+            <div className="overflow-x-auto">
+              <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Order Details</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Submitted By</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Files</TableHead>
+                  <TableHead>Submitted</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {workOrders.filter(order => order.createdBy !== 'admin' && order.status === 'Under QA').map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <p className="font-medium">{order.title}</p>
+                        <p className="text-sm text-gray-500">{order.description}</p>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{order.category}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <User className="h-4 w-4 text-gray-400" />
+                        {users.find(user => user.id === order.createdBy)?.name || 'Unknown Worker'}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        {getStatusIcon(order.status)}
+                        {getStatusBadge(order.status)}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {(order.attachmentUrls && order.attachmentUrls.length > 0) || order.attachmentUrl ? (
+                        <div className="space-y-1">
+                          {order.attachmentUrls && order.attachmentUrls.length > 0 ? (
+                            order.attachmentUrls.map((url, index) => (
+                              <div key={index} className="flex items-center gap-2">
+                                <button
+                                  onClick={() => handleFileDownload(url, order.attachmentNames?.[index] || `attachment-${index + 1}`)}
+                                  className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded text-xs font-medium transition-colors cursor-pointer"
+                                >
+                                  <FileText className="h-3 w-3" />
+                                  {order.attachmentNames?.[index] || `File ${index + 1}`}
+                                </button>
+                              </div>
+                            ))
+                          ) : (
+                            order.attachmentUrl && (
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => handleFileDownload(order.attachmentUrl, order.attachmentName || 'attachment')}
+                                  className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-md text-sm font-medium transition-colors cursor-pointer"
+                                >
+                                  <FileText className="h-4 w-4" />
+                                  Download File
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-gray-400 text-sm">No files</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <Calendar className="h-4 w-4" />
+                        {new Date(order.createdAt).toLocaleDateString()}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Approved')}>
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                            Approve
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Rejected')}>
+                            <XCircle className="h-4 w-4 mr-2" />
+                            Reject
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No worker submissions</h3>
+              <p className="text-gray-500">Worker submissions will appear here for review</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl">
