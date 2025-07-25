@@ -45,6 +45,20 @@ const App = () => (
                 </Layout>
               </ProtectedRoute>
             } />
+            <Route path="/assigned-orders" element={
+              <ProtectedRoute requiredRole="Admin">
+                <Layout>
+                  <AssignedOrders />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/orders-from-workers" element={
+              <ProtectedRoute requiredRole="Admin">
+                <Layout>
+                  <OrdersFromWorkers />
+                </Layout>
+              </ProtectedRoute>
+            } />
             <Route path="/work-orders" element={
               <ProtectedRoute requiredRole="Admin">
                 <Layout>
