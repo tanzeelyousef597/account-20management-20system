@@ -359,6 +359,10 @@ export default function OrdersFromWorkers() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => openEditDialog(order)}>
+                              <Edit className="h-4 w-4 mr-2" />
+                              Edit
+                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Approved')}>
                               <CheckCircle className="h-4 w-4 mr-2" />
                               Approve
@@ -366,6 +370,13 @@ export default function OrdersFromWorkers() {
                             <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Rejected')}>
                               <XCircle className="h-4 w-4 mr-2" />
                               Reject
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleDeleteOrder(order.id)}
+                              className="text-red-600"
+                            >
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
