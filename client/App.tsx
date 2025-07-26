@@ -8,6 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Layout from "@/components/Layout";
 import Login from "./pages/Login";
@@ -36,118 +37,120 @@ const App = () => (
       <Toaster />
       <Sonner />
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Layout>
-                  <Dashboard />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/assigned-orders" element={
-              <ProtectedRoute requiredRole="Admin">
-                <Layout>
-                  <AssignedOrders />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/orders-from-workers" element={
-              <ProtectedRoute requiredRole="Admin">
-                <Layout>
-                  <OrdersFromWorkers />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/monthly-report" element={
-              <ProtectedRoute requiredRole="Admin">
-                <Layout>
-                  <MonthlyReport />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/work-orders" element={
-              <ProtectedRoute requiredRole="Admin">
-                <Layout>
-                  <WorkOrders />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/users" element={
-              <ProtectedRoute requiredRole="Admin">
-                <Layout>
-                  <UserManagement />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/invoices" element={
-              <ProtectedRoute requiredRole="Admin">
-                <Layout>
-                  <Invoices />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/bonuses" element={
-              <ProtectedRoute requiredRole="Admin">
-                <Layout>
-                  <Bonuses />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/fines" element={
-              <ProtectedRoute requiredRole="Admin">
-                <Layout>
-                  <Fines />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/logs" element={
-              <ProtectedRoute requiredRole="Admin">
-                <Layout>
-                  <ActivityLogs />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/settings" element={
-              <ProtectedRoute requiredRole="Admin">
-                <Layout>
-                  <Settings />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/my-orders" element={
-              <ProtectedRoute requiredRole="Worker">
-                <Layout>
-                  <MyOrders />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/my-invoices" element={
-              <ProtectedRoute requiredRole="Worker">
-                <Layout>
-                  <MyInvoices />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/my-bonuses" element={
-              <ProtectedRoute requiredRole="Worker">
-                <Layout>
-                  <MyBonuses />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/my-fines" element={
-              <ProtectedRoute requiredRole="Worker">
-                <Layout>
-                  <MyFines />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <CurrencyProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Dashboard />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/assigned-orders" element={
+                <ProtectedRoute requiredRole="Admin">
+                  <Layout>
+                    <AssignedOrders />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/orders-from-workers" element={
+                <ProtectedRoute requiredRole="Admin">
+                  <Layout>
+                    <OrdersFromWorkers />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/monthly-report" element={
+                <ProtectedRoute requiredRole="Admin">
+                  <Layout>
+                    <MonthlyReport />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/work-orders" element={
+                <ProtectedRoute requiredRole="Admin">
+                  <Layout>
+                    <WorkOrders />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/users" element={
+                <ProtectedRoute requiredRole="Admin">
+                  <Layout>
+                    <UserManagement />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/invoices" element={
+                <ProtectedRoute requiredRole="Admin">
+                  <Layout>
+                    <Invoices />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/bonuses" element={
+                <ProtectedRoute requiredRole="Admin">
+                  <Layout>
+                    <Bonuses />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/fines" element={
+                <ProtectedRoute requiredRole="Admin">
+                  <Layout>
+                    <Fines />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/logs" element={
+                <ProtectedRoute requiredRole="Admin">
+                  <Layout>
+                    <ActivityLogs />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/settings" element={
+                <ProtectedRoute requiredRole="Admin">
+                  <Layout>
+                    <Settings />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/my-orders" element={
+                <ProtectedRoute requiredRole="Worker">
+                  <Layout>
+                    <MyOrders />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/my-invoices" element={
+                <ProtectedRoute requiredRole="Worker">
+                  <Layout>
+                    <MyInvoices />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/my-bonuses" element={
+                <ProtectedRoute requiredRole="Worker">
+                  <Layout>
+                    <MyBonuses />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/my-fines" element={
+                <ProtectedRoute requiredRole="Worker">
+                  <Layout>
+                    <MyFines />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </CurrencyProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
