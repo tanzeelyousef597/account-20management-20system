@@ -23,6 +23,7 @@ import {
   Camera
 } from 'lucide-react';
 import { User } from '@shared/types';
+import { api } from '@shared/api-client';
 
 export default function UserManagement() {
   const [users, setUsers] = useState<User[]>([]);
