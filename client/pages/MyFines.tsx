@@ -13,6 +13,7 @@ import {
   Info
 } from 'lucide-react';
 import { Fine } from '@shared/types';
+import { api } from '@shared/api-client';
 
 export default function MyFines() {
   const { user } = useAuth();
