@@ -102,7 +102,7 @@ export default function Invoices() {
   const fetchUsers = async () => {
     try {
       console.log('Fetching users from:', window.location.origin + '/api/users');
-      const response = await fetch('/api/users');
+      const response = await fetch(`${window.location.protocol}//${window.location.host}/api/users`);
       console.log('Users response status:', response.status);
       if (response.ok) {
         const data = await response.json();
