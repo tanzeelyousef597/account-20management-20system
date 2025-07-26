@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useCurrency } from '@/contexts/CurrencyContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,6 +22,7 @@ import { Bonus, User as UserType } from '@shared/types';
 
 export default function Bonuses() {
   const [bonuses, setBonuses] = useState<Bonus[]>([]);
+  const { formatAmount } = useCurrency();
   const [users, setUsers] = useState<UserType[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
