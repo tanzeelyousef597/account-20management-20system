@@ -46,34 +46,12 @@ export const handleCreateWorkOrder: RequestHandler = async (req, res) => {
   nextId++;
   updateDashboard();
 
-  // Send WhatsApp message if worker is assigned
-  console.log('🔍 Checking WhatsApp messaging conditions:');
-  console.log(`   - Assigned To: ${assignedTo}`);
-  console.log(`   - Assigned User: ${assignedUser ? assignedUser.name : 'Not found'}`);
-  console.log(`   - WhatsApp Number: ${assignedUser?.whatsappNumber || 'Not set'}`);
-
-  if (assignedTo && assignedUser?.whatsappNumber) {
-    console.log('✅ All conditions met. Sending WhatsApp message...');
-    try {
-      await WhatsAppService.sendOrderAssignmentMessage({
-        to: assignedUser.whatsappNumber,
-        message: '', // Will use template from settings
-        adminName: 'Admin User', // In production, get from auth context
-        dueDate: submissionDate || 'Not specified',
-        workerName: assignedUser.name,
-        orderTitle: folderName
-      });
-      console.log(`✅ WhatsApp message sent successfully to ${assignedUser.name} (${assignedUser.whatsappNumber})`);
-    } catch (error) {
-      console.error('❌ Failed to send WhatsApp message:', error);
-      // Don't fail the order creation if WhatsApp fails
-    }
-  } else {
-    console.log('❌ WhatsApp message not sent. Reason:');
-    if (!assignedTo) console.log('   - No worker assigned');
-    if (!assignedUser) console.log('   - Assigned user not found');
-    if (!assignedUser?.whatsappNumber) console.log('   - Worker has no WhatsApp number');
-  }
+  // WhatsApp integration has been disabled - keeping field for record only
+  console.log(`✅ Work order created successfully for ${assignedUser ? assignedUser.name : 'unassigned'}`);
+  console.log(`   - Order: ${folderName}`);
+  console.log(`   - Category: ${workCategory}`);
+  console.log(`   - Due Date: ${submissionDate || 'Not specified'}`);
+  console.log(`   - Submissions: ${totalSubmissions}`);
 
   res.json(newOrder);
 };
