@@ -276,7 +276,7 @@ export default function AIInvoiceGenerator({
                           <div key={index} className="flex justify-between items-center text-sm">
                             <span className="text-gray-700">{category.category}:</span>
                             <span className="font-mono text-gray-600">
-                              {category.count} x {parseFloat(category.price).toFixed(2)} = {category.total.toFixed(2)} PKR
+                              {category.count} x {parseFloat(category.price).toFixed(2)} = {formatAmount(category.total)}
                             </span>
                           </div>
                         ))}
