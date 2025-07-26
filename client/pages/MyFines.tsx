@@ -16,6 +16,7 @@ import { Fine } from '@shared/types';
 
 export default function MyFines() {
   const { user } = useAuth();
+  const { formatAmount } = useCurrency();
   const [fines, setFines] = useState<Fine[]>([]);
 
   useEffect(() => {
@@ -34,10 +35,6 @@ export default function MyFines() {
     } catch (error) {
       console.error('Error fetching fines:', error);
     }
-  };
-
-  const formatCurrency = (amount: number) => {
-    return `PKR ${amount.toLocaleString()}`;
   };
 
   const totalFines = fines.reduce((sum, fine) => sum + fine.amount, 0);
