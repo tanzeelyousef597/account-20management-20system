@@ -905,7 +905,7 @@ export default function AssignedOrders() {
             <DialogDescription>Update the work order details</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleUpdateOrder} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="editFolderName">Folder Name</Label>
                 <Input
@@ -926,7 +926,7 @@ export default function AssignedOrders() {
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="editWorkCategory">Work Category</Label>
                 <Input
