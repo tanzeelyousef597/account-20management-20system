@@ -11,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Plus,
   Edit,
@@ -29,7 +30,10 @@ import {
   ClipboardList,
   ChevronLeft,
   ChevronRight,
-  Search
+  Search,
+  PlayCircle,
+  StopCircle,
+  AlertTriangle
 } from 'lucide-react';
 import { WorkOrder, User as UserType } from '@shared/types';
 
@@ -55,7 +59,7 @@ export default function AssignedOrders() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 100;
-
+  
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -197,7 +201,7 @@ export default function AssignedOrders() {
           throw new Error('Failed to create unassigned order');
         }
       } else {
-        // Create separate order for each assigned worker
+        // Create separate order for each assigned worker - set status to "In Progress"
         for (const workerId of formData.assignedTo) {
           const response = await fetch('/api/work-orders', {
             method: 'POST',
@@ -205,6 +209,7 @@ export default function AssignedOrders() {
             body: JSON.stringify({
               ...formData,
               assignedTo: workerId,
+              status: 'In Progress', // Orders go to "Orders in Work" tab
               attachmentUrls,
               attachmentNames,
             }),
@@ -312,6 +317,7 @@ export default function AssignedOrders() {
       'Approved': 'bg-green-100 text-green-800',
       'Rejected': 'bg-red-100 text-red-800',
       'In Progress': 'bg-blue-100 text-blue-800',
+      'Stopped': 'bg-gray-100 text-gray-800',
     };
     
     return (
@@ -326,20 +332,22 @@ export default function AssignedOrders() {
       case 'Approved': return <CheckCircle className="h-4 w-4 text-green-600" />;
       case 'Rejected': return <XCircle className="h-4 w-4 text-red-600" />;
       case 'Under QA': return <Clock className="h-4 w-4 text-yellow-600" />;
+      case 'In Progress': return <PlayCircle className="h-4 w-4 text-blue-600" />;
+      case 'Stopped': return <StopCircle className="h-4 w-4 text-gray-600" />;
       default: return <Clock className="h-4 w-4 text-blue-600" />;
     }
   };
 
-  // Filter assigned orders (all orders created by admin or assigned to workers)
-  const assignedOrders = useMemo(() => {
-    let filtered = workOrders.filter(order =>
-      order.assignedTo || order.createdBy === 'admin'
+  // Filter orders for different tabs with search
+  const getFilteredOrders = (statusFilter: string[]) => {
+    let filtered = workOrders.filter(order => 
+      order.assignedTo && statusFilter.includes(order.status)
     );
-
+    
     // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(order =>
+      filtered = filtered.filter(order => 
         order.title?.toLowerCase().includes(query) ||
         order.description?.toLowerCase().includes(query) ||
         order.category?.toLowerCase().includes(query) ||
@@ -347,17 +355,219 @@ export default function AssignedOrders() {
         order.status?.toLowerCase().includes(query)
       );
     }
-
+    
     return filtered;
-  }, [workOrders, searchQuery]);
+  };
+
+  const ordersInWork = getFilteredOrders(['In Progress', 'Under QA']);
+  const approvedOrders = getFilteredOrders(['Approved']);
+  const stoppedOrders = getFilteredOrders(['Stopped']);
 
   // Pagination logic
-  const totalPages = Math.ceil(assignedOrders.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedOrders = assignedOrders.slice(startIndex, startIndex + itemsPerPage);
+  const getPaginatedOrders = (orders: WorkOrder[]) => {
+    const totalPages = Math.ceil(orders.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedOrders = orders.slice(startIndex, startIndex + itemsPerPage);
+    return { paginatedOrders, totalPages, startIndex };
+  };
 
-  const goToPage = (page: number) => {
+  const goToPage = (page: number, totalPages: number) => {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  };
+
+  const renderOrdersTable = (orders: WorkOrder[], tabType: string) => {
+    const { paginatedOrders, totalPages, startIndex } = getPaginatedOrders(orders);
+
+    return (
+      <div className="space-y-4">
+        <div className="overflow-x-auto">
+          <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Order Details</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Assigned To</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Files</TableHead>
+              <TableHead>Created</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {paginatedOrders.map((order) => (
+              <TableRow key={order.id}>
+                <TableCell>
+                  <div className="space-y-1">
+                    <p className="font-medium">{order.title}</p>
+                    <p className="text-sm text-gray-500">{order.description}</p>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline">{order.category}</Badge>
+                </TableCell>
+                <TableCell>
+                  {order.assignedToName ? (
+                    <div className="flex items-center gap-2">
+                      <User className="h-4 w-4 text-gray-400" />
+                      {order.assignedToName}
+                    </div>
+                  ) : (
+                    <span className="text-gray-400 text-sm">Unassigned</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    {getStatusIcon(order.status)}
+                    {getStatusBadge(order.status)}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {(order.attachmentUrls && order.attachmentUrls.length > 0) || order.attachmentUrl ? (
+                    <div className="space-y-1">
+                      {order.attachmentUrls && order.attachmentUrls.length > 0 ? (
+                        order.attachmentUrls.map((url, index) => (
+                          <div key={index} className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleFileDownload(url, order.attachmentNames?.[index] || `attachment-${index + 1}`)}
+                              className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded text-xs font-medium transition-colors cursor-pointer"
+                            >
+                              <FileText className="h-3 w-3" />
+                              {order.attachmentNames?.[index] || `File ${index + 1}`}
+                            </button>
+                          </div>
+                        ))
+                      ) : (
+                        order.attachmentUrl && (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleFileDownload(order.attachmentUrl, order.attachmentName || 'attachment')}
+                              className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-md text-sm font-medium transition-colors cursor-pointer"
+                            >
+                              <FileText className="h-4 w-4" />
+                              Download File
+                            </button>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  ) : (
+                    <span className="text-gray-400 text-sm">No files</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <Calendar className="h-4 w-4" />
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => openEditDialog(order)}>
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit
+                      </DropdownMenuItem>
+                      {tabType === 'work' && (
+                        <>
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Approved')}>
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                            Approve
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Stopped')}>
+                            <StopCircle className="h-4 w-4 mr-2" />
+                            Stop Order
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                      {tabType === 'approved' && (
+                        <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Stopped')}>
+                          <StopCircle className="h-4 w-4 mr-2" />
+                          Stop Order
+                        </DropdownMenuItem>
+                      )}
+                      {tabType === 'stopped' && (
+                        <>
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'In Progress')}>
+                            <PlayCircle className="h-4 w-4 mr-2" />
+                            Resume Order
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Approved')}>
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                            Approve Order
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                      <DropdownMenuItem 
+                        onClick={() => handleDeleteOrder(order.id)}
+                        className="text-red-600"
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          </Table>
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-500">
+              Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, orders.length)} of {orders.length} entries
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => goToPage(currentPage - 1, totalPages)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Button>
+              
+              <div className="flex items-center space-x-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  const page = currentPage <= 3 ? i + 1 : currentPage - 2 + i;
+                  if (page > totalPages) return null;
+                  
+                  return (
+                    <Button
+                      key={page}
+                      variant={page === currentPage ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => goToPage(page, totalPages)}
+                      className="w-8 h-8 p-0"
+                    >
+                      {page}
+                    </Button>
+                  );
+                })}
+              </div>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => goToPage(currentPage + 1, totalPages)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -365,7 +575,7 @@ export default function AssignedOrders() {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">Assigned Orders</h2>
-          <p className="text-gray-600 mt-1">All orders created by admin and assigned to workers</p>
+          <p className="text-gray-600 mt-1">Manage orders through their workflow stages</p>
         </div>
         
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -437,7 +647,7 @@ export default function AssignedOrders() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="assignedTo">Assign Users (Optional)</Label>
+                  <Label htmlFor="assignedTo">Assign Users (Required)</Label>
                   <div className="relative" ref={dropdownRef}>
                     <Button 
                       variant="outline" 
@@ -521,7 +731,7 @@ export default function AssignedOrders() {
                     )}
                   </div>
                   <p className="text-sm text-gray-500 mt-1">
-                    Select one or more workers. Leave unselected to create unassigned order.
+                    Orders will be created with "In Progress" status and go to "Orders in Work" tab.
                   </p>
                 </div>
               </div>
@@ -566,7 +776,9 @@ export default function AssignedOrders() {
                 <Button type="button" variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit">Create Order</Button>
+                <Button type="submit" disabled={formData.assignedTo.length === 0}>
+                  Create Order
+                </Button>
               </div>
             </form>
           </DialogContent>
@@ -588,213 +800,102 @@ export default function AssignedOrders() {
         </CardContent>
       </Card>
 
-      {/* Summary Card */}
-      <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-        <CardContent className="p-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-blue-100 rounded-full">
-              <ClipboardList className="h-6 w-6 text-blue-600" />
-            </div>
-            <div>
-              <p className="text-blue-600 font-medium">Total Assigned Orders</p>
-              <p className="text-2xl font-bold text-blue-800">{assignedOrders.length}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Tabbed Interface */}
+      <Tabs defaultValue="work" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="work" className="flex items-center gap-2">
+            <PlayCircle className="h-4 w-4" />
+            Orders in Work ({ordersInWork.length})
+          </TabsTrigger>
+          <TabsTrigger value="approved" className="flex items-center gap-2">
+            <CheckCircle className="h-4 w-4" />
+            Approved Orders ({approvedOrders.length})
+          </TabsTrigger>
+          <TabsTrigger value="stopped" className="flex items-center gap-2">
+            <StopCircle className="h-4 w-4" />
+            Stopped Orders ({stoppedOrders.length})
+          </TabsTrigger>
+        </TabsList>
 
-      {/* Orders Table */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <ClipboardList className="h-5 w-5 text-blue-600" />
-            Assigned Orders
-          </CardTitle>
-          <CardDescription>
-            All orders created by admin and assigned to workers
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {paginatedOrders.length > 0 ? (
-            <div className="space-y-4">
-              <div className="overflow-x-auto">
-                <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Order Details</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Assigned To</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Files</TableHead>
-                    <TableHead>Created</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paginatedOrders.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell>
-                        <div className="space-y-1">
-                          <p className="font-medium">{order.title}</p>
-                          <p className="text-sm text-gray-500">{order.description}</p>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{order.category}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        {order.assignedToName ? (
-                          <div className="flex items-center gap-2">
-                            <User className="h-4 w-4 text-gray-400" />
-                            {order.assignedToName}
-                          </div>
-                        ) : (
-                          <span className="text-gray-400 text-sm">Unassigned</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          {getStatusIcon(order.status)}
-                          {getStatusBadge(order.status)}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {(order.attachmentUrls && order.attachmentUrls.length > 0) || order.attachmentUrl ? (
-                          <div className="space-y-1">
-                            {order.attachmentUrls && order.attachmentUrls.length > 0 ? (
-                              order.attachmentUrls.map((url, index) => (
-                                <div key={index} className="flex items-center gap-2">
-                                  <button
-                                    onClick={() => handleFileDownload(url, order.attachmentNames?.[index] || `attachment-${index + 1}`)}
-                                    className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded text-xs font-medium transition-colors cursor-pointer"
-                                  >
-                                    <FileText className="h-3 w-3" />
-                                    {order.attachmentNames?.[index] || `File ${index + 1}`}
-                                  </button>
-                                </div>
-                              ))
-                            ) : (
-                              order.attachmentUrl && (
-                                <div className="flex items-center gap-2">
-                                  <button
-                                    onClick={() => handleFileDownload(order.attachmentUrl, order.attachmentName || 'attachment')}
-                                    className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-md text-sm font-medium transition-colors cursor-pointer"
-                                  >
-                                    <FileText className="h-4 w-4" />
-                                    Download File
-                                  </button>
-                                </div>
-                              )
-                            )}
-                          </div>
-                        ) : (
-                          <span className="text-gray-400 text-sm">No files</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                          <Calendar className="h-4 w-4" />
-                          {new Date(order.createdAt).toLocaleDateString()}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => openEditDialog(order)}>
-                              <Edit className="h-4 w-4 mr-2" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Approved')}>
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Approve
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Rejected')}>
-                              <XCircle className="h-4 w-4 mr-2" />
-                              Reject
-                            </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              onClick={() => handleDeleteOrder(order.id)}
-                              className="text-red-600"
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-                </Table>
-              </div>
-
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-between">
-                  <div className="text-sm text-gray-500">
-                    Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, assignedOrders.length)} of {assignedOrders.length} entries
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => goToPage(currentPage - 1)}
-                      disabled={currentPage === 1}
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                      Previous
-                    </Button>
-                    
-                    <div className="flex items-center space-x-1">
-                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                        const page = currentPage <= 3 ? i + 1 : currentPage - 2 + i;
-                        if (page > totalPages) return null;
-                        
-                        return (
-                          <Button
-                            key={page}
-                            variant={page === currentPage ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => goToPage(page)}
-                            className="w-8 h-8 p-0"
-                          >
-                            {page}
-                          </Button>
-                        );
-                      })}
-                    </div>
-                    
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => goToPage(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                    >
-                      Next
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
+        <TabsContent value="work">
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <PlayCircle className="h-5 w-5 text-blue-600" />
+                Orders in Work
+              </CardTitle>
+              <CardDescription>
+                Orders currently in progress or under QA
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {ordersInWork.length > 0 ? (
+                renderOrdersTable(ordersInWork, 'work')
+              ) : (
+                <div className="text-center py-12">
+                  <PlayCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No orders in work</h3>
+                  <p className="text-gray-500 mb-4">Assign new orders to workers to get started</p>
+                  <Button onClick={() => setIsCreateDialogOpen(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Order
+                  </Button>
                 </div>
               )}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <ClipboardList className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No assigned orders</h3>
-              <p className="text-gray-500 mb-4">Create and assign orders to workers to get started</p>
-              <Button onClick={() => setIsCreateDialogOpen(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Create Order
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="approved">
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+                Approved Orders
+              </CardTitle>
+              <CardDescription>
+                Orders that have been completed and approved
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {approvedOrders.length > 0 ? (
+                renderOrdersTable(approvedOrders, 'approved')
+              ) : (
+                <div className="text-center py-12">
+                  <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No approved orders</h3>
+                  <p className="text-gray-500">Approved orders will appear here</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="stopped">
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <StopCircle className="h-5 w-5 text-gray-600" />
+                Stopped Orders
+              </CardTitle>
+              <CardDescription>
+                Orders that have been stopped or paused
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {stoppedOrders.length > 0 ? (
+                renderOrdersTable(stoppedOrders, 'stopped')
+              ) : (
+                <div className="text-center py-12">
+                  <StopCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No stopped orders</h3>
+                  <p className="text-gray-500">Stopped orders will appear here</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
