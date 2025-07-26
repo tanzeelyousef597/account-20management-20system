@@ -96,7 +96,10 @@ export const api = {
   createInvoice: (data: any) => apiClient.post('/api/invoices', data),
 
   // Bonuses
-  getBonuses: () => apiClient.get('/api/bonuses'),
+  getBonuses: (params?: any) => {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return apiClient.get(`/api/bonuses${query}`);
+  },
   getWorkerBonuses: (workerId: string) => apiClient.get(`/api/bonuses/worker/${workerId}`),
   createBonus: (data: any) => apiClient.post('/api/bonuses', data),
 
