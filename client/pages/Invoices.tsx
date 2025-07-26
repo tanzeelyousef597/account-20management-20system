@@ -103,18 +103,10 @@ export default function Invoices() {
 
   const fetchWorkOrders = async () => {
     try {
-      console.log('Fetching work orders from:', window.location.origin + '/api/work-orders');
-      const response = await fetch(`${window.location.protocol}//${window.location.host}/api/work-orders`);
-      console.log('Work orders response status:', response.status);
-      if (response.ok) {
-        const data = await response.json();
-        setWorkOrders(data);
-      } else {
-        console.error('Failed to fetch work orders:', response.status, response.statusText);
-      }
+      const data = await api.getWorkOrders();
+      setWorkOrders(data);
     } catch (error) {
       console.error('Error fetching work orders:', error);
-      console.error('Current window location:', window.location.href);
     }
   };
 
