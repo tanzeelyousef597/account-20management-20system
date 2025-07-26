@@ -336,7 +336,7 @@ Type: ${invoice.isManual ? 'Manual' : 'AI Generated'}
                   <Card className="bg-blue-50 border-blue-200">
                     <CardContent className="p-4">
                       <h4 className="font-semibold text-blue-900 mb-3">Worker Statistics</h4>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                         <div>
                           <span className="text-blue-700">Total Submissions:</span>
                           <span className="font-semibold ml-2">{userStats.totalSubmissions}</span>
