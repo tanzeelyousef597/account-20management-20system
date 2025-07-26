@@ -20,6 +20,7 @@ import { Invoice } from '@shared/types';
 
 export default function MyInvoices() {
   const { user } = useAuth();
+  const { formatAmount } = useCurrency();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
 
   useEffect(() => {
@@ -38,10 +39,6 @@ export default function MyInvoices() {
     } catch (error) {
       console.error('Error fetching invoices:', error);
     }
-  };
-
-  const formatCurrency = (amount: number) => {
-    return `PKR ${amount.toLocaleString()}`;
   };
 
   const handleDownloadInvoice = (invoiceId: string) => {
