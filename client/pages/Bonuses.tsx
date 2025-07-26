@@ -220,7 +220,7 @@ export default function Bonuses() {
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Amount</p>
                 <p className="text-2xl font-bold text-green-600">
-                  {formatCurrency(bonuses.reduce((sum, bonus) => sum + bonus.amount, 0))}
+                  {formatAmount(bonuses.reduce((sum, bonus) => sum + bonus.amount, 0))}
                 </p>
               </div>
               <DollarSign className="h-8 w-8 text-green-600" />
@@ -289,7 +289,7 @@ export default function Bonuses() {
                     <TableCell>
                       <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
                         <DollarSign className="h-3 w-3 mr-1" />
-                        {formatCurrency(bonus.amount)}
+                        {formatAmount(bonus.amount)}
                       </Badge>
                     </TableCell>
                     <TableCell>
