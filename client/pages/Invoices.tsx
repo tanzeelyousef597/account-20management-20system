@@ -284,13 +284,13 @@ Type: ${invoice.isManual ? 'Manual' : 'AI Generated'}
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">Invoices</h2>
           <p className="text-gray-600 mt-1">Manage worker invoices with AI-powered generation</p>
         </div>
-        
-        <div className="flex gap-3">
+
+        <div className="flex flex-col sm:flex-row gap-3">
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="outline">
