@@ -42,6 +42,7 @@ export default function AIInvoiceGenerator({
   workOrders,
   selectedMonth
 }: AIInvoiceGeneratorProps) {
+  const { formatAmount, currency } = useCurrency();
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [showTotal, setShowTotal] = useState(false);
   const [grandTotal, setGrandTotal] = useState(0);
