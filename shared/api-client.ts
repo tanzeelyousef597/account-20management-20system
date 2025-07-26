@@ -101,7 +101,10 @@ export const api = {
   createBonus: (data: any) => apiClient.post('/api/bonuses', data),
 
   // Fines
-  getFines: () => apiClient.get('/api/fines'),
+  getFines: (params?: any) => {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return apiClient.get(`/api/fines${query}`);
+  },
   getWorkerFines: (workerId: string) => apiClient.get(`/api/fines/worker/${workerId}`),
   createFine: (data: any) => apiClient.post('/api/fines', data),
 
