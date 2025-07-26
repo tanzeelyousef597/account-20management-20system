@@ -68,7 +68,7 @@ export default function MyBonuses() {
               <div>
                 <p className="text-sm font-medium text-blue-700">Total Amount</p>
                 <p className="text-2xl font-bold text-blue-900">
-                  {formatCurrency(totalBonuses)}
+                  {formatAmount(totalBonuses)}
                 </p>
               </div>
               <DollarSign className="h-8 w-8 text-blue-600" />
@@ -82,7 +82,7 @@ export default function MyBonuses() {
               <div>
                 <p className="text-sm font-medium text-purple-700">This Month</p>
                 <p className="text-2xl font-bold text-purple-900">
-                  {formatCurrency(thisMonthBonuses)}
+                  {formatAmount(thisMonthBonuses)}
                 </p>
               </div>
               <TrendingUp className="h-8 w-8 text-purple-600" />
@@ -119,7 +119,7 @@ export default function MyBonuses() {
                     <TableCell>
                       <Badge className="bg-green-100 text-green-800 hover:bg-green-100 text-base px-3 py-1">
                         <DollarSign className="h-4 w-4 mr-1" />
-                        {formatCurrency(bonus.amount)}
+                        {formatAmount(bonus.amount)}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -168,7 +168,7 @@ export default function MyBonuses() {
               <div>
                 <h3 className="text-xl font-bold mb-2">Congratulations!</h3>
                 <p className="text-green-100">
-                  You've earned {formatCurrency(totalBonuses)} in total bonuses. 
+                  You've earned {formatAmount(totalBonuses)} in total bonuses. 
                   Keep up the excellent work!
                 </p>
               </div>
