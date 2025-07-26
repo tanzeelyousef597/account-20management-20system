@@ -129,7 +129,8 @@ export default function MyInvoices() {
         </CardHeader>
         <CardContent>
           {invoices.length > 0 ? (
-            <Table>
+            <div className="overflow-x-auto">
+              <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Month/Year</TableHead>
@@ -198,6 +199,7 @@ export default function MyInvoices() {
                 ))}
               </TableBody>
             </Table>
+            </div>
           ) : (
             <div className="text-center py-16">
               <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
