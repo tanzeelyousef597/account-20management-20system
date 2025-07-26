@@ -244,14 +244,15 @@ export default function Fines() {
         </CardHeader>
         <CardContent>
           {fines.length > 0 ? (
-            <Table>
+            <div className="overflow-x-auto">
+              <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Worker</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Reason</TableHead>
-                  <TableHead>Date Issued</TableHead>
-                  <TableHead>Issued By</TableHead>
+                  <TableHead className="whitespace-nowrap">Worker</TableHead>
+                  <TableHead className="whitespace-nowrap">Amount</TableHead>
+                  <TableHead className="whitespace-nowrap">Reason</TableHead>
+                  <TableHead className="whitespace-nowrap">Date Issued</TableHead>
+                  <TableHead className="whitespace-nowrap">Issued By</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -298,6 +299,7 @@ export default function Fines() {
                 ))}
               </TableBody>
             </Table>
+            </div>
           ) : (
             <div className="text-center py-12">
               <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
