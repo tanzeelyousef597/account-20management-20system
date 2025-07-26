@@ -27,9 +27,8 @@ export default function MyBonuses() {
 
   const fetchMyBonuses = async () => {
     try {
-      const response = await fetch(`/api/bonuses/worker/${user?.id}`);
-      if (response.ok) {
-        const data = await response.json();
+      if (user?.id) {
+        const data = await api.getWorkerBonuses(user.id);
         setBonuses(data);
       }
     } catch (error) {
