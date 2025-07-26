@@ -205,7 +205,7 @@ export default function Fines() {
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Amount</p>
                 <p className="text-2xl font-bold text-red-600">
-                  {formatCurrency(fines.reduce((sum, fine) => sum + fine.amount, 0))}
+                  {formatAmount(fines.reduce((sum, fine) => sum + fine.amount, 0))}
                 </p>
               </div>
               <DollarSign className="h-8 w-8 text-red-600" />
@@ -277,7 +277,7 @@ export default function Fines() {
                     <TableCell>
                       <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
                         <DollarSign className="h-3 w-3 mr-1" />
-                        {formatCurrency(fine.amount)}
+                        {formatAmount(fine.amount)}
                       </Badge>
                     </TableCell>
                     <TableCell>
