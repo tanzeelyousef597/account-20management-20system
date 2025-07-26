@@ -288,7 +288,7 @@ export default function UserManagement() {
               </div>
 
               <div>
-                <Label htmlFor="whatsappNumber">WhatsApp Number (Optional)</Label>
+                <Label htmlFor="whatsappNumber">WhatsApp Number (Record Only)</Label>
                 <Input
                   id="whatsappNumber"
                   type="tel"
@@ -296,6 +296,9 @@ export default function UserManagement() {
                   value={formData.whatsappNumber}
                   onChange={(e) => setFormData({...formData, whatsappNumber: e.target.value})}
                 />
+                <p className="text-sm text-gray-500 mt-1">
+                  For contact record purposes only. WhatsApp integration has been disabled.
+                </p>
                 <p className="text-sm text-gray-500 mt-1">Format: +country code + number</p>
               </div>
 
@@ -489,7 +492,7 @@ export default function UserManagement() {
             </div>
 
             <div>
-              <Label htmlFor="editWhatsappNumber">WhatsApp Number (Optional)</Label>
+              <Label htmlFor="editWhatsappNumber">WhatsApp Number (Record Only)</Label>
               <Input
                 id="editWhatsappNumber"
                 type="tel"
@@ -497,6 +500,9 @@ export default function UserManagement() {
                 value={formData.whatsappNumber}
                 onChange={(e) => setFormData({...formData, whatsappNumber: e.target.value})}
               />
+              <p className="text-sm text-gray-500 mt-1">
+                For contact record purposes only. WhatsApp integration has been disabled.
+              </p>
               <p className="text-sm text-gray-500 mt-1">Format: +country code + number</p>
             </div>
 
