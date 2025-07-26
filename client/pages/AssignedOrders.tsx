@@ -380,43 +380,43 @@ export default function AssignedOrders() {
 
     return (
       <div className="space-y-4">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto border rounded-lg">
           <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Order Details</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Assigned To</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Files</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className="whitespace-nowrap">Order Details</TableHead>
+              <TableHead className="whitespace-nowrap">Category</TableHead>
+              <TableHead className="whitespace-nowrap">Assigned To</TableHead>
+              <TableHead className="whitespace-nowrap">Status</TableHead>
+              <TableHead className="whitespace-nowrap">Files</TableHead>
+              <TableHead className="whitespace-nowrap">Created</TableHead>
+              <TableHead className="whitespace-nowrap">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {paginatedOrders.map((order) => (
               <TableRow key={order.id}>
-                <TableCell>
+                <TableCell className="min-w-64">
                   <div className="space-y-1">
-                    <p className="font-medium">{order.title}</p>
-                    <p className="text-sm text-gray-500">{order.description}</p>
+                    <p className="font-medium truncate" title={order.title}>{order.title}</p>
+                    <p className="text-sm text-gray-500 truncate" title={order.description}>{order.description}</p>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline">{order.category}</Badge>
+                  <Badge variant="outline" className="whitespace-nowrap">{order.category}</Badge>
                 </TableCell>
                 <TableCell>
                   {order.assignedToName ? (
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 text-gray-400" />
-                      {order.assignedToName}
+                    <div className="flex items-center gap-2 whitespace-nowrap">
+                      <User className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                      <span className="truncate max-w-24" title={order.assignedToName}>{order.assignedToName}</span>
                     </div>
                   ) : (
-                    <span className="text-gray-400 text-sm">Unassigned</span>
+                    <span className="text-gray-400 text-sm whitespace-nowrap">Unassigned</span>
                   )}
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 whitespace-nowrap">
                     {getStatusIcon(order.status)}
                     {getStatusBadge(order.status)}
                   </div>
@@ -455,8 +455,8 @@ export default function AssignedOrders() {
                   )}
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <Calendar className="h-4 w-4" />
+                  <div className="flex items-center gap-2 text-sm text-gray-500 whitespace-nowrap">
+                    <Calendar className="h-4 w-4 flex-shrink-0" />
                     {new Date(order.createdAt).toLocaleDateString()}
                   </div>
                 </TableCell>
