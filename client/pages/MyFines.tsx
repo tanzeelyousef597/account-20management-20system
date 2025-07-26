@@ -122,13 +122,14 @@ export default function MyFines() {
         </CardHeader>
         <CardContent>
           {fines.length > 0 ? (
-            <Table>
+            <div className="overflow-x-auto">
+              <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Reason</TableHead>
-                  <TableHead>Date Issued</TableHead>
-                  <TableHead>Issued By</TableHead>
+                  <TableHead className="whitespace-nowrap">Amount</TableHead>
+                  <TableHead className="whitespace-nowrap">Reason</TableHead>
+                  <TableHead className="whitespace-nowrap">Date Issued</TableHead>
+                  <TableHead className="whitespace-nowrap">Issued By</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -167,6 +168,7 @@ export default function MyFines() {
                 ))}
               </TableBody>
             </Table>
+            </div>
           ) : (
             <div className="text-center py-16">
               <div className="relative">
