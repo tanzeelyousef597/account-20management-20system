@@ -184,20 +184,10 @@ export default function Invoices() {
         isManual: true,
       };
 
-      const response = await fetch('/api/invoices', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(invoiceData),
-      });
-
-      if (response.ok) {
-        fetchInvoices();
-        setIsCreateDialogOpen(false);
-        resetForm();
-      } else {
-        const error = await response.text();
-        alert(`Failed to create invoice: ${error}`);
-      }
+      await api.createInvoice(invoiceData);
+      fetchInvoices();
+      setIsCreateDialogOpen(false);
+      resetForm();
     } catch (error) {
       console.error('Error creating invoice:', error);
       alert('Error creating invoice');
