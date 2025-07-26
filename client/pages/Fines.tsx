@@ -22,6 +22,7 @@ import { Fine, User as UserType } from '@shared/types';
 
 export default function Fines() {
   const [fines, setFines] = useState<Fine[]>([]);
+  const { formatAmount, currency } = useCurrency();
   const [users, setUsers] = useState<UserType[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -100,9 +101,7 @@ export default function Fines() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
-  const formatCurrency = (amount: number) => {
-    return `PKR ${amount.toLocaleString()}`;
-  };
+  // Remove local formatCurrency function - using global currency context
 
   return (
     <div className="space-y-6">
@@ -150,7 +149,7 @@ export default function Fines() {
               </div>
 
               <div>
-                <Label htmlFor="amount">Amount (PKR)</Label>
+                <Label htmlFor="amount">Amount ({currency})</Label>
                 <Input
                   id="amount"
                   type="number"
