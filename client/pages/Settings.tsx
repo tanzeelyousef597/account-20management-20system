@@ -1,87 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCurrency, availableCurrencies } from '@/contexts/CurrencyContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
   Settings as SettingsIcon,
-  MessageCircle,
+  DollarSign,
   Save,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Globe,
+  User
 } from 'lucide-react';
-
-interface WhatsAppSettings {
-  adminWhatsAppNumber: string;
-  messageTemplate: string;
-  isEnabled: boolean;
-}
 
 export default function Settings() {
   const { user } = useAuth();
-  const [settings, setSettings] = useState<WhatsAppSettings>({
-    adminWhatsAppNumber: '+923189046142',
-    messageTemplate: 'An order has been assigned to you by [Admin Name]. The due date is [Due Date].',
-    isEnabled: true
-  });
+  const { currency, setCurrency, formatAmount } = useCurrency();
   const [isLoading, setIsLoading] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [error, setError] = useState<string>('');
-
-  useEffect(() => {
-    fetchSettings();
-  }, []);
-
-  const fetchSettings = async () => {
-    try {
-      const response = await fetch('/api/settings/whatsapp');
-      if (response.ok) {
-        const data = await response.json();
-        setSettings(data);
-      }
-    } catch (error) {
-      console.error('Error fetching settings:', error);
-    }
-  };
+  const [selectedCurrency, setSelectedCurrency] = useState(currency);
 
   const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    setIsSaved(false);
-
+    
     try {
-      const response = await fetch('/api/settings/whatsapp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(settings),
-      });
-
-      if (response.ok) {
-        setIsSaved(true);
-        setTimeout(() => setIsSaved(false), 3000);
-      } else {
-        const errorData = await response.json();
-        setError(errorData.error || 'Failed to save settings');
-      }
+      // Update currency setting
+      setCurrency(selectedCurrency);
+      
+      // Simulate API call for other settings if needed
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 3000);
     } catch (error) {
-      setError('Failed to save settings');
+      setError('Failed to save settings. Please try again.');
       console.error('Error saving settings:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Only admins can access settings
-  if (user?.role !== 'Admin') {
+  if (!user || user.role !== 'Admin') {
     return (
-      <div className="container mx-auto py-6">
-        <Alert>
+      <div className="flex items-center justify-center min-h-96">
+        <Alert className="max-w-md">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
             You don't have permission to access settings. Only administrators can modify system settings.
@@ -92,134 +61,262 @@ export default function Settings() {
   }
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
-      {/* Header */}
+    <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-gray-900">Settings</h2>
-        <p className="text-gray-600 mt-1">Configure system settings and preferences</p>
+        <h2 className="text-3xl font-bold text-gray-900">System Settings</h2>
+        <p className="text-gray-600 mt-1">Manage global system configuration and preferences</p>
       </div>
 
-      {/* WhatsApp Configuration */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MessageCircle className="h-5 w-5 text-green-600" />
-            WhatsApp Messaging Configuration
-          </CardTitle>
-          <CardDescription>
-            Configure WhatsApp messaging for order assignments
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSaveSettings} className="space-y-6">
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
+      {error && (
+        <Alert className="border-red-200 bg-red-50">
+          <AlertCircle className="h-4 w-4 text-red-600" />
+          <AlertDescription className="text-red-800">
+            {error}
+          </AlertDescription>
+        </Alert>
+      )}
 
-            {isSaved && (
-              <Alert className="border-green-200 bg-green-50">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <AlertDescription className="text-green-800">
-                  Settings saved successfully!
-                </AlertDescription>
-              </Alert>
-            )}
+      {isSaved && (
+        <Alert className="border-green-200 bg-green-50">
+          <CheckCircle className="h-4 w-4 text-green-600" />
+          <AlertDescription className="text-green-800">
+            Settings saved successfully! Changes have been applied system-wide.
+          </AlertDescription>
+        </Alert>
+      )}
 
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="adminWhatsAppNumber">Admin WhatsApp Number</Label>
-                <Input
-                  id="adminWhatsAppNumber"
-                  type="tel"
-                  placeholder="+923189046142"
-                  value={settings.adminWhatsAppNumber}
-                  onChange={(e) => setSettings({...settings, adminWhatsAppNumber: e.target.value})}
-                  required
-                />
-                <p className="text-sm text-gray-500 mt-1">
-                  This number will be used to send WhatsApp messages when orders are assigned. 
-                  Format: +country code + number
-                </p>
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Currency Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <DollarSign className="h-5 w-5 text-green-600" />
+              Currency Configuration
+            </CardTitle>
+            <CardDescription>
+              Set the global currency for all financial calculations and displays throughout the system
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <form onSubmit={handleSaveSettings}>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="currency">Default Currency</Label>
+                  <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select currency" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(availableCurrencies).map(([code, info]) => (
+                        <SelectItem key={code} value={code}>
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono text-sm">{info.symbol}</span>
+                            <span>{code}</span>
+                            <span className="text-gray-500">- {info.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-sm text-gray-500 mt-1">
+                    This currency will be used for all invoices, bonuses, fines, and payments
+                  </p>
+                </div>
 
-              <div>
-                <Label htmlFor="messageTemplate">Message Template</Label>
-                <Textarea
-                  id="messageTemplate"
-                  placeholder="Enter your message template..."
-                  value={settings.messageTemplate}
-                  onChange={(e) => setSettings({...settings, messageTemplate: e.target.value})}
-                  rows={4}
-                  required
-                />
-                <p className="text-sm text-gray-500 mt-1">
-                  Available placeholders: [Admin Name], [Due Date], [Worker Name], [Order Title]
-                </p>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="isEnabled"
-                  checked={settings.isEnabled}
-                  onChange={(e) => setSettings({...settings, isEnabled: e.target.checked})}
-                  className="rounded border-gray-300"
-                />
-                <Label htmlFor="isEnabled" className="text-sm">
-                  Enable WhatsApp messaging for order assignments
-                </Label>
-              </div>
-            </div>
-
-            <div className="flex justify-end">
-              <Button 
-                type="submit" 
-                disabled={isLoading}
-                className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
-              >
-                {isLoading ? (
-                  <div className="flex items-center gap-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                    Saving...
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-medium text-gray-900 mb-2">Preview</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>Sample Invoice Amount:</span>
+                      <span className="font-semibold">
+                        {availableCurrencies[selectedCurrency as keyof typeof availableCurrencies]?.symbol}1,250.00
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Sample Bonus:</span>
+                      <span className="font-semibold text-green-600">
+                        {availableCurrencies[selectedCurrency as keyof typeof availableCurrencies]?.symbol}500.00
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Sample Fine:</span>
+                      <span className="font-semibold text-red-600">
+                        -{availableCurrencies[selectedCurrency as keyof typeof availableCurrencies]?.symbol}100.00
+                      </span>
+                    </div>
                   </div>
-                ) : (
-                  <>
-                    <Save className="h-4 w-4 mr-2" />
-                    Save Settings
-                  </>
-                )}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+                </div>
 
-      {/* Preview Section */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle>Message Preview</CardTitle>
-          <CardDescription>
-            Preview of how the WhatsApp message will look
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="bg-gray-50 border rounded-lg p-4">
-            <p className="text-sm font-medium text-gray-700 mb-2">From: {settings.adminWhatsAppNumber}</p>
-            <div className="bg-white border rounded-lg p-3 shadow-sm">
-              <p className="text-gray-900">
-                {settings.messageTemplate
-                  .replace('[Admin Name]', user?.name || 'Admin User')
-                  .replace('[Due Date]', 'January 15, 2024')
-                  .replace('[Worker Name]', 'John Doe')
-                  .replace('[Order Title]', 'Sample Work Order')}
+                <Button 
+                  type="submit" 
+                  disabled={isLoading || selectedCurrency === currency}
+                  className="w-full"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4 mr-2" />
+                      Save Currency Settings
+                    </>
+                  )}
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+
+        {/* System Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <SettingsIcon className="h-5 w-5 text-blue-600" />
+              System Information
+            </CardTitle>
+            <CardDescription>
+              Current system configuration and status
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <DollarSign className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm font-medium">Current Currency</span>
+                </div>
+                <div className="text-sm">
+                  <span className="font-mono mr-1">
+                    {availableCurrencies[currency as keyof typeof availableCurrencies]?.symbol}
+                  </span>
+                  <span className="font-semibold">{currency}</span>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm font-medium">Current Admin</span>
+                </div>
+                <span className="text-sm font-semibold">{user.name}</span>
+              </div>
+
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <Globe className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm font-medium">System Status</span>
+                </div>
+                <span className="text-sm font-semibold text-green-600">Active</span>
+              </div>
+            </div>
+
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                <strong>Important:</strong> Currency changes will affect all existing financial data displays. 
+                Historical data will be shown in the new currency format.
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
+
+        {/* User Management Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <User className="h-5 w-5 text-purple-600" />
+              User Management
+            </CardTitle>
+            <CardDescription>
+              Contact information and user preferences
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="adminEmail">Admin Email</Label>
+              <Input
+                id="adminEmail"
+                type="email"
+                value={user.email}
+                disabled
+                className="bg-gray-50"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                Your email address (cannot be changed here)
               </p>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+
+            <div>
+              <Label htmlFor="whatsappNumber">WhatsApp Number (Record Only)</Label>
+              <Input
+                id="whatsappNumber"
+                type="tel"
+                value={user.whatsappNumber || ''}
+                disabled
+                placeholder="No WhatsApp number on record"
+                className="bg-gray-50"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                WhatsApp integration has been disabled. This field is for record keeping only.
+              </p>
+            </div>
+
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                To update your profile information, please contact the system administrator 
+                or use the user management section.
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
+
+        {/* Application Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <SettingsIcon className="h-5 w-5 text-gray-600" />
+              Application Configuration
+            </CardTitle>
+            <CardDescription>
+              System-wide application settings and preferences
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <span className="text-sm font-medium">Pagination Size</span>
+                <span className="text-sm font-semibold">100 items per page</span>
+              </div>
+
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <span className="text-sm font-medium">File Upload Limit</span>
+                <span className="text-sm font-semibold">2GB per file</span>
+              </div>
+
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <span className="text-sm font-medium">AI Features</span>
+                <span className="text-sm font-semibold text-green-600">Enabled</span>
+              </div>
+
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <span className="text-sm font-medium">WhatsApp Integration</span>
+                <span className="text-sm font-semibold text-gray-500">Disabled</span>
+              </div>
+            </div>
+
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                Application settings are configured at the system level. 
+                Contact technical support for advanced configuration changes.
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
