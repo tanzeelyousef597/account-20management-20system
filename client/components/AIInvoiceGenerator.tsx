@@ -119,10 +119,10 @@ export default function AIInvoiceGenerator({
     });
 
     const invoiceText = `Invoice for ${worker.name} - ${monthName}\n\n` +
-      categories.map(cat => 
-        `${cat.category}: ${cat.count} x ${parseFloat(cat.price).toFixed(2)} = ${cat.total.toFixed(2)} PKR`
+      categories.map(cat =>
+        `${cat.category}: ${cat.count} x ${parseFloat(cat.price).toFixed(2)} = ${formatAmount(cat.total)}`
       ).join('\n') +
-      `\n-------------------------------\nGrand Total: ${grandTotal.toFixed(2)} PKR`;
+      `\n-------------------------------\nGrand Total: ${formatAmount(grandTotal)}`;
     
     navigator.clipboard.writeText(invoiceText);
     alert('Invoice data copied to clipboard!');
