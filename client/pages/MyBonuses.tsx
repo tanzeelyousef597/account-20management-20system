@@ -12,6 +12,7 @@ import {
   FileText
 } from 'lucide-react';
 import { Bonus } from '@shared/types';
+import { api } from '@shared/api-client';
 
 export default function MyBonuses() {
   const { user } = useAuth();
