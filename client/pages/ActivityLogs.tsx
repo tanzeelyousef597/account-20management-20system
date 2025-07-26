@@ -228,15 +228,16 @@ export default function ActivityLogs() {
         </CardHeader>
         <CardContent>
           {filteredLogs.length > 0 ? (
-            <Table>
+            <div className="overflow-x-auto">
+              <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>User</TableHead>
-                  <TableHead>Activity</TableHead>
-                  <TableHead>Details</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Time</TableHead>
-                  <TableHead>Elapsed</TableHead>
+                  <TableHead className="whitespace-nowrap">User</TableHead>
+                  <TableHead className="whitespace-nowrap">Activity</TableHead>
+                  <TableHead className="whitespace-nowrap">Details</TableHead>
+                  <TableHead className="whitespace-nowrap">Type</TableHead>
+                  <TableHead className="whitespace-nowrap">Time</TableHead>
+                  <TableHead className="whitespace-nowrap">Elapsed</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -285,6 +286,7 @@ export default function ActivityLogs() {
                 ))}
               </TableBody>
             </Table>
+            </div>
           ) : (
             <div className="text-center py-12">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
