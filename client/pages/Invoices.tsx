@@ -304,7 +304,7 @@ Type: ${invoice.isManual ? 'Manual' : 'AI Generated'}
                 <DialogDescription>Generate an invoice with custom values</DialogDescription>
               </DialogHeader>
               <form onSubmit={handleCreateInvoice} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="worker">Select Worker</Label>
                     <Select value={selectedUserId} onValueChange={setSelectedUserId}>
