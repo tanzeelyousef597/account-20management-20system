@@ -22,7 +22,7 @@ import { Bonus, User as UserType } from '@shared/types';
 
 export default function Bonuses() {
   const [bonuses, setBonuses] = useState<Bonus[]>([]);
-  const { formatAmount } = useCurrency();
+  const { formatAmount, currency } = useCurrency();
   const [users, setUsers] = useState<UserType[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
