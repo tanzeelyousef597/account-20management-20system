@@ -85,18 +85,10 @@ export default function Invoices() {
 
   const fetchInvoices = async () => {
     try {
-      console.log('Fetching invoices from:', window.location.origin + '/api/invoices');
-      const response = await fetch(`${window.location.protocol}//${window.location.host}/api/invoices`);
-      console.log('Response status:', response.status);
-      if (response.ok) {
-        const data = await response.json();
-        setInvoices(data);
-      } else {
-        console.error('Failed to fetch invoices:', response.status, response.statusText);
-      }
+      const data = await api.getInvoices();
+      setInvoices(data);
     } catch (error) {
       console.error('Error fetching invoices:', error);
-      console.error('Current window location:', window.location.href);
     }
   };
 
