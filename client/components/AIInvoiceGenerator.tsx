@@ -236,7 +236,7 @@ export default function AIInvoiceGenerator({
                                 <div className="text-right">
                                   <p className="text-sm text-gray-600">Total</p>
                                   <p className="text-lg font-bold text-blue-600">
-                                    {category.total.toFixed(2)} PKR
+                                    {formatAmount(category.total)}
                                   </p>
                                 </div>
                               )}
