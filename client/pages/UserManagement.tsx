@@ -468,7 +468,7 @@ export default function UserManagement() {
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="editPassword">New Password (optional)</Label>
                 <Input
