@@ -128,23 +128,13 @@ export default function Invoices() {
         .reduce((sum, order) => sum + (order.payRate || 0), 0);
 
       // Fetch fines and bonuses for this user and month
-      const [finesResponse, bonusesResponse] = await Promise.all([
-        fetch(`/api/fines?userId=${userId}&month=${formData.month}`),
-        fetch(`/api/bonuses?userId=${userId}&month=${formData.month}`)
+      const [finesData, bonusesData] = await Promise.all([
+        api.getFines({ userId, month: formData.month }),
+        api.getBonuses({ userId, month: formData.month })
       ]);
 
-      let fines = 0;
-      let bonuses = 0;
-
-      if (finesResponse.ok) {
-        const finesData = await finesResponse.json();
-        fines = finesData.reduce((sum: number, fine: any) => sum + (fine.amount || 0), 0);
-      }
-
-      if (bonusesResponse.ok) {
-        const bonusesData = await bonusesResponse.json();
-        bonuses = bonusesData.reduce((sum: number, bonus: any) => sum + (bonus.amount || 0), 0);
-      }
+      const fines = finesData.reduce((sum: number, fine: any) => sum + (fine.amount || 0), 0);
+      const bonuses = bonusesData.reduce((sum: number, bonus: any) => sum + (bonus.amount || 0), 0);
 
       setUserStats({
         totalSubmissions,
