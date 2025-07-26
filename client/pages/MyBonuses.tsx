@@ -15,6 +15,7 @@ import { Bonus } from '@shared/types';
 
 export default function MyBonuses() {
   const { user } = useAuth();
+  const { formatAmount } = useCurrency();
   const [bonuses, setBonuses] = useState<Bonus[]>([]);
 
   useEffect(() => {
@@ -33,10 +34,6 @@ export default function MyBonuses() {
     } catch (error) {
       console.error('Error fetching bonuses:', error);
     }
-  };
-
-  const formatCurrency = (amount: number) => {
-    return `PKR ${amount.toLocaleString()}`;
   };
 
   const totalBonuses = bonuses.reduce((sum, bonus) => sum + bonus.amount, 0);
