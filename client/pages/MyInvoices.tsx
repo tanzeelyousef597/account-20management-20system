@@ -81,7 +81,7 @@ export default function MyInvoices() {
               <div>
                 <p className="text-sm font-medium text-green-700">Total Earnings</p>
                 <p className="text-2xl font-bold text-green-900">
-                  {formatCurrency(totalEarnings)}
+                  {formatAmount(totalEarnings)}
                 </p>
               </div>
               <DollarSign className="h-8 w-8 text-green-600" />
@@ -95,7 +95,7 @@ export default function MyInvoices() {
               <div>
                 <p className="text-sm font-medium text-purple-700">This Month</p>
                 <p className="text-2xl font-bold text-purple-900">
-                  {formatCurrency(thisMonthEarnings)}
+                  {formatAmount(thisMonthEarnings)}
                 </p>
               </div>
               <TrendingUp className="h-8 w-8 text-purple-600" />
@@ -152,11 +152,11 @@ export default function MyInvoices() {
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span>Fixed Pay:</span>
-                          <span className="font-medium">{formatCurrency(invoice.fixedPay)}</span>
+                          <span className="font-medium">{formatAmount(invoice.fixedPay)}</span>
                         </div>
                         <div className="flex justify-between">
                           <span>Work Pay:</span>
-                          <span className="font-medium">{formatCurrency(invoice.workPay)}</span>
+                          <span className="font-medium">{formatAmount(invoice.workPay)}</span>
                         </div>
                       </div>
                     </TableCell>
@@ -168,7 +168,7 @@ export default function MyInvoices() {
                               <Gift className="h-3 w-3" />
                               <span>Bonus:</span>
                             </div>
-                            <span className="font-medium">+{formatCurrency(invoice.bonus)}</span>
+                            <span className="font-medium">+{formatAmount(invoice.bonus)}</span>
                           </div>
                         )}
                         {invoice.fine > 0 && (
@@ -177,7 +177,7 @@ export default function MyInvoices() {
                               <AlertCircle className="h-3 w-3" />
                               <span>Fine:</span>
                             </div>
-                            <span className="font-medium">-{formatCurrency(invoice.fine)}</span>
+                            <span className="font-medium">-{formatAmount(invoice.fine)}</span>
                           </div>
                         )}
                         {invoice.bonus === 0 && invoice.fine === 0 && (
@@ -189,7 +189,7 @@ export default function MyInvoices() {
                       <div className="flex items-center gap-2">
                         <DollarSign className="h-4 w-4 text-green-600" />
                         <span className="text-xl font-bold text-green-600">
-                          {formatCurrency(invoice.totalAmount)}
+                          {formatAmount(invoice.totalAmount)}
                         </span>
                       </div>
                     </TableCell>
@@ -219,7 +219,7 @@ export default function MyInvoices() {
               <div className="text-center">
                 <p className="text-blue-100 text-sm font-medium">Average Monthly Earnings</p>
                 <p className="text-2xl font-bold">
-                  {formatCurrency(Math.round(totalEarnings / Math.max(invoices.length, 1)))}
+                  {formatAmount(Math.round(totalEarnings / Math.max(invoices.length, 1)))}
                 </p>
               </div>
               <div className="text-center">
