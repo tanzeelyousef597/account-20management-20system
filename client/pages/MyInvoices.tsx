@@ -32,9 +32,8 @@ export default function MyInvoices() {
 
   const fetchMyInvoices = async () => {
     try {
-      const response = await fetch(`/api/invoices/worker/${user?.id}`);
-      if (response.ok) {
-        const data = await response.json();
+      if (user?.id) {
+        const data = await api.getWorkerInvoices(user.id);
         setInvoices(data);
       }
     } catch (error) {
