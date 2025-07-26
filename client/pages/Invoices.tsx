@@ -24,6 +24,7 @@ import {
 import { Invoice, User as UserType, WorkOrder } from '@shared/types';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import AIInvoiceGenerator from '@/components/AIInvoiceGenerator';
+import { api } from '@shared/api-client';
 
 export default function Invoices() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
