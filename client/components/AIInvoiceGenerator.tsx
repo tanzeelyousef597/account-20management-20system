@@ -284,7 +284,7 @@ export default function AIInvoiceGenerator({
                         <div className="flex justify-between items-center">
                           <span className="text-lg font-semibold text-gray-900">🧾 Grand Total:</span>
                           <span className="text-2xl font-bold text-green-600">
-                            {grandTotal.toFixed(2)} PKR
+                            {formatAmount(grandTotal)}
                           </span>
                         </div>
                       </div>
