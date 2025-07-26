@@ -47,11 +47,8 @@ export default function UserManagement() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('/api/users');
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(data);
-      }
+      const data = await api.getUsers();
+      setUsers(data);
     } catch (error) {
       console.error('Error fetching users:', error);
     }
