@@ -192,19 +192,19 @@ export default function AIInvoiceGenerator({
                     {categories.map((category, index) => (
                       <Card key={category.category} className="border border-gray-200 hover:border-blue-300 transition-colors">
                         <CardContent className="p-6">
-                          <div className="flex items-center justify-between gap-6">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                             {/* Category Info */}
                             <div className="flex items-center gap-4 flex-1">
-                              <div className="p-3 bg-blue-50 rounded-lg">
+                              <div className="p-3 bg-blue-50 rounded-lg flex-shrink-0">
                                 <FileText className="h-6 w-6 text-blue-600" />
                               </div>
-                              <div>
-                                <h4 className="text-lg font-semibold text-gray-900">
+                              <div className="min-w-0">
+                                <h4 className="text-lg font-semibold text-gray-900 truncate">
                                   📂 {category.category}
                                 </h4>
                                 <div className="flex items-center gap-2 mt-1">
-                                  <CheckCircle className="h-4 w-4 text-green-600" />
-                                  <span className="text-sm text-gray-600">
+                                  <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
+                                  <span className="text-sm text-gray-600 truncate">
                                     Approved Submissions: <span className="font-semibold text-green-600">{category.count}</span>
                                   </span>
                                 </div>
@@ -212,7 +212,7 @@ export default function AIInvoiceGenerator({
                             </div>
 
                             {/* Price Input */}
-                            <div className="flex items-center gap-4">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                               <div className="text-right">
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                   💰 Price per Submission
