@@ -520,8 +520,8 @@ export default function AssignedOrders() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-500">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-sm text-gray-500 text-center sm:text-left">
               Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, orders.length)} of {orders.length} entries
             </div>
             <div className="flex items-center space-x-2">
