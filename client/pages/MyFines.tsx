@@ -28,9 +28,8 @@ export default function MyFines() {
 
   const fetchMyFines = async () => {
     try {
-      const response = await fetch(`/api/fines/worker/${user?.id}`);
-      if (response.ok) {
-        const data = await response.json();
+      if (user?.id) {
+        const data = await api.getWorkerFines(user.id);
         setFines(data);
       }
     } catch (error) {
