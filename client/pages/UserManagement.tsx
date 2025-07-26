@@ -446,7 +446,7 @@ export default function UserManagement() {
               <p className="text-sm text-gray-500 mt-2">Click to update profile photo</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="editName">Full Name</Label>
                 <Input
