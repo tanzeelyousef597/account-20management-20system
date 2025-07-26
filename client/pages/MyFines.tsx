@@ -70,7 +70,7 @@ export default function MyFines() {
               <div>
                 <p className="text-sm font-medium text-orange-700">Total Amount</p>
                 <p className="text-2xl font-bold text-orange-900">
-                  {formatCurrency(totalFines)}
+                  {formatAmount(totalFines)}
                 </p>
               </div>
               <DollarSign className="h-8 w-8 text-orange-600" />
@@ -84,7 +84,7 @@ export default function MyFines() {
               <div>
                 <p className="text-sm font-medium text-yellow-700">This Month</p>
                 <p className="text-2xl font-bold text-yellow-900">
-                  {formatCurrency(thisMonthFines)}
+                  {formatAmount(thisMonthFines)}
                 </p>
               </div>
               <TrendingDown className="h-8 w-8 text-yellow-600" />
@@ -137,7 +137,7 @@ export default function MyFines() {
                     <TableCell>
                       <Badge className="bg-red-100 text-red-800 hover:bg-red-100 text-base px-3 py-1">
                         <DollarSign className="h-4 w-4 mr-1" />
-                        {formatCurrency(fine.amount)}
+                        {formatAmount(fine.amount)}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -195,7 +195,7 @@ export default function MyFines() {
                 <h3 className="text-xl font-bold mb-2">Improvement Opportunity</h3>
                 <p className="text-blue-100">
                   Learn from past mistakes and continue improving your performance. 
-                  Total fines: {formatCurrency(totalFines)}
+                  Total fines: {formatAmount(totalFines)}
                 </p>
               </div>
               <TrendingDown className="h-12 w-12 text-blue-200" />
