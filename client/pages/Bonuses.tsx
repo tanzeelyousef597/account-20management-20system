@@ -105,9 +105,7 @@ export default function Bonuses() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
-  const formatCurrency = (amount: number) => {
-    return `PKR ${amount.toLocaleString()}`;
-  };
+  // Remove local formatCurrency function - using global currency context
 
   return (
     <div className="space-y-6">
@@ -155,7 +153,7 @@ export default function Bonuses() {
               </div>
 
               <div>
-                <Label htmlFor="amount">Amount (PKR)</Label>
+                <Label htmlFor="amount">Amount ({currency})</Label>
                 <Input
                   id="amount"
                   type="number"
