@@ -215,19 +215,19 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Work Categories Chart */}
+      {/* Dashboard Metrics Chart */}
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5" />
-            Work categories / submissions by time
+            Dashboard Metrics Overview
           </CardTitle>
           <CardDescription>
-            Breakdown of submissions across different work categories
+            Visual breakdown of key performance metrics
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <CustomBarChart data={dashboardData.categories} />
+          <ModernBarChart data={dashboardData.categories} />
         </CardContent>
       </Card>
     </div>
