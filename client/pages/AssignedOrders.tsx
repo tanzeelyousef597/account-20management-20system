@@ -810,14 +810,14 @@ export default function AssignedOrders() {
 
       {/* Search Bar */}
       <Card className="bg-white/80 backdrop-blur-xl border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-500 animate-in slide-in-from-bottom" style={{ animationDelay: '500ms' }}>
-        <CardContent className="p-6">
+        <CardContent className="p-3 sm:p-4 md:p-6">
           <div className="relative group">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 group-focus-within:text-blue-500 transition-colors duration-300" />
+            <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 sm:h-5 sm:w-5 group-focus-within:text-blue-500 transition-colors duration-300" />
             <Input
               placeholder="Search orders by title, description, category, worker, or status..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-12 border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/90 backdrop-blur-sm rounded-xl"
+              className="pl-10 sm:pl-12 h-10 sm:h-12 md:h-14 lg:h-16 border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/90 backdrop-blur-sm rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg"
             />
           </div>
         </CardContent>
