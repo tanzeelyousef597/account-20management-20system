@@ -69,22 +69,16 @@ export default function Fines() {
     if (!selectedUser) return;
 
     try {
-      const response = await fetch('/api/fines', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          workerId: formData.workerId,
-          workerName: selectedUser.name,
-          amount: parseFloat(formData.amount),
-          reason: formData.reason,
-        }),
+      await api.createFine({
+        workerId: formData.workerId,
+        workerName: selectedUser.name,
+        amount: parseFloat(formData.amount),
+        reason: formData.reason,
       });
-      
-      if (response.ok) {
-        fetchFines();
-        setIsCreateDialogOpen(false);
-        resetForm();
-      }
+
+      fetchFines();
+      setIsCreateDialogOpen(false);
+      resetForm();
     } catch (error) {
       console.error('Error creating fine:', error);
     }
