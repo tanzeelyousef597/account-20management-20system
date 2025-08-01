@@ -226,15 +226,15 @@ export default function ActivityLogs() {
         </CardHeader>
         <CardContent>
           {filteredLogs.length > 0 ? (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto -mx-4 md:mx-0">
               <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="whitespace-nowrap">User</TableHead>
-                  <TableHead className="whitespace-nowrap">Activity</TableHead>
-                  <TableHead className="whitespace-nowrap">Details</TableHead>
+                  <TableHead className="whitespace-nowrap min-w-40">User</TableHead>
+                  <TableHead className="whitespace-nowrap hidden sm:table-cell">Activity</TableHead>
+                  <TableHead className="whitespace-nowrap hidden md:table-cell">Details</TableHead>
                   <TableHead className="whitespace-nowrap">Type</TableHead>
-                  <TableHead className="whitespace-nowrap">Time</TableHead>
+                  <TableHead className="whitespace-nowrap hidden lg:table-cell">Time</TableHead>
                   <TableHead className="whitespace-nowrap">Elapsed</TableHead>
                 </TableRow>
               </TableHeader>
