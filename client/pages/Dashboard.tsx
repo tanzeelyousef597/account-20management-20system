@@ -287,15 +287,15 @@ export default function Dashboard() {
       </div>
 
       {/* Analytics Section */}
-      <div className="space-y-8 animate-in fade-in duration-1000" style={{ animationDelay: '800ms' }}>
-        <div className="text-center space-y-3">
-          <h3 className="text-3xl font-bold bg-gradient-to-r from-slate-800 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+      <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-in fade-in duration-1000" style={{ animationDelay: '800ms' }}>
+        <div className="text-center space-y-2 sm:space-y-3">
+          <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-800 via-blue-600 to-purple-600 bg-clip-text text-transparent px-2">
             Performance Analytics
           </h3>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto px-4">
             Real-time visualization of your submissions and performance metrics
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto"></div>
+          <div className="w-16 sm:w-20 md:w-24 lg:w-28 h-0.5 sm:h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto"></div>
         </div>
 
         {/* Chart Section */}
