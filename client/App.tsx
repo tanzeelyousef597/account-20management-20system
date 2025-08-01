@@ -120,6 +120,13 @@ const App = () => (
                   </Layout>
                 </ProtectedRoute>
               } />
+              <Route path="/chat" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Chat />
+                  </Layout>
+                </ProtectedRoute>
+              } />
               <Route path="/my-orders" element={
                 <ProtectedRoute requiredRole="Worker">
                   <Layout>
