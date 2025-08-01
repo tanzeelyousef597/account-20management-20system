@@ -99,8 +99,20 @@ export const handleUpdateWorkOrderStatus: RequestHandler = (req, res) => {
     return res.status(404).json({ error: 'Work order not found' });
   }
 
+  const oldStatus = workOrders[orderIndex].status;
   workOrders[orderIndex].status = status;
   updateDashboard();
+
+  // Log activity
+  addActivityLog({
+    userId: workOrders[orderIndex].assignedTo || workOrders[orderIndex].createdBy,
+    userName: workOrders[orderIndex].assignedToName || 'Admin User',
+    action: 'Work order status updated',
+    details: `Updated status of "${workOrders[orderIndex].title}" from ${oldStatus} to ${status}`,
+    timestamp: new Date().toISOString(),
+    type: 'order_updated',
+  });
+
   res.json(workOrders[orderIndex]);
 };
 
