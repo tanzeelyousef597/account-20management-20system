@@ -633,7 +633,10 @@ Type: ${invoice.isManual ? 'Manual' : 'AI Generated'}
             {selectedWorker ? (
               <AIInvoiceGenerator
                 isOpen={true}
-                onClose={() => {}}
+                onClose={() => {
+                  setSelectedWorker(null);
+                  setIsAIGeneratorOpen(false);
+                }}
                 worker={selectedWorker}
                 workOrders={workOrders}
                 selectedMonth={selectedMonth}
