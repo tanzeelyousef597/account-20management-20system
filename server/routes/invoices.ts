@@ -50,7 +50,17 @@ export const handleCreateInvoice: RequestHandler = (req, res) => {
   
   invoices.push(newInvoice);
   nextId++;
-  
+
+  // Log activity
+  addActivityLog({
+    userId: '1', // In production, get admin ID from request context
+    userName: 'Admin User',
+    action: 'Invoice generated',
+    details: `Generated invoice for ${workerName} - ${month} ${year} ($${totalAmount})`,
+    timestamp: new Date().toISOString(),
+    type: 'invoice_generated',
+  });
+
   res.json(newInvoice);
 };
 
