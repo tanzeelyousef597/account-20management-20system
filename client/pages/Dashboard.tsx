@@ -77,18 +77,21 @@ export default function Dashboard() {
   const ModernBarChart = ({ data }: { data: { category: string; submissions: number }[] }) => {
     // Use dashboard metrics for the chart
     const chartData = [
-      { label: 'Total Submissions', value: dashboardData.totalSubmissions, color: 'bg-red-500' },
-      { label: 'Approved Submissions', value: dashboardData.approvedSubmissions, color: 'bg-orange-500' },
-      { label: 'Rejected Submissions', value: dashboardData.rejectedSubmissions, color: 'bg-yellow-500' },
-      { label: 'Orders in Work', value: dashboardData.ordersInWork, color: 'bg-green-500' },
-      { label: 'Orders in QA', value: dashboardData.ordersInQA, color: 'bg-blue-500' },
+      { label: 'Total Submissions', value: dashboardData.totalSubmissions, color: '#22c55e', shortLabel: 'Total' },
+      { label: 'Approved Submissions', value: dashboardData.approvedSubmissions, color: '#84cc16', shortLabel: 'Approved' },
+      { label: 'Rejected Submissions', value: dashboardData.rejectedSubmissions, color: '#f59e0b', shortLabel: 'Rejected' },
+      { label: 'Orders in Work', value: dashboardData.ordersInWork, color: '#3b82f6', shortLabel: 'In Work' },
+      { label: 'Orders in QA', value: dashboardData.ordersInQA, color: '#8b5cf6', shortLabel: 'In QA' },
     ];
 
     const maxValue = Math.max(...chartData.map(d => d.value), 1);
+    const roundedMax = Math.ceil(maxValue / 1000) * 1000; // Round up to nearest thousand
+    const yAxisSteps = 5;
+    const stepValue = roundedMax / yAxisSteps;
 
     if (chartData.every(item => item.value === 0)) {
       return (
-        <div className="h-80 flex items-center justify-center bg-gray-50 rounded-lg">
+        <div className="h-80 flex items-center justify-center bg-white rounded-lg border border-gray-200">
           <div className="text-center space-y-2">
             <BarChart3 className="h-12 w-12 text-gray-400 mx-auto" />
             <p className="text-gray-500 font-medium">No data available</p>
@@ -104,35 +107,67 @@ export default function Dashboard() {
     }
 
     return (
-      <div className="h-64 md:h-80 flex items-end justify-center gap-3 md:gap-6 lg:gap-8 p-4 md:p-8 bg-gray-50 rounded-lg overflow-x-auto">
-        {chartData.map((item, index) => {
-          const maxBarHeight = window.innerWidth < 768 ? 180 : 240; // Responsive max height
-          const height = (item.value / maxValue) * maxBarHeight;
-          const minHeight = item.value > 0 ? 15 : 0; // Minimum bar height for visibility
-
-          return (
-            <div key={index} className="flex flex-col items-center space-y-2 md:space-y-3 flex-shrink-0">
-              {/* Value label above bar */}
-              <div className="text-xs md:text-sm font-semibold text-gray-700 min-h-4 md:min-h-5">
-                {item.value > 0 ? item.value : ''}
+      <div className="relative bg-white border border-gray-200 rounded-lg p-6">
+        {/* Chart Container */}
+        <div className="relative h-80 flex">
+          {/* Y-Axis */}
+          <div className="w-16 flex flex-col justify-between text-xs text-gray-600 pr-2">
+            {Array.from({ length: yAxisSteps + 1 }, (_, i) => (
+              <div key={i} className="text-right">
+                {Math.round(stepValue * (yAxisSteps - i)).toLocaleString()}
               </div>
+            ))}
+          </div>
 
-              {/* Bar */}
-              <div
-                className={`${item.color} rounded-t-lg transition-all duration-1000 ease-out shadow-lg w-12 md:w-14 lg:w-16 hover:scale-105 hover:shadow-xl`}
-                style={{
-                  height: `${Math.max(height, minHeight)}px`,
-                  animationDelay: `${index * 0.2}s`
-                }}
-              />
-
-              {/* Label below bar */}
-              <div className="text-xs font-medium text-gray-600 text-center w-12 md:w-14 lg:w-16 leading-tight">
-                {item.label}
-              </div>
+          {/* Chart Area with Grid */}
+          <div className="flex-1 relative">
+            {/* Horizontal Grid Lines */}
+            <div className="absolute inset-0">
+              {Array.from({ length: yAxisSteps + 1 }, (_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-full border-t border-gray-200"
+                  style={{ top: `${(i / yAxisSteps) * 100}%` }}
+                />
+              ))}
             </div>
-          );
-        })}
+
+            {/* Bars Container */}
+            <div className="absolute inset-0 flex items-end justify-center gap-8 px-4">
+              {chartData.map((item, index) => {
+                const height = roundedMax > 0 ? (item.value / roundedMax) * 100 : 0;
+                const minHeight = item.value > 0 ? 2 : 0; // Minimum bar height for visibility
+
+                return (
+                  <div key={index} className="flex flex-col items-center space-y-2 flex-shrink-0">
+                    {/* Value label above bar */}
+                    <div className="text-sm font-semibold text-gray-700 mb-1">
+                      {item.value > 0 ? item.value.toLocaleString() : ''}
+                    </div>
+
+                    {/* Bar */}
+                    <div
+                      className="w-16 rounded-t transition-all duration-1000 ease-out"
+                      style={{
+                        backgroundColor: item.color,
+                        height: `${Math.max(height, minHeight)}%`,
+                        animationDelay: `${index * 0.2}s`
+                      }}
+                    />
+
+                    {/* Label below bar */}
+                    <div className="text-xs font-medium text-gray-600 text-center w-16 leading-tight mt-2">
+                      {item.shortLabel}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* X-Axis Line */}
+        <div className="ml-16 border-t border-gray-300 mt-2"></div>
       </div>
     );
   };
