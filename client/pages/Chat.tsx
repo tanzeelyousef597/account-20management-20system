@@ -506,7 +506,9 @@ export default function Chat() {
                         className="rounded max-w-full h-auto max-h-64 object-cover"
                       />
                       {message.content && (
-                        <p className="text-sm mt-2 break-words">{message.content}</p>
+                        <p className="text-sm mt-2 break-words">
+                          {renderMessageWithLinks(message.content)}
+                        </p>
                       )}
                     </div>
                   )}
