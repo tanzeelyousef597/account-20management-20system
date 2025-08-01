@@ -101,6 +101,8 @@ export function createServer() {
   app.get("/api/fines", handleGetFines);
   app.get("/api/fines/worker/:workerId", handleGetWorkerFines);
   app.post("/api/fines", handleCreateFine);
+  app.put("/api/fines/:id", handleUpdateFine);
+  app.delete("/api/fines/:id", handleDeleteFine);
 
   // Activity logs routes
   app.get("/api/activity-logs", handleGetActivityLogs);
