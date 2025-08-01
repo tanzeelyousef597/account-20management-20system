@@ -518,10 +518,6 @@ export default function AssignedOrders() {
                             <PlayCircle className="h-4 w-4 mr-2" />
                             Resume Order
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Approved')}>
-                            <CheckCircle className="h-4 w-4 mr-2" />
-                            Mark Approved
-                          </DropdownMenuItem>
                         </>
                       )}
                       <DropdownMenuItem 
