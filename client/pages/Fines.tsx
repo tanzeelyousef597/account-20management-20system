@@ -45,11 +45,8 @@ export default function Fines() {
 
   const fetchFines = async () => {
     try {
-      const response = await fetch('/api/fines');
-      if (response.ok) {
-        const data = await response.json();
-        setFines(data);
-      }
+      const data = await api.getFines();
+      setFines(data);
     } catch (error) {
       console.error('Error fetching fines:', error);
     }
