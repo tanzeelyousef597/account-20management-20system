@@ -293,6 +293,7 @@ export default function Fines() {
                   <TableHead className="whitespace-nowrap">Reason</TableHead>
                   <TableHead className="whitespace-nowrap">Date Issued</TableHead>
                   <TableHead className="whitespace-nowrap">Issued By</TableHead>
+                  <TableHead className="whitespace-nowrap">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
