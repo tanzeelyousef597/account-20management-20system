@@ -139,16 +139,34 @@ export default function Layout({ children }: LayoutProps) {
                   onClick={() => setIsMobileMenuOpen(false)}
                   style={{ animationDelay: `${index * 100}ms` }}
                   className={cn(
-                    'flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative group animate-in slide-in-from-left',
+                    'flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative group animate-in slide-in-from-left transform hover:scale-105',
                     isActive
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
+                      : 'text-gray-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-gray-900 hover:shadow-md'
                   )}
                 >
-                  <Icon className="mr-3 h-5 w-5" />
-                  {item.name}
+                  {/* Active indicator */}
+                  {isActive && (
+                    <div className="absolute left-0 top-1/2 w-1 h-8 bg-white rounded-full transform -translate-y-1/2 animate-in slide-in-from-left duration-500"></div>
+                  )}
+
+                  {/* Icon with animation */}
+                  <Icon className={cn(
+                    "mr-3 h-5 w-5 transition-all duration-300",
+                    isActive ? "text-white drop-shadow-sm" : "text-gray-500 group-hover:text-blue-600"
+                  )} />
+
+                  {/* Text */}
+                  <span className="relative z-10">{item.name}</span>
+
+                  {/* Hover effect */}
+                  {!isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  )}
+
+                  {/* Chat notification badge */}
                   {item.name === 'Chat' && unreadCount > 0 && (
-                    <span className="absolute top-1 left-7 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                    <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-gradient-to-r from-red-500 to-pink-500 rounded-full shadow-lg animate-pulse">
                       {unreadCount > 99 ? '99+' : unreadCount}
                     </span>
                   )}
