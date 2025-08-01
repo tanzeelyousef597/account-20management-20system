@@ -220,31 +220,8 @@ export default function Dashboard() {
       <div className="space-y-6">
         <div className="text-center space-y-2">
           <h3 className="text-2xl font-bold text-gray-900">Performance Analytics</h3>
-          <p className="text-gray-600">Select a time period to view detailed metrics</p>
+          <p className="text-gray-600">Real-time visualization of your submissions and performance metrics</p>
         </div>
-
-        {/* Filter Controls */}
-        <Card className="shadow-sm bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-          <CardContent className="p-4 md:p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 md:gap-4">
-              <div className="flex items-center gap-2 md:gap-3 justify-center sm:justify-start">
-                <Calendar className="h-4 w-4 md:h-5 md:w-5 text-blue-600" />
-                <span className="text-sm font-medium text-gray-700">Time Period:</span>
-              </div>
-              <Select value={selectedFilter} onValueChange={setSelectedFilter}>
-                <SelectTrigger className="w-full sm:w-48 md:w-60 bg-white border-blue-300 focus:border-blue-500 shadow-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Last Day">📅 Last Day</SelectItem>
-                  <SelectItem value="Last Week">📊 Last Week</SelectItem>
-                  <SelectItem value="Last Month">📈 Last Month</SelectItem>
-                  <SelectItem value="Last Year">📋 Last Year</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Chart Section */}
         <Card className="shadow-lg border border-gray-200 bg-white">
