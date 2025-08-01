@@ -478,10 +478,6 @@ export default function AssignedOrders() {
                       </DropdownMenuItem>
                       {tabType === 'work' && (
                         <>
-                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Approved')}>
-                            <CheckCircle className="h-4 w-4 mr-2" />
-                            Approve
-                          </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Stopped')}>
                             <StopCircle className="h-4 w-4 mr-2" />
                             Stop Order
