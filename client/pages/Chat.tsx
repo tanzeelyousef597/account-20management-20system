@@ -260,6 +260,36 @@ export default function Chat() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
+  const renderMessageWithLinks = (text: string) => {
+    // Regular expression to detect URLs
+    const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[^\s]+\.[a-z]{2,}(?:\/[^\s]*)?)/gi;
+
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, index) => {
+      if (urlRegex.test(part)) {
+        // Ensure the URL has a protocol
+        let href = part;
+        if (!part.startsWith('http')) {
+          href = `https://${part}`;
+        }
+
+        return (
+          <a
+            key={index}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline hover:text-blue-800 break-all"
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   const conversationsList = (
     <div className="h-full flex flex-col">
       {/* Header */}
