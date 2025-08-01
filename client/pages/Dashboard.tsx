@@ -56,20 +56,38 @@ export default function Dashboard() {
     icon: Icon,
     title,
     value,
-    bgColor
+    bgColor,
+    index = 0
   }: {
     icon: any,
     title: string,
     value: number,
-    bgColor: string
+    bgColor: string,
+    index?: number
   }) => (
-    <div className={`${bgColor} rounded-lg p-6 text-white shadow-lg`}>
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-white/80 text-sm font-medium">{title}</p>
-          <p className="text-3xl font-bold mt-1">{value}</p>
+    <div
+      className={`${bgColor} rounded-2xl p-6 text-white shadow-2xl transform hover:scale-105 transition-all duration-500 hover:shadow-3xl relative overflow-hidden group animate-in slide-in-from-bottom`}
+      style={{ animationDelay: `${index * 150}ms` }}
+    >
+      {/* Background animation */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+      {/* Floating orbs */}
+      <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
+      <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-white/10 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+
+      <div className="flex items-center justify-between relative z-10">
+        <div className="space-y-2">
+          <p className="text-white/90 text-sm font-medium tracking-wide">{title}</p>
+          <p className="text-4xl font-bold mt-2 tabular-nums animate-in zoom-in duration-700" style={{ animationDelay: `${index * 200 + 300}ms` }}>
+            {value.toLocaleString()}
+          </p>
+          <div className="w-12 h-1 bg-white/30 rounded-full group-hover:bg-white/50 transition-colors duration-300"></div>
         </div>
-        <Icon className="h-8 w-8 text-white/80" />
+        <div className="relative">
+          <Icon className="h-10 w-10 text-white/90 drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
+          <div className="absolute inset-0 bg-white/20 rounded-full blur-xl scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        </div>
       </div>
     </div>
   );
