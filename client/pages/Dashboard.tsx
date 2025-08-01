@@ -22,7 +22,7 @@ interface DashboardData {
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
+  const [selectedFilter, setSelectedFilter] = useState('Last Month');
   const [dashboardData, setDashboardData] = useState<DashboardData>({
     totalSubmissions: 0,
     approvedSubmissions: 0,
