@@ -2,24 +2,10 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'SuperAdmin' | 'Admin' | 'Worker';
+  role: 'Admin' | 'Worker';
   profilePhoto?: string;
   whatsappNumber?: string;
-  companyId?: string; // For multi-tenancy
   createdAt: string;
-}
-
-export interface Company {
-  id: string;
-  name: string;
-  address: string;
-  phoneNumber: string;
-  plan: string;
-  maxUsers: number;
-  currentUsers: number;
-  createdAt: string;
-  isActive: boolean;
-  databaseUrl?: string; // For separate database per company
 }
 
 export interface WorkOrder {
