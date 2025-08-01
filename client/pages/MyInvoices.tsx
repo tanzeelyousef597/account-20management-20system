@@ -23,6 +23,7 @@ export default function MyInvoices() {
   const { user } = useAuth();
   const { formatAmount } = useCurrency();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
 
   useEffect(() => {
     if (user) {
