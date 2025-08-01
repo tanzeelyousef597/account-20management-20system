@@ -43,6 +43,7 @@ const adminNavItems = [
   { name: 'Invoices', href: '/invoices', icon: DollarSign },
   { name: 'Bonuses', href: '/bonuses', icon: TrendingUp },
   { name: 'Fines', href: '/fines', icon: AlertCircle },
+  { name: 'Chat', href: '/chat', icon: MessageSquare },
   { name: 'Activity Logs', href: '/logs', icon: Activity },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
