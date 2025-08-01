@@ -55,11 +55,8 @@ export default function Bonuses() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('/api/users');
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(data.filter((user: UserType) => user.role === 'Worker'));
-      }
+      const data = await api.getUsers();
+      setUsers(data.filter((user: UserType) => user.role === 'Worker'));
     } catch (error) {
       console.error('Error fetching users:', error);
     }
