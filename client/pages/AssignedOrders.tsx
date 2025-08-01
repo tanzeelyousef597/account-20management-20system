@@ -929,6 +929,31 @@ export default function AssignedOrders() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="done">
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCheck className="h-5 w-5 text-purple-600" />
+                Done Orders
+              </CardTitle>
+              <CardDescription>
+                Orders that have been completed and marked as done
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {doneOrders.length > 0 ? (
+                renderOrdersTable(doneOrders, 'done')
+              ) : (
+                <div className="text-center py-12">
+                  <CheckCheck className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No done orders</h3>
+                  <p className="text-gray-500">Completed orders marked as done will appear here</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
 
       {/* Edit Dialog */}
