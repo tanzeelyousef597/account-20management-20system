@@ -124,6 +124,18 @@ export const handleDeleteWorkOrder: RequestHandler = (req, res) => {
     return res.status(404).json({ error: 'Work order not found' });
   }
 
+  const deletedOrder = workOrders[orderIndex];
+
+  // Log activity
+  addActivityLog({
+    userId: deletedOrder.createdBy,
+    userName: 'Admin User', // In production, get from request context
+    action: 'Work order deleted',
+    details: `Deleted work order: ${deletedOrder.title}`,
+    timestamp: new Date().toISOString(),
+    type: 'order_updated',
+  });
+
   workOrders.splice(orderIndex, 1);
   res.json({ message: 'Work order deleted successfully' });
 };
