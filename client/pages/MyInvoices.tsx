@@ -63,7 +63,7 @@ export default function MyInvoices() {
   };
 
   const totalEarnings = invoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0);
-  const totalApprovedSubmissions = invoices.reduce((sum, invoice) => sum + invoice.submissionCount, 0);
+  const totalApprovedSubmissions = workOrders.filter(order => order.status === 'Approved').length;
 
   return (
     <div className="space-y-6">
