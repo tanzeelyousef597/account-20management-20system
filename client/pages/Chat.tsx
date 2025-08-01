@@ -27,6 +27,7 @@ import { useToast } from '@/hooks/use-toast';
 
 export default function Chat() {
   const { user } = useAuth();
+  const { refreshUnreadCount } = useChat();
   const { toast } = useToast();
   const [conversations, setConversations] = useState<ChatConversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<ChatConversation | null>(null);
