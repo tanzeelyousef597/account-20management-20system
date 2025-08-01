@@ -143,5 +143,12 @@ export function createServer() {
   app.post("/api/chat/online-status", handleGetOnlineStatus);
   app.post("/api/chat/group", handleCreateGroupChat);
 
+  // Company management routes (Super Admin only)
+  app.get("/api/companies", handleGetCompanies);
+  app.post("/api/companies", handleCreateCompany);
+  app.put("/api/companies/:id", handleUpdateCompany);
+  app.delete("/api/companies/:id", handleDeleteCompany);
+  app.get("/api/companies/stats", handleGetCompanyStats);
+
   return app;
 }
