@@ -23,6 +23,7 @@ import {
   MoreHorizontal
 } from 'lucide-react';
 import { Fine, User as UserType } from '@shared/types';
+import { api } from '@shared/api-client';
 
 export default function Fines() {
   const [fines, setFines] = useState<Fine[]>([]);
