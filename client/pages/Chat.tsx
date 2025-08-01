@@ -242,32 +242,7 @@ export default function Chat() {
     }
   };
 
-  const handleScreenshot = async () => {
-    if (!selectedConversation || !user) return;
 
-    try {
-      // Use the native browser Screen Capture API or fall back to clipboard
-      if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
-        // Modern browsers with screen capture support
-        toast({
-          title: 'Screenshot Sharing',
-          description: 'Use your OS screenshot tool (Win+Shift+S, Cmd+Shift+4, etc.) and paste in the chat',
-        });
-      } else {
-        // Fallback message
-        toast({
-          title: 'Screenshot Sharing',
-          description: 'Take a screenshot using your system tools and paste it into the chat',
-        });
-      }
-    } catch (error) {
-      console.error('Failed to access screen capture:', error);
-      toast({
-        title: 'Screenshot Feature',
-        description: 'Use your system screenshot tools and paste the image in chat',
-      });
-    }
-  };
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
