@@ -229,21 +229,23 @@ export default function Layout({ children }: LayoutProps) {
               </div>
             </div>
             {user.role === 'Worker' && (
-              <div className="flex items-center space-x-3">
-                <Avatar className="h-8 w-8">
+              <div className="flex items-center space-x-3 animate-in slide-in-from-right duration-500">
+                <Avatar className="h-8 w-8 ring-2 ring-blue-100 hover:ring-blue-300 transition-all duration-300">
                   <AvatarImage src={user.profilePhoto} />
-                  <AvatarFallback className="text-xs">
+                  <AvatarFallback className="text-xs bg-gradient-to-br from-blue-500 to-purple-600 text-white">
                     {getUserInitials(user.name)}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-sm font-medium text-gray-700 hidden sm:inline">{user.name}</span>
+                <span className="text-sm font-medium text-gray-700 hidden sm:inline hover:text-blue-600 transition-colors duration-300">{user.name}</span>
               </div>
             )}
           </div>
         </header>
 
-        <main className="p-4 sm:p-6">
-          {children}
+        <main className="p-4 sm:p-6 animate-in fade-in duration-700 relative">
+          <div className="relative z-10">
+            {children}
+          </div>
         </main>
       </div>
     </div>
