@@ -432,9 +432,7 @@ export default function Chat() {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm">
-            <MoreVertical className="h-4 w-4" />
-          </Button>
+          {/* Chat actions removed as requested */}
         </div>
       </div>
 
