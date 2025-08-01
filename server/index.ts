@@ -24,7 +24,9 @@ import {
 import {
   handleGetBonuses,
   handleGetWorkerBonuses,
-  handleCreateBonus
+  handleCreateBonus,
+  handleUpdateBonus,
+  handleDeleteBonus
 } from "./routes/bonuses";
 import {
   handleGetFines,
