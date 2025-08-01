@@ -365,6 +365,7 @@ export default function AssignedOrders() {
   const ordersInWork = getFilteredOrders(['In Progress', 'Under QA']);
   const approvedOrders = getFilteredOrders(['Approved']);
   const stoppedOrders = getFilteredOrders(['Stopped']);
+  const doneOrders = getFilteredOrders(['Done']);
 
   // Pagination logic
   const getPaginatedOrders = (orders: WorkOrder[]) => {
