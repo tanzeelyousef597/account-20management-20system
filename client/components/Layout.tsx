@@ -106,16 +106,19 @@ export default function Layout({ children }: LayoutProps) {
       )}>
         <div className="flex h-full flex-col">
           {/* Header */}
-          <div className="flex h-16 items-center justify-between border-b border-slate-200/50 px-6 bg-gradient-to-r from-blue-600 to-purple-600 relative overflow-hidden">
+          <div className="flex h-14 sm:h-16 items-center justify-between border-b border-slate-200/50 px-3 sm:px-4 md:px-6 bg-gradient-to-r from-blue-600 to-purple-600 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-purple-600/90"></div>
-            <div className="flex items-center group relative z-10">
-              <div className="relative">
-                <Building2 className="h-8 w-8 text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-lg" />
-                <div className="absolute inset-0 h-8 w-8 bg-white/20 rounded-full blur-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100"></div>
+            <div className="flex items-center group relative z-10 min-w-0 flex-1">
+              <div className="relative flex-shrink-0">
+                <Building2 className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-lg" />
+                <div className="absolute inset-0 h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 bg-white/20 rounded-full blur-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100"></div>
               </div>
-              <div className="ml-3">
-                <div className="text-lg font-bold text-white tracking-tight drop-shadow-sm">MT Web Experts</div>
-                <div className="text-xs text-blue-100/90">Accounts Management</div>
+              <div className="ml-2 sm:ml-3 min-w-0 flex-1">
+                <div className="text-sm sm:text-base md:text-lg font-bold text-white tracking-tight drop-shadow-sm truncate">
+                  <span className="hidden sm:inline">MT Web Experts</span>
+                  <span className="sm:hidden">MT Web</span>
+                </div>
+                <div className="text-xs text-blue-100/90 hidden sm:block">Accounts Management</div>
               </div>
             </div>
             {/* Close button for mobile */}
