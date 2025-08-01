@@ -383,18 +383,75 @@ export default function AssignedOrders() {
     const { paginatedOrders, totalPages, startIndex } = getPaginatedOrders(orders);
 
     return (
-      <div className="space-y-4">
-        <div className="overflow-x-auto border rounded-lg">
+      <div className="space-y-3 sm:space-y-4">
+        {/* Mobile Card View */}
+        <div className="block md:hidden space-y-3">
+          {paginatedOrders.map((order) => (
+            <div key={order.id} className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+              <div className="space-y-3">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1 min-w-0 mr-3">
+                    <h3 className="font-medium text-sm truncate" title={order.title}>{order.title}</h3>
+                    <p className="text-xs text-gray-500 mt-1 line-clamp-2">{order.description}</p>
+                  </div>
+                  <div className="flex-shrink-0">
+                    {renderStatusBadge(order.status)}
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <span className="text-gray-500">Category:</span>
+                    <p className="font-medium truncate">{order.category}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Assigned:</span>
+                    <p className="font-medium truncate">{order.assignedToName || 'Unassigned'}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Created:</span>
+                    <p className="font-medium">{new Date(order.createdAt).toLocaleDateString()}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Files:</span>
+                    <p className="font-medium">{order.attachmentUrls?.length || 0} files</p>
+                  </div>
+                </div>
+                <div className="flex justify-end pt-2 border-t border-slate-100">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <MoreHorizontal className="h-3 w-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => openEditDialog(order)}>
+                        <Edit className="mr-2 h-3 w-3" />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDeleteOrder(order.id)}>
+                        <Trash2 className="mr-2 h-3 w-3" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto border rounded-lg">
           <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="whitespace-nowrap">Order Details</TableHead>
-              <TableHead className="whitespace-nowrap">Category</TableHead>
-              <TableHead className="whitespace-nowrap">Assigned To</TableHead>
-              <TableHead className="whitespace-nowrap">Status</TableHead>
-              <TableHead className="whitespace-nowrap">Files</TableHead>
-              <TableHead className="whitespace-nowrap">Created</TableHead>
-              <TableHead className="whitespace-nowrap">Actions</TableHead>
+              <TableHead className="whitespace-nowrap text-xs lg:text-sm">Order Details</TableHead>
+              <TableHead className="whitespace-nowrap text-xs lg:text-sm hidden lg:table-cell">Category</TableHead>
+              <TableHead className="whitespace-nowrap text-xs lg:text-sm">Assigned To</TableHead>
+              <TableHead className="whitespace-nowrap text-xs lg:text-sm">Status</TableHead>
+              <TableHead className="whitespace-nowrap text-xs lg:text-sm hidden xl:table-cell">Files</TableHead>
+              <TableHead className="whitespace-nowrap text-xs lg:text-sm hidden lg:table-cell">Created</TableHead>
+              <TableHead className="whitespace-nowrap text-xs lg:text-sm">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
