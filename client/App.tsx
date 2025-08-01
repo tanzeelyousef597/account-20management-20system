@@ -40,7 +40,8 @@ const App = () => (
       <Sonner />
       <AuthProvider>
         <CurrencyProvider>
-          <BrowserRouter>
+          <ChatProvider>
+            <BrowserRouter>
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/login" element={<Login />} />
@@ -158,7 +159,8 @@ const App = () => (
               } />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
+            </BrowserRouter>
+          </ChatProvider>
         </CurrencyProvider>
       </AuthProvider>
     </TooltipProvider>
