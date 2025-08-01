@@ -118,11 +118,10 @@ export default function Dashboard() {
 
               {/* Bar */}
               <div
-                className={`${item.color} rounded-t-lg transition-all duration-1000 ease-out shadow-lg min-w-16 w-16`}
+                className={`${item.color} rounded-t-lg transition-all duration-1000 ease-out shadow-lg min-w-16 w-16 hover:scale-105 hover:shadow-xl`}
                 style={{
                   height: `${Math.max(height, minHeight)}px`,
-                  transform: 'translateY(0)',
-                  animation: `barGrow 1.5s ease-out ${index * 0.2}s both`
+                  animationDelay: `${index * 0.2}s`
                 }}
               />
 
@@ -133,19 +132,6 @@ export default function Dashboard() {
             </div>
           );
         })}
-
-        <style jsx>{`
-          @keyframes barGrow {
-            from {
-              height: 0px;
-              opacity: 0;
-            }
-            to {
-              height: ${maxValue > 0 ? 'var(--bar-height)' : '0px'};
-              opacity: 1;
-            }
-          }
-        `}</style>
       </div>
     );
   };
