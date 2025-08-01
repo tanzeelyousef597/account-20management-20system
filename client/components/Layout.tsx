@@ -75,7 +75,8 @@ export default function Layout({ children }: LayoutProps) {
     return <>{children}</>;
   }
 
-  const navItems = user.role === 'Admin' ? adminNavItems : workerNavItems;
+  const navItems = user.role === 'SuperAdmin' ? superAdminNavItems :
+                   user.role === 'Admin' ? adminNavItems : workerNavItems;
 
   const handleLogout = () => {
     logout();
