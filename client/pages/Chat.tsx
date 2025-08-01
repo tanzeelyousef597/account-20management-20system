@@ -94,14 +94,21 @@ export default function Chat() {
       const response = await api.getMessages(conversationId);
       setMessages(response.messages);
 
-      // Update conversation unread count
-      setConversations(prev =>
-        prev.map(conv =>
-          conv.id === conversationId
-            ? { ...conv, unreadCount: 0 }
-            : conv
-        )
-      );
+      // Mark messages as read
+      try {
+        await api.markMessagesAsRead(conversationId, user.id);
+
+        // Update conversation unread count
+        setConversations(prev =>
+          prev.map(conv =>
+            conv.id === conversationId
+              ? { ...conv, unreadCount: 0 }
+              : conv
+          )
+        );
+      } catch (readError) {
+        console.error('Failed to mark messages as read:', readError);
+      }
     } catch (error) {
       console.error('Failed to load messages:', error);
       toast({
