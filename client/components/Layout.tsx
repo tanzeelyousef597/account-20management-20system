@@ -25,7 +25,8 @@ import {
   ChevronDown,
   Settings,
   Menu,
-  X
+  X,
+  MessageSquare
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
