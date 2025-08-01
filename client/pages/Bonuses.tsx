@@ -70,24 +70,18 @@ export default function Bonuses() {
     if (!selectedUser) return;
 
     try {
-      const response = await fetch('/api/bonuses', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          workerId: formData.workerId,
-          workerName: selectedUser.name,
-          amount: parseFloat(formData.amount),
-          reason: formData.reason,
-          month: formData.month,
-          year: new Date(formData.month).getFullYear(),
-        }),
+      await api.createBonus({
+        workerId: formData.workerId,
+        workerName: selectedUser.name,
+        amount: parseFloat(formData.amount),
+        reason: formData.reason,
+        month: formData.month,
+        year: new Date(formData.month).getFullYear(),
       });
-      
-      if (response.ok) {
-        fetchBonuses();
-        setIsCreateDialogOpen(false);
-        resetForm();
-      }
+
+      fetchBonuses();
+      setIsCreateDialogOpen(false);
+      resetForm();
     } catch (error) {
       console.error('Error creating bonus:', error);
     }
