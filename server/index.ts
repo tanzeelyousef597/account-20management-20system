@@ -131,7 +131,7 @@ export function createServer() {
   app.get("/api/chat/conversations/:userId", handleGetConversations);
   app.get("/api/chat/messages/:conversationId", handleGetMessages);
   app.post("/api/chat/send/:senderId", handleSendMessage);
-  app.put("/api/chat/mark-read/:userId/:otherUserId", handleMarkAsRead);
+  app.put("/api/chat/mark-read/:conversationId", handleMarkAsRead);
   app.post("/api/chat/upload-file", handleUploadChatFile);
   app.post("/api/chat/online-status", handleGetOnlineStatus);
   app.post("/api/chat/group", handleCreateGroupChat);
