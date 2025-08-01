@@ -127,7 +127,7 @@ export default function Layout({ children }: LayoutProps) {
                   to={item.href}
                   onClick={() => setIsMobileMenuOpen(false)} // Close menu on mobile after click
                   className={cn(
-                    'flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                    'flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors relative',
                     isActive
                       ? 'bg-primary text-primary-foreground'
                       : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
@@ -135,6 +135,11 @@ export default function Layout({ children }: LayoutProps) {
                 >
                   <Icon className="mr-3 h-5 w-5" />
                   {item.name}
+                  {item.name === 'Chat' && unreadCount > 0 && (
+                    <span className="absolute top-1 left-7 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  )}
                 </Link>
               );
             })}
