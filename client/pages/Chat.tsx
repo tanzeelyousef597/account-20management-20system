@@ -634,22 +634,35 @@ export default function Chat() {
   );
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex rounded-lg border bg-card">
+    <div className="h-[calc(100vh-8rem)] flex rounded-lg border bg-card overflow-hidden">
       {/* Desktop Layout */}
       <div className="hidden lg:flex w-full">
         {/* Conversations Sidebar */}
-        <div className="w-80 border-r">
+        <div className="w-80 xl:w-96 border-r bg-gray-50/50 flex-shrink-0">
           {conversationsList}
         </div>
-        
+
         {/* Chat Area */}
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           {chatArea}
         </div>
       </div>
 
+      {/* Tablet Layout */}
+      <div className="hidden md:flex lg:hidden w-full">
+        {!isMobileConversationOpen ? (
+          <div className="w-full">
+            {conversationsList}
+          </div>
+        ) : (
+          <div className="w-full">
+            {chatArea}
+          </div>
+        )}
+      </div>
+
       {/* Mobile Layout */}
-      <div className="lg:hidden w-full">
+      <div className="md:hidden w-full">
         {!isMobileConversationOpen ? (
           conversationsList
         ) : (
