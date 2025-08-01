@@ -39,8 +39,8 @@ export default function Dashboard() {
   const fetchDashboardData = async () => {
     try {
       const endpoint = user?.role === 'Worker'
-        ? `/api/dashboard/worker/${user.id}?month=${selectedMonth}`
-        : `/api/dashboard/data?month=${selectedMonth}`;
+        ? `/api/dashboard/worker/${user.id}?filter=${encodeURIComponent(selectedFilter)}`
+        : `/api/dashboard/data?filter=${encodeURIComponent(selectedFilter)}`;
 
       const response = await fetch(endpoint);
       if (response.ok) {
