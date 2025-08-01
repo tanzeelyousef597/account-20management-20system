@@ -176,13 +176,13 @@ export default function Layout({ children }: LayoutProps) {
           </nav>
 
           {/* User Profile */}
-          <div className="border-t p-4">
+          <div className="border-t border-slate-200/50 p-4 bg-gradient-to-r from-slate-50/50 to-blue-50/50">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="w-full justify-start px-3 py-2 h-auto">
-                  <Avatar className="h-8 w-8 mr-3">
+                <Button variant="ghost" className="w-full justify-start px-3 py-3 h-auto rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300 group">
+                  <Avatar className="h-10 w-10 mr-3 ring-2 ring-blue-100 group-hover:ring-blue-300 transition-all duration-300">
                     <AvatarImage src={user.profilePhoto} />
-                    <AvatarFallback className="text-xs">
+                    <AvatarFallback className="text-sm bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold">
                       {getUserInitials(user.name)}
                     </AvatarFallback>
                   </Avatar>
