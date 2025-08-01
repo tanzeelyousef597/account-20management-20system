@@ -319,6 +319,7 @@ export default function AssignedOrders() {
       'Rejected': 'bg-red-100 text-red-800',
       'In Progress': 'bg-blue-100 text-blue-800',
       'Stopped': 'bg-gray-100 text-gray-800',
+      'Done': 'bg-purple-100 text-purple-800',
     };
     
     return (
