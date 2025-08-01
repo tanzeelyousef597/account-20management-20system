@@ -103,19 +103,39 @@ export const handleDashboardData: RequestHandler = (req, res) => {
 
 export const handleWorkerDashboardData: RequestHandler = (req, res) => {
   const { workerId } = req.params;
-  const { month } = req.query;
+  const { filter } = req.query;
 
   // Filter orders for this specific worker
   let workerOrders = workOrders.filter(order =>
     order.assignedTo === workerId || order.createdBy === workerId
   );
 
-  if (month) {
-    const [year, monthNum] = month.toString().split('-');
+  if (filter) {
+    const now = new Date();
+    let startDate: Date;
+
+    switch (filter) {
+      case 'Last Day':
+        startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        break;
+      case 'Last Week':
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case 'Last Month':
+        startDate = new Date();
+        startDate.setMonth(startDate.getMonth() - 1);
+        break;
+      case 'Last Year':
+        startDate = new Date();
+        startDate.setFullYear(startDate.getFullYear() - 1);
+        break;
+      default:
+        startDate = new Date(0); // No filter, include all
+    }
+
     workerOrders = workerOrders.filter(order => {
       const orderDate = new Date(order.createdAt);
-      return orderDate.getFullYear() === parseInt(year) &&
-             (orderDate.getMonth() + 1) === parseInt(monthNum);
+      return orderDate >= startDate;
     });
   }
 
