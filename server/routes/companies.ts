@@ -4,7 +4,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { addActivityLog } from "./activity-logs";
 
 // In-memory storage for companies (in production, use proper database)
-export const companies: Company[] = [];
+export const companies: Company[] = [
+  {
+    id: 'default-company',
+    name: 'MT Web Experts',
+    address: '123 Business Street, Tech City',
+    phoneNumber: '+1-234-567-8900',
+    plan: 'Enterprise',
+    maxUsers: 100,
+    currentUsers: 2, // Admin and Worker users
+    createdAt: new Date().toISOString(),
+    isActive: true,
+    databaseUrl: 'mt_web_experts_db'
+  }
+];
 
 export const handleGetCompanies: RequestHandler = (req, res) => {
   res.json(companies);
