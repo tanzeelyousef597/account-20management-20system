@@ -173,18 +173,43 @@ export const handleGetMessages: RequestHandler = (req, res) => {
 // Send a message
 export const handleSendMessage: RequestHandler = (req, res) => {
   const { senderId } = req.params;
-  const { receiverId, content, messageType, fileUrl, fileName, fileSize } = req.body as SendMessageRequest;
+  const { conversationId, receiverId, content, messageType, fileUrl, fileName, fileSize } = req.body as SendMessageRequest;
 
-  if (!senderId || !receiverId || !content) {
-    return res.status(400).json({ error: 'Sender ID, receiver ID, and content are required' });
+  if (!senderId || !content) {
+    return res.status(400).json({ error: 'Sender ID and content are required' });
   }
 
-  // Check if both users exist
+  // Check if sender exists
   const sender = users.find(u => u.id === senderId);
-  const receiver = users.find(u => u.id === receiverId);
+  if (!sender) {
+    return res.status(404).json({ error: 'Sender not found' });
+  }
 
-  if (!sender || !receiver) {
-    return res.status(404).json({ error: 'Sender or receiver not found' });
+  let conversation: ChatConversation;
+
+  if (conversationId) {
+    // Find existing conversation
+    const existingConv = conversations.find(c => c.id === conversationId);
+    if (!existingConv) {
+      return res.status(404).json({ error: 'Conversation not found' });
+    }
+
+    // Verify sender is participant
+    if (!existingConv.participantIds.includes(senderId)) {
+      return res.status(403).json({ error: 'Not a participant in this conversation' });
+    }
+
+    conversation = existingConv;
+  } else if (receiverId) {
+    // Create or find direct conversation
+    const receiver = users.find(u => u.id === receiverId);
+    if (!receiver) {
+      return res.status(404).json({ error: 'Receiver not found' });
+    }
+
+    conversation = getOrCreateConversation(senderId, receiverId);
+  } else {
+    return res.status(400).json({ error: 'Either conversationId or receiverId is required' });
   }
 
   // Create new message
@@ -192,27 +217,21 @@ export const handleSendMessage: RequestHandler = (req, res) => {
     id: nextMessageId.toString(),
     senderId,
     senderName: sender.name,
-    receiverId,
-    receiverName: receiver.name,
+    conversationId: conversation.id,
     content,
     messageType: messageType || 'text',
     fileUrl,
     fileName,
     fileSize,
     timestamp: new Date().toISOString(),
-    isRead: false,
+    readBy: [senderId], // Sender has "read" their own message
   };
 
   messages.push(newMessage);
   nextMessageId++;
 
-  // Update or create conversation
-  try {
-    const conversation = getOrCreateConversation(senderId, receiverId);
-    conversation.lastActivity = newMessage.timestamp;
-  } catch (error) {
-    console.error('Error updating conversation:', error);
-  }
+  // Update conversation
+  conversation.lastActivity = newMessage.timestamp;
 
   res.json(newMessage);
 };
