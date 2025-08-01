@@ -101,3 +101,36 @@ export interface DashboardStats {
   thisMonthSubmissions: number;
   pendingInvoices: number;
 }
+
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  receiverId: string;
+  receiverName: string;
+  content: string;
+  messageType: 'text' | 'image' | 'file';
+  fileUrl?: string;
+  fileName?: string;
+  fileSize?: number;
+  timestamp: string;
+  isRead: boolean;
+}
+
+export interface ChatConversation {
+  id: string;
+  participantIds: string[];
+  participants: User[];
+  lastMessage?: ChatMessage;
+  unreadCount: number;
+  lastActivity: string;
+}
+
+export interface SendMessageRequest {
+  receiverId: string;
+  content: string;
+  messageType: 'text' | 'image' | 'file';
+  fileUrl?: string;
+  fileName?: string;
+  fileSize?: number;
+}
