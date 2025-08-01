@@ -139,21 +139,18 @@ export const handleCreateGroupChat: RequestHandler = (req, res) => {
   res.json(groupConversation);
 };
 
-// Get messages between two users
+// Get messages for a conversation
 export const handleGetMessages: RequestHandler = (req, res) => {
-  const { userId, otherUserId } = req.params;
+  const { conversationId } = req.params;
   const { page = '1', limit = '50' } = req.query;
 
-  if (!userId || !otherUserId) {
-    return res.status(400).json({ error: 'Both user IDs are required' });
+  if (!conversationId) {
+    return res.status(400).json({ error: 'Conversation ID is required' });
   }
 
-  // Get messages between these users
+  // Get messages for this conversation
   const conversationMessages = messages
-    .filter(msg => 
-      (msg.senderId === userId && msg.receiverId === otherUserId) ||
-      (msg.senderId === otherUserId && msg.receiverId === userId)
-    )
+    .filter(msg => msg.conversationId === conversationId)
     .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 
   // Apply pagination
@@ -161,7 +158,7 @@ export const handleGetMessages: RequestHandler = (req, res) => {
   const limitNum = parseInt(limit as string);
   const startIndex = (pageNum - 1) * limitNum;
   const endIndex = startIndex + limitNum;
-  
+
   const paginatedMessages = conversationMessages.slice(startIndex, endIndex);
 
   res.json({
