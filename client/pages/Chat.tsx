@@ -183,26 +183,32 @@ export default function Chat() {
   const handleStartChat = async (targetUser: User) => {
     if (!user) return;
 
-    // Check if conversation already exists
-    let existingConv = conversations.find(conv => 
-      conv.participants.some(p => p.id === targetUser.id)
+    // Check if conversation already exists (direct conversation)
+    let existingConv = conversations.find(conv =>
+      !conv.isGroup &&
+      conv.participants.some(p => p.id === targetUser.id) &&
+      conv.participants.some(p => p.id === user.id) &&
+      conv.participants.length === 2
     );
 
     if (!existingConv) {
       // Create new conversation by sending a message
       try {
-        await api.sendMessage(user.id, {
+        const message = await api.sendMessage(user.id, {
           receiverId: targetUser.id,
           content: `Hello ${targetUser.name}! 👋`,
           messageType: 'text',
         });
-        
+
         // Reload conversations to get the new one
         await loadConversations();
-        
-        // Find the new conversation
-        existingConv = conversations.find(conv => 
-          conv.participants.some(p => p.id === targetUser.id)
+
+        // Find the new conversation using the message's conversationId
+        existingConv = conversations.find(conv =>
+          conv.id === message.conversationId ||
+          (!conv.isGroup &&
+           conv.participants.some(p => p.id === targetUser.id) &&
+           conv.participants.some(p => p.id === user.id))
         );
       } catch (error) {
         console.error('Failed to start chat:', error);
