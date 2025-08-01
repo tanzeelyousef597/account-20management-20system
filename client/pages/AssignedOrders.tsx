@@ -486,13 +486,23 @@ export default function AssignedOrders() {
                             <StopCircle className="h-4 w-4 mr-2" />
                             Stop Order
                           </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Done')}>
+                            <CheckCheck className="h-4 w-4 mr-2" />
+                            Mark Done
+                          </DropdownMenuItem>
                         </>
                       )}
                       {tabType === 'approved' && (
-                        <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Stopped')}>
-                          <StopCircle className="h-4 w-4 mr-2" />
-                          Stop Order
-                        </DropdownMenuItem>
+                        <>
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Stopped')}>
+                            <StopCircle className="h-4 w-4 mr-2" />
+                            Stop Order
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Done')}>
+                            <CheckCheck className="h-4 w-4 mr-2" />
+                            Mark Done
+                          </DropdownMenuItem>
+                        </>
                       )}
                       {tabType === 'stopped' && (
                         <>
@@ -503,6 +513,22 @@ export default function AssignedOrders() {
                           <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Approved')}>
                             <CheckCircle className="h-4 w-4 mr-2" />
                             Approve Order
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Done')}>
+                            <CheckCheck className="h-4 w-4 mr-2" />
+                            Mark Done
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                      {tabType === 'done' && (
+                        <>
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'In Progress')}>
+                            <PlayCircle className="h-4 w-4 mr-2" />
+                            Resume Order
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Approved')}>
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                            Mark Approved
                           </DropdownMenuItem>
                         </>
                       )}
