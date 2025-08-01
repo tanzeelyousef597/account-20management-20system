@@ -247,20 +247,27 @@ export default function Dashboard() {
         </Card>
 
         {/* Chart Section */}
-        <Card className="shadow-lg border-0 bg-gradient-to-br from-white to-gray-50">
-          <CardHeader className="text-center pb-4 md:pb-6 px-4 md:px-6">
-            <CardTitle className="text-lg md:text-xl font-bold text-gray-900 flex items-center justify-center gap-2 md:gap-3">
-              <BarChart3 className="h-5 w-5 md:h-6 md:w-6 text-blue-600" />
-              Dashboard Metrics Overview
-            </CardTitle>
-            <CardDescription className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
-              Real-time visualization of your key performance indicators for {selectedFilter.toLowerCase()}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-0 px-4 md:px-6">
-            <div className="bg-white rounded-xl border border-gray-100 p-4 md:p-6 shadow-inner">
-              <ModernBarChart data={dashboardData.categories} />
+        <Card className="shadow-lg border border-gray-200 bg-white">
+          <CardHeader className="pb-4 px-6 border-b border-gray-100">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <CardTitle className="text-lg font-semibold text-gray-900">
+                Work categories / submissions by time
+              </CardTitle>
+              <Select value={selectedFilter} onValueChange={setSelectedFilter}>
+                <SelectTrigger className="w-full sm:w-40 bg-white border-gray-300 focus:border-blue-500">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Last Day">Last Day</SelectItem>
+                  <SelectItem value="Last Week">Last Week</SelectItem>
+                  <SelectItem value="Last Month">Last Month</SelectItem>
+                  <SelectItem value="Last Year">Last Year</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
+          </CardHeader>
+          <CardContent className="p-6">
+            <ModernBarChart data={dashboardData.categories} />
           </CardContent>
         </Card>
       </div>
