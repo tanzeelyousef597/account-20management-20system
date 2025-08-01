@@ -32,6 +32,16 @@ export const handleCreateFine: RequestHandler = (req, res) => {
   fines.push(newFine);
   nextId++;
 
+  // Log activity
+  addActivityLog({
+    userId: createdBy,
+    userName: 'Admin User', // In production, get from request context
+    action: 'Fine issued',
+    details: `Issued fine of $${amount} to ${workerName} - ${reason}`,
+    timestamp: new Date().toISOString(),
+    type: 'fine_issued',
+  });
+
   res.json(newFine);
 };
 
