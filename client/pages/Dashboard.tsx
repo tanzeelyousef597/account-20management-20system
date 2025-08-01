@@ -138,7 +138,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Header with Month Selector */}
+      {/* Header with Time Filter */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
@@ -146,22 +146,15 @@ export default function Dashboard() {
         </div>
         <div className="flex items-center gap-2">
           <Calendar className="h-4 w-4 text-gray-400" />
-          <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-            <SelectTrigger className="w-40">
+          <Select value={selectedFilter} onValueChange={setSelectedFilter}>
+            <SelectTrigger className="w-44">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {Array.from({ length: 12 }, (_, i) => {
-                const date = new Date();
-                date.setMonth(date.getMonth() - i);
-                const value = date.toISOString().slice(0, 7);
-                const label = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-                return (
-                  <SelectItem key={value} value={value}>
-                    {label}
-                  </SelectItem>
-                );
-              })}
+              <SelectItem value="Last Day">Last Day</SelectItem>
+              <SelectItem value="Last Week">Last Week</SelectItem>
+              <SelectItem value="Last Month">Last Month</SelectItem>
+              <SelectItem value="Last Year">Last Year</SelectItem>
             </SelectContent>
           </Select>
         </div>
