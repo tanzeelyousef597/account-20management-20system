@@ -86,20 +86,17 @@ export default function Chat() {
     }
   };
 
-  const loadMessages = async (otherUserId: string) => {
+  const loadMessages = async (conversationId: string) => {
     if (!user) return;
-    
+
     try {
-      const response = await api.getMessages(user.id, otherUserId);
+      const response = await api.getMessages(conversationId);
       setMessages(response.messages);
-      
-      // Mark messages as read
-      await api.markMessagesAsRead(user.id, otherUserId);
-      
+
       // Update conversation unread count
-      setConversations(prev => 
-        prev.map(conv => 
-          conv.participants.some(p => p.id === otherUserId)
+      setConversations(prev =>
+        prev.map(conv =>
+          conv.id === conversationId
             ? { ...conv, unreadCount: 0 }
             : conv
         )
