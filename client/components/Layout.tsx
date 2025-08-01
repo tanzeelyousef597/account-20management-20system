@@ -218,22 +218,27 @@ export default function Layout({ children }: LayoutProps) {
       </div>
 
       {/* Main Content */}
-      <div className="lg:pl-64 relative">
+      <div className="lg:pl-64 xl:pl-72 2xl:pl-80 relative">
         <header className="bg-white/80 backdrop-blur-xl shadow-lg border-b border-slate-200/50 sticky top-0 z-30">
-          <div className="flex h-16 items-center justify-between px-4 sm:px-6">
-            <div className="flex items-center">
+          <div className="flex h-14 sm:h-16 items-center justify-between px-3 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center min-w-0 flex-1">
               {/* Mobile menu button */}
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden p-2 rounded-xl text-gray-400 hover:text-blue-600 hover:bg-blue-50 mr-3 transition-all duration-300 hover:scale-110"
+                className="lg:hidden p-1.5 sm:p-2 rounded-lg sm:rounded-xl text-gray-400 hover:text-blue-600 hover:bg-blue-50 mr-2 sm:mr-3 transition-all duration-300 hover:scale-110 flex-shrink-0"
               >
-                <Menu className="h-5 w-5" />
+                <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
-              <div className="animate-in slide-in-from-left duration-500">
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  {user.role === 'Admin' ? 'Administrator Dashboard' : 'Worker Dashboard'}
+              <div className="animate-in slide-in-from-left duration-500 min-w-0 flex-1">
+                <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent truncate">
+                  <span className="hidden md:inline">
+                    {user.role === 'Admin' ? 'Administrator Dashboard' : 'Worker Dashboard'}
+                  </span>
+                  <span className="md:hidden">
+                    {user.role === 'Admin' ? 'Admin' : 'Worker'}
+                  </span>
                 </h1>
-                <div className="text-xs text-gray-500 mt-0.5">
+                <div className="text-xs sm:text-sm text-gray-500 mt-0.5 truncate hidden sm:block">
                   Welcome back, {user.name.split(' ')[0]}
                 </div>
               </div>
