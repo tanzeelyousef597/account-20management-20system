@@ -34,6 +34,16 @@ export const handleCreateBonus: RequestHandler = (req, res) => {
   bonuses.push(newBonus);
   nextId++;
 
+  // Log activity
+  addActivityLog({
+    userId: createdBy,
+    userName: 'Admin User', // In production, get from request context
+    action: 'Bonus added',
+    details: `Added bonus of $${amount} for ${workerName} - ${reason}`,
+    timestamp: new Date().toISOString(),
+    type: 'bonus_added',
+  });
+
   res.json(newBonus);
 };
 
