@@ -105,6 +105,40 @@ export const handleGetConversations: RequestHandler = (req, res) => {
   res.json(userConversations);
 };
 
+// Create group chat
+export const handleCreateGroupChat: RequestHandler = (req, res) => {
+  const { name, participantIds } = req.body as CreateGroupChatRequest;
+  const { createdBy } = req.query;
+
+  if (!name || !participantIds || participantIds.length < 2) {
+    return res.status(400).json({ error: 'Group name and at least 2 participants are required' });
+  }
+
+  // Verify all participants exist
+  const participants = participantIds.map(id => users.find(u => u.id === id)).filter(Boolean) as User[];
+
+  if (participants.length !== participantIds.length) {
+    return res.status(400).json({ error: 'Some participants not found' });
+  }
+
+  // Create new group conversation
+  const groupConversation: ChatConversation = {
+    id: nextConversationId.toString(),
+    name,
+    isGroup: true,
+    participantIds,
+    participants,
+    unreadCount: 0,
+    lastActivity: new Date().toISOString(),
+    createdBy: createdBy as string,
+  };
+
+  conversations.push(groupConversation);
+  nextConversationId++;
+
+  res.json(groupConversation);
+};
+
 // Get messages between two users
 export const handleGetMessages: RequestHandler = (req, res) => {
   const { userId, otherUserId } = req.params;
