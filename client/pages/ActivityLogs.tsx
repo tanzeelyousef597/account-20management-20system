@@ -33,11 +33,8 @@ export default function ActivityLogs() {
 
   const fetchActivityLogs = async () => {
     try {
-      const response = await fetch('/api/activity-logs');
-      if (response.ok) {
-        const data = await response.json();
-        setLogs(data);
-      }
+      const data = await api.getActivityLogs();
+      setLogs(data);
     } catch (error) {
       console.error('Error fetching activity logs:', error);
     }
