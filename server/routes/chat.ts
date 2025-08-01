@@ -235,20 +235,19 @@ export const handleSendMessage: RequestHandler = (req, res) => {
 
 // Mark messages as read
 export const handleMarkAsRead: RequestHandler = (req, res) => {
-  const { userId, otherUserId } = req.params;
+  const { conversationId } = req.params;
+  const { userId } = req.body;
 
-  if (!userId || !otherUserId) {
-    return res.status(400).json({ error: 'Both user IDs are required' });
+  if (!conversationId || !userId) {
+    return res.status(400).json({ error: 'Conversation ID and user ID are required' });
   }
 
-  // Mark all messages from otherUserId to userId as read
-  const updatedCount = messages
-    .filter(msg => msg.senderId === otherUserId && msg.receiverId === userId && !msg.isRead)
-    .length;
-
+  // Mark all messages in this conversation as read by this user
+  let updatedCount = 0;
   messages.forEach(msg => {
-    if (msg.senderId === otherUserId && msg.receiverId === userId) {
-      msg.isRead = true;
+    if (msg.conversationId === conversationId && !msg.readBy.includes(userId)) {
+      msg.readBy.push(userId);
+      updatedCount++;
     }
   });
 
