@@ -85,7 +85,9 @@ export default function Dashboard() {
     ];
 
     const maxValue = Math.max(...chartData.map(d => d.value), 1);
-    const roundedMax = Math.ceil(maxValue / 1000) * 1000; // Round up to nearest thousand
+    // Ensure minimum scale for better visibility
+    const minScale = Math.max(maxValue * 1.2, 100); // At least 100 or 20% above max value
+    const roundedMax = Math.ceil(minScale / 100) * 100; // Round up to nearest hundred
     const yAxisSteps = 5;
     const stepValue = roundedMax / yAxisSteps;
 
@@ -136,7 +138,7 @@ export default function Dashboard() {
             <div className="absolute inset-0 flex items-end justify-center gap-8 px-4">
               {chartData.map((item, index) => {
                 const height = roundedMax > 0 ? (item.value / roundedMax) * 100 : 0;
-                const minHeight = item.value > 0 ? 2 : 0; // Minimum bar height for visibility
+                const minHeight = item.value > 0 ? 10 : 0; // Minimum 10% height for visibility
 
                 return (
                   <div key={index} className="flex flex-col items-center space-y-2 flex-shrink-0">
