@@ -241,43 +241,43 @@ export default function ActivityLogs() {
               <TableBody>
                 {filteredLogs.map((log) => (
                   <TableRow key={log.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-8 w-8">
+                    <TableCell className="min-w-40">
+                      <div className="flex items-center gap-2 md:gap-3">
+                        <Avatar className="h-6 w-6 md:h-8 md:w-8 flex-shrink-0">
                           <AvatarImage src="" />
                           <AvatarFallback className="text-xs">
                             {getUserInitials(log.userName)}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
-                          <p className="font-medium">{log.userName}</p>
-                          <p className="text-sm text-gray-500">ID: {log.userId}</p>
+                        <div className="min-w-0">
+                          <p className="font-medium text-sm md:text-base truncate">{log.userName}</p>
+                          <p className="text-xs text-gray-500 hidden md:block">ID: {log.userId}</p>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       <div className="flex items-center gap-2">
                         {getActivityIcon(log.type)}
-                        <span className="font-medium">{log.action}</span>
+                        <span className="font-medium text-sm">{log.action}</span>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <p className="text-sm text-gray-600 max-w-md" title={log.details}>
+                    <TableCell className="hidden md:table-cell">
+                      <p className="text-sm text-gray-600 max-w-md truncate" title={log.details}>
                         {log.details}
                       </p>
                     </TableCell>
                     <TableCell>
                       {getActivityBadge(log.type)}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden lg:table-cell">
                       <p className="text-sm text-gray-500">
                         {new Date(log.timestamp).toLocaleString()}
                       </p>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <Clock className="h-4 w-4" />
-                        {getTimeElapsed(log.timestamp)}
+                      <div className="flex items-center gap-1 md:gap-2 text-xs md:text-sm text-gray-500">
+                        <Clock className="h-3 w-3 md:h-4 md:w-4" />
+                        <span className="truncate">{getTimeElapsed(log.timestamp)}</span>
                       </div>
                     </TableCell>
                   </TableRow>
