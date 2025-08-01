@@ -13,7 +13,6 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
   Search,
   Send,
-  MoreVertical,
   Users,
   X,
   CheckCheck,
