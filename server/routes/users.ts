@@ -57,6 +57,16 @@ export const handleCreateUser: RequestHandler = (req, res) => {
   userPasswords[email] = password;
   nextUserId++;
 
+  // Log activity
+  addActivityLog({
+    userId: '1', // In production, get admin ID from request context
+    userName: 'Admin User',
+    action: 'User account created',
+    details: `Created new ${role.toLowerCase()} account for ${name} (${email})`,
+    timestamp: new Date().toISOString(),
+    type: 'user_created',
+  });
+
   res.json(newUser);
 };
 
