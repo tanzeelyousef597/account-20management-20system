@@ -56,6 +56,13 @@ import {
   handleGetOnlineStatus,
   handleCreateGroupChat
 } from "./routes/chat";
+import {
+  handleGetCompanies,
+  handleCreateCompany,
+  handleUpdateCompany,
+  handleDeleteCompany,
+  handleGetCompanyStats
+} from "./routes/companies";
 
 export function createServer() {
   const app = express();
