@@ -23,6 +23,7 @@ import {
   MoreHorizontal
 } from 'lucide-react';
 import { Bonus, User as UserType } from '@shared/types';
+import { api } from '@shared/api-client';
 
 export default function Bonuses() {
   const [bonuses, setBonuses] = useState<Bonus[]>([]);
