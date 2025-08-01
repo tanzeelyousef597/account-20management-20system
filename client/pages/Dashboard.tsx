@@ -93,58 +93,18 @@ export default function Dashboard() {
       }
     };
 
-    // Categories with colors matching the screenshot
+    // Categories with real dashboard data - all 5 requested categories
     const categories = [
-      { name: 'Total Submissions', color: '#10b981', value: dashboardData.totalSubmissions }, // Green
-      { name: 'Approved Submissions', color: '#84cc16', value: dashboardData.approvedSubmissions }, // Lime/Yellow-green
-      { name: 'Orders in Work', color: '#3b82f6', value: dashboardData.ordersInWork }, // Blue
+      { name: 'Total Submissions', color: '#8b5cf6', value: dashboardData.totalSubmissions, gradient: 'from-purple-500 to-purple-600' },
+      { name: 'Approved Submissions', color: '#10b981', value: dashboardData.approvedSubmissions, gradient: 'from-emerald-500 to-emerald-600' },
+      { name: 'Rejected Submissions', color: '#ef4444', value: dashboardData.rejectedSubmissions, gradient: 'from-red-500 to-red-600' },
+      { name: 'Orders in QA', color: '#f59e0b', value: dashboardData.ordersInQA, gradient: 'from-amber-500 to-amber-600' },
+      { name: 'Orders in Work', color: '#3b82f6', value: dashboardData.ordersInWork, gradient: 'from-blue-500 to-blue-600' },
     ];
 
-    const timePeriods = getTimePeriods();
-
-    // Generate concentrated data that shows meaningful patterns
-    const generateTimeData = () => {
-      return timePeriods.map((period, index) => {
-        const periodData: { [key: string]: number } = { period };
-
-        // Create a more realistic pattern where most data is concentrated in a few periods
-        const isMainPeriod = index === Math.floor(timePeriods.length * 0.6); // Main period around 60% through
-        const isSecondaryPeriod = index === Math.floor(timePeriods.length * 0.7); // Secondary period
-
-        categories.forEach((category) => {
-          if (category.value === 0) {
-            periodData[category.name] = 0;
-          } else if (isMainPeriod) {
-            // Main period gets most of the data
-            periodData[category.name] = Math.floor(category.value * 0.7);
-          } else if (isSecondaryPeriod) {
-            // Secondary period gets some data
-            periodData[category.name] = Math.floor(category.value * 0.25);
-          } else {
-            // Other periods get minimal or no data
-            const hasData = Math.random() > 0.7; // 30% chance of having data
-            if (hasData) {
-              periodData[category.name] = Math.floor(category.value * (0.01 + Math.random() * 0.04));
-            } else {
-              periodData[category.name] = 0;
-            }
-          }
-        });
-
-        return periodData;
-      });
-    };
-
-    const timeData = generateTimeData();
-
-    // Calculate scale based on the actual maximum values in the chart
-    const allChartValues = timeData.flatMap(period =>
-      categories.map(cat => period[cat.name] || 0)
-    );
-    const maxChartValue = Math.max(...allChartValues, 1);
-
-    // Scale to show proper proportions
-    const roundedMax = Math.ceil(maxChartValue * 1.1 / 1000) * 1000; // Round to nearest thousand
+    // Use actual dashboard values directly - no dummy data
+    const maxValue = Math.max(...categories.map(cat => cat.value), 1);
+    const roundedMax = Math.max(maxValue * 1.2, 10); // Add 20% padding and minimum of 10
     const yAxisSteps = 5;
     const stepValue = roundedMax / yAxisSteps;
 
