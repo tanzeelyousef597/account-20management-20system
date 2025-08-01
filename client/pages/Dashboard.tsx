@@ -299,20 +299,21 @@ export default function Dashboard() {
         </div>
 
         {/* Chart Section */}
-        <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-1">
-          <CardHeader className="pb-6 px-8 border-b border-slate-200/50 bg-gradient-to-r from-blue-50 to-purple-50">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <CardTitle className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Work categories / submissions by time
+        <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-1 mx-auto max-w-full">
+          <CardHeader className="pb-4 sm:pb-6 px-3 sm:px-4 md:px-6 lg:px-8 border-b border-slate-200/50 bg-gradient-to-r from-blue-50 to-purple-50">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+              <CardTitle className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent truncate">
+                <span className="hidden sm:inline">Work categories / submissions by time</span>
+                <span className="sm:hidden">Work Categories</span>
               </CardTitle>
               <Select value={selectedFilter} onValueChange={setSelectedFilter}>
-                <SelectTrigger className="w-full sm:w-40 bg-white/90 backdrop-blur-sm border-slate-300 focus:border-blue-500 hover:border-purple-400 transition-all duration-300 rounded-xl shadow-lg">
+                <SelectTrigger className="w-full sm:w-32 md:w-36 lg:w-40 bg-white/90 backdrop-blur-sm border-slate-300 focus:border-blue-500 hover:border-purple-400 transition-all duration-300 rounded-lg sm:rounded-xl shadow-lg text-xs sm:text-sm">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-white/95 backdrop-blur-xl border-slate-200 shadow-2xl rounded-xl">
-                  <SelectItem value="Last Day" className="hover:bg-blue-50 rounded-lg transition-colors duration-200">Last Day</SelectItem>
-                  <SelectItem value="Last Week" className="hover:bg-blue-50 rounded-lg transition-colors duration-200">Last Week</SelectItem>
-                  <SelectItem value="Last Month" className="hover:bg-blue-50 rounded-lg transition-colors duration-200">Last Month</SelectItem>
+                <SelectContent className="bg-white/95 backdrop-blur-xl border-slate-200 shadow-2xl rounded-lg sm:rounded-xl">
+                  <SelectItem value="Last Day" className="hover:bg-blue-50 rounded-lg transition-colors duration-200 text-xs sm:text-sm">Last Day</SelectItem>
+                  <SelectItem value="Last Week" className="hover:bg-blue-50 rounded-lg transition-colors duration-200 text-xs sm:text-sm">Last Week</SelectItem>
+                  <SelectItem value="Last Month" className="hover:bg-blue-50 rounded-lg transition-colors duration-200 text-xs sm:text-sm">Last Month</SelectItem>
                   <SelectItem value="Last Year">Last Year</SelectItem>
                 </SelectContent>
               </Select>
