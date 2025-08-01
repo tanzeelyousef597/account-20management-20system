@@ -257,8 +257,8 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </header>
 
-        <main className="p-4 sm:p-6 animate-in fade-in duration-700 relative">
-          <div className="relative z-10">
+        <main className="p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10 2xl:p-12 animate-in fade-in duration-700 relative min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)]">
+          <div className="relative z-10 max-w-[1920px] mx-auto">
             {children}
           </div>
         </main>
