@@ -29,6 +29,7 @@ import MyBonuses from "./pages/MyBonuses";
 import MyFines from "./pages/MyFines";
 import Settings from "./pages/Settings";
 import Chat from "./pages/Chat";
+import SuperAdminCompanies from "./pages/SuperAdminCompanies";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
