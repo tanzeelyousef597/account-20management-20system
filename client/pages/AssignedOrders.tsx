@@ -820,14 +820,10 @@ export default function AssignedOrders() {
 
       {/* Tabbed Interface */}
       <Tabs defaultValue="work" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="work" className="flex items-center gap-2">
             <PlayCircle className="h-4 w-4" />
             Orders in Work ({ordersInWork.length})
-          </TabsTrigger>
-          <TabsTrigger value="approved" className="flex items-center gap-2">
-            <CheckCircle className="h-4 w-4" />
-            Approved Orders ({approvedOrders.length})
           </TabsTrigger>
           <TabsTrigger value="stopped" className="flex items-center gap-2">
             <StopCircle className="h-4 w-4" />
