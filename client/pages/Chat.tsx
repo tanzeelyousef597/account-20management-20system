@@ -566,12 +566,15 @@ export default function Chat() {
                   )}
                   
                   {message.messageType === 'file' && (
-                    <div className="flex items-center gap-2">
-                      <Paperclip className="h-4 w-4" />
-                      <div>
-                        <div className="text-sm font-medium">{message.fileName}</div>
+                    <div className="flex items-center gap-3 p-2 border rounded cursor-pointer hover:bg-accent/50 transition-colors"
+                         onClick={() => window.open(message.fileUrl, '_blank')}>
+                      <div className="flex-shrink-0">
+                        <Paperclip className="h-5 w-5" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-sm font-medium truncate">{message.fileName}</div>
                         <div className="text-xs opacity-70">
-                          {message.fileSize ? `${(message.fileSize / 1024 / 1024).toFixed(1)} MB` : ''}
+                          {message.fileSize ? `${(message.fileSize / 1024 / 1024).toFixed(1)} MB` : ''} • Click to download
                         </div>
                       </div>
                     </div>
