@@ -160,22 +160,52 @@ export default function MyOrders() {
     setSubmissionFile(null);
   };
 
-  const getStatusBadge = (status: string) => {
+  const getWorkerStatusBadge = (order: WorkOrder, isAssigned: boolean) => {
+    // For assigned orders, workers only see "Assigned" regardless of admin status changes
+    if (isAssigned && order.assignedTo === user?.id) {
+      // Only show different status if order is clearly completed/rejected
+      if (order.status === 'Rejected') {
+        return (
+          <Badge className="bg-red-100 text-red-800">
+            <XCircle className="h-3 w-3 mr-1" />
+            Rejected
+          </Badge>
+        );
+      } else if (order.status === 'Done') {
+        return (
+          <Badge className="bg-purple-100 text-purple-800">
+            <CheckCircle className="h-3 w-3 mr-1" />
+            Completed
+          </Badge>
+        );
+      } else {
+        // All other statuses show as "Assigned" to worker
+        return (
+          <Badge className="bg-blue-100 text-blue-800">
+            <Clock className="h-3 w-3 mr-1" />
+            Assigned
+          </Badge>
+        );
+      }
+    }
+
+    // For submitted orders, show actual status
     const statusConfig = {
       'Under QA': { color: 'bg-yellow-100 text-yellow-800', icon: Clock },
       'Approved': { color: 'bg-green-100 text-green-800', icon: CheckCircle },
       'Rejected': { color: 'bg-red-100 text-red-800', icon: XCircle },
       'In Progress': { color: 'bg-blue-100 text-blue-800', icon: Clock },
       'Completed': { color: 'bg-purple-100 text-purple-800', icon: CheckCircle },
+      'Done': { color: 'bg-purple-100 text-purple-800', icon: CheckCircle },
     };
-    
-    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig['Under QA'];
+
+    const config = statusConfig[order.status as keyof typeof statusConfig] || statusConfig['Under QA'];
     const Icon = config.icon;
-    
+
     return (
       <Badge className={config.color}>
         <Icon className="h-3 w-3 mr-1" />
-        {status}
+        {order.status}
       </Badge>
     );
   };
