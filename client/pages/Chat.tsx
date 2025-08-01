@@ -397,14 +397,31 @@ export default function Chat() {
                         {conversation.lastMessage && formatTime(conversation.lastMessage.timestamp)}
                       </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-muted-foreground truncate">
-                        {conversation.lastMessage?.content || 'No messages yet'}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-muted-foreground truncate">
+                          {conversation.lastMessage?.content || 'No messages yet'}
+                        </div>
+                        {conversation.unreadCount > 0 && (
+                          <Badge variant="default" className="ml-2 px-2 py-0.5 text-xs">
+                            {conversation.unreadCount}
+                          </Badge>
+                        )}
                       </div>
+
+                      {/* Show recent message previews for unread conversations */}
                       {conversation.unreadCount > 0 && (
-                        <Badge variant="default" className="ml-2 px-2 py-0.5 text-xs">
-                          {conversation.unreadCount}
-                        </Badge>
+                        <div className="bg-blue-50 p-2 rounded text-xs space-y-1 border-l-2 border-blue-500">
+                          <div className="font-medium text-blue-700">Recent messages:</div>
+                          {messages
+                            .filter(msg => msg.conversationId === conversation.id)
+                            .slice(-3)
+                            .map((msg, idx) => (
+                              <div key={idx} className="text-blue-600 truncate">
+                                <span className="font-medium">{msg.senderName}:</span> {msg.content}
+                              </div>
+                            ))}
+                        </div>
                       )}
                     </div>
                   </div>
