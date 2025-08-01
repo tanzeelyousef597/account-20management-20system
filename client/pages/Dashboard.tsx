@@ -34,7 +34,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchDashboardData();
-  }, [selectedMonth]);
+  }, [selectedFilter]);
 
   const fetchDashboardData = async () => {
     try {
