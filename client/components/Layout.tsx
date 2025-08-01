@@ -82,10 +82,10 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
-      {/* Background Animation */}
+      {/* Background Animation - Responsive sizes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-1/2 -left-40 w-80 h-80 bg-gradient-to-br from-indigo-400/20 to-blue-600/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        <div className="absolute -top-20 sm:-top-32 md:-top-40 -right-20 sm:-right-32 md:-right-40 w-40 sm:w-60 md:w-80 lg:w-96 xl:w-[28rem] 2xl:w-[32rem] h-40 sm:h-60 md:h-80 lg:h-96 xl:h-[28rem] 2xl:h-[32rem] bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-1/2 -left-20 sm:-left-32 md:-left-40 w-40 sm:w-60 md:w-80 lg:w-96 xl:w-[28rem] 2xl:w-[32rem] h-40 sm:h-60 md:h-80 lg:h-96 xl:h-[28rem] 2xl:h-[32rem] bg-gradient-to-br from-indigo-400/20 to-blue-600/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
       </div>
 
       {/* Mobile menu overlay */}
