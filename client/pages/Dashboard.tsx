@@ -180,21 +180,54 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Dashboard Metrics Chart */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" />
-            Dashboard Metrics Overview
-          </CardTitle>
-          <CardDescription>
-            Visual breakdown of key performance metrics
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ModernBarChart data={dashboardData.categories} />
-        </CardContent>
-      </Card>
+      {/* Analytics Section */}
+      <div className="space-y-6">
+        <div className="text-center space-y-2">
+          <h3 className="text-2xl font-bold text-gray-900">Performance Analytics</h3>
+          <p className="text-gray-600">Select a time period to view detailed metrics</p>
+        </div>
+
+        {/* Filter Controls */}
+        <Card className="shadow-sm bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+          <CardContent className="p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4">
+              <div className="flex items-center gap-3">
+                <Calendar className="h-5 w-5 text-blue-600" />
+                <span className="text-sm font-medium text-gray-700">Time Period:</span>
+              </div>
+              <Select value={selectedFilter} onValueChange={setSelectedFilter}>
+                <SelectTrigger className="w-full sm:w-60 bg-white border-blue-300 focus:border-blue-500 shadow-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Last Day">📅 Last Day</SelectItem>
+                  <SelectItem value="Last Week">📊 Last Week</SelectItem>
+                  <SelectItem value="Last Month">📈 Last Month</SelectItem>
+                  <SelectItem value="Last Year">📋 Last Year</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Chart Section */}
+        <Card className="shadow-lg border-0 bg-gradient-to-br from-white to-gray-50">
+          <CardHeader className="text-center pb-6">
+            <CardTitle className="text-xl font-bold text-gray-900 flex items-center justify-center gap-3">
+              <BarChart3 className="h-6 w-6 text-blue-600" />
+              Dashboard Metrics Overview
+            </CardTitle>
+            <CardDescription className="text-gray-600">
+              Real-time visualization of your key performance indicators for {selectedFilter.toLowerCase()}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-inner">
+              <ModernBarChart data={dashboardData.categories} />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
