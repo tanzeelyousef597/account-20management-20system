@@ -78,19 +78,16 @@ export const handleGetConversations: RequestHandler = (req, res) => {
   const userConversations = conversations
     .filter(conv => conv.participantIds.includes(userId))
     .map(conv => {
-      // Get unread message count for this user
-      const unreadCount = messages.filter(msg => 
-        msg.receiverId === userId && 
-        (conv.participantIds.includes(msg.senderId)) &&
-        !msg.isRead
+      // Get unread message count for this user (messages in this conversation not read by this user)
+      const unreadCount = messages.filter(msg =>
+        msg.conversationId === conv.id &&
+        msg.senderId !== userId &&
+        !msg.readBy.includes(userId)
       ).length;
 
       // Get last message in this conversation
       const conversationMessages = messages
-        .filter(msg => 
-          conv.participantIds.includes(msg.senderId) && 
-          conv.participantIds.includes(msg.receiverId)
-        )
+        .filter(msg => msg.conversationId === conv.id)
         .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
       return {
