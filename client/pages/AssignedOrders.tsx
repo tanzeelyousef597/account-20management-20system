@@ -589,16 +589,21 @@ export default function AssignedOrders() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900">Assigned Orders</h2>
-          <p className="text-gray-600 mt-1">Manage orders through their workflow stages</p>
+    <div className="space-y-8 animate-in fade-in duration-700">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 animate-in slide-in-from-top duration-500">
+        <div className="relative">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            Assigned Orders
+          </h2>
+          <p className="text-gray-600 mt-2 text-lg animate-in slide-in-from-left duration-700" style={{ animationDelay: '200ms' }}>
+            Manage orders through their workflow stages
+          </p>
+          <div className="absolute -bottom-2 left-0 w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-in slide-in-from-left duration-1000" style={{ animationDelay: '400ms' }}></div>
         </div>
-        
+
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 animate-in slide-in-from-right" style={{ animationDelay: '300ms' }}>
               <Plus className="h-4 w-4 mr-2" />
               Create Order
             </Button>
