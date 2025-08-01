@@ -15,6 +15,7 @@ import {
   Filter
 } from 'lucide-react';
 import { ActivityLog } from '@shared/types';
+import { api } from '@shared/api-client';
 
 export default function ActivityLogs() {
   const [logs, setLogs] = useState<ActivityLog[]>([]);
