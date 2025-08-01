@@ -19,18 +19,14 @@ export const handleLogin: RequestHandler = (req, res) => {
   const token = `token_${user.id}_${Date.now()}`;
 
   // Log login activity
-  const logEntry = {
-    id: Date.now().toString(),
+  addActivityLog({
     userId: user.id,
     userName: user.name,
     action: 'User logged in',
     details: `${user.name} (${user.role}) logged into the system`,
     timestamp: new Date().toISOString(),
     type: 'login' as const,
-  };
-
-  // Store log (in production, save to database)
-  console.log('Activity Log:', logEntry);
+  });
 
   const response: LoginResponse = {
     user,
