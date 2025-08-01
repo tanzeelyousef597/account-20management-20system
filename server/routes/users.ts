@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { User, CreateUserRequest } from "@shared/types";
+import { addActivityLog } from "./activity-logs";
 
 // Mock database - In production, use a real database
 let users: User[] = [
