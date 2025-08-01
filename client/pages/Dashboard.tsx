@@ -74,12 +74,21 @@ export default function Dashboard() {
     </div>
   );
 
-  const CustomBarChart = ({ data }: { data: { category: string; submissions: number }[] }) => {
-    const maxValue = Math.max(...data.map(d => d.submissions), 1);
+  const ModernBarChart = ({ data }: { data: { category: string; submissions: number }[] }) => {
+    // Use dashboard metrics for the chart
+    const chartData = [
+      { label: 'Total Submissions', value: dashboardData.totalSubmissions, color: 'bg-red-500' },
+      { label: 'Approved Submissions', value: dashboardData.approvedSubmissions, color: 'bg-orange-500' },
+      { label: 'Rejected Submissions', value: dashboardData.rejectedSubmissions, color: 'bg-yellow-500' },
+      { label: 'Orders in Work', value: dashboardData.ordersInWork, color: 'bg-green-500' },
+      { label: 'Orders in QA', value: dashboardData.ordersInQA, color: 'bg-blue-500' },
+    ];
 
-    if (data.length === 0 || data.every(item => item.submissions === 0)) {
+    const maxValue = Math.max(...chartData.map(d => d.value), 1);
+
+    if (chartData.every(item => item.value === 0)) {
       return (
-        <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
+        <div className="h-80 flex items-center justify-center bg-gray-50 rounded-lg">
           <div className="text-center space-y-2">
             <BarChart3 className="h-12 w-12 text-gray-400 mx-auto" />
             <p className="text-gray-500 font-medium">No data available</p>
@@ -95,24 +104,48 @@ export default function Dashboard() {
     }
 
     return (
-      <div className="space-y-4">
-        {data.map((item, index) => (
-          <div key={index} className="space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-gray-700">{item.category}</span>
-              <span className="text-sm font-bold text-blue-600">{item.submissions}</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-4">
+      <div className="h-80 flex items-end justify-center gap-8 p-8 bg-gray-50 rounded-lg">
+        {chartData.map((item, index) => {
+          const height = (item.value / maxValue) * 240; // 240px max height
+          const minHeight = item.value > 0 ? 20 : 0; // Minimum bar height for visibility
+
+          return (
+            <div key={index} className="flex flex-col items-center space-y-3">
+              {/* Value label above bar */}
+              <div className="text-sm font-semibold text-gray-700 min-h-5">
+                {item.value > 0 ? item.value : ''}
+              </div>
+
+              {/* Bar */}
               <div
-                className="bg-gradient-to-r from-green-400 to-green-500 h-4 rounded-full transition-all duration-700 ease-out"
+                className={`${item.color} rounded-t-lg transition-all duration-1000 ease-out shadow-lg min-w-16 w-16`}
                 style={{
-                  width: `${(item.submissions / maxValue) * 100}%`,
-                  minWidth: item.submissions > 0 ? '8px' : '0px'
+                  height: `${Math.max(height, minHeight)}px`,
+                  transform: 'translateY(0)',
+                  animation: `barGrow 1.5s ease-out ${index * 0.2}s both`
                 }}
               />
+
+              {/* Label below bar */}
+              <div className="text-xs font-medium text-gray-600 text-center max-w-16 leading-tight">
+                {item.label}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
+
+        <style jsx>{`
+          @keyframes barGrow {
+            from {
+              height: 0px;
+              opacity: 0;
+            }
+            to {
+              height: ${maxValue > 0 ? 'var(--bar-height)' : '0px'};
+              opacity: 1;
+            }
+          }
+        `}</style>
       </div>
     );
   };
