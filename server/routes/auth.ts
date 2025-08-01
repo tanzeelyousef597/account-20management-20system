@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { LoginRequest, LoginResponse } from "@shared/types";
 import { users, userPasswords } from "./users";
+import { addActivityLog } from "./activity-logs";
 
 export const handleLogin: RequestHandler = (req, res) => {
   const { email, password } = req.body as LoginRequest;
