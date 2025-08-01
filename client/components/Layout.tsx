@@ -54,6 +54,7 @@ const workerNavItems = [
   { name: 'My Invoices', href: '/my-invoices', icon: FileText },
   { name: 'My Bonuses', href: '/my-bonuses', icon: TrendingUp },
   { name: 'My Fines', href: '/my-fines', icon: AlertCircle },
+  { name: 'Chat', href: '/chat', icon: MessageSquare },
 ];
 
 export default function Layout({ children }: LayoutProps) {
