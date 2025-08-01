@@ -75,23 +75,61 @@ export default function Dashboard() {
   );
 
   const ModernBarChart = ({ data }: { data: { category: string; submissions: number }[] }) => {
-    // Use dashboard metrics for the chart
-    const chartData = [
-      { label: 'Total Submissions', value: dashboardData.totalSubmissions, color: '#22c55e', shortLabel: 'Total' },
-      { label: 'Approved Submissions', value: dashboardData.approvedSubmissions, color: '#84cc16', shortLabel: 'Approved' },
-      { label: 'Rejected Submissions', value: dashboardData.rejectedSubmissions, color: '#f59e0b', shortLabel: 'Rejected' },
-      { label: 'Orders in Work', value: dashboardData.ordersInWork, color: '#3b82f6', shortLabel: 'In Work' },
-      { label: 'Orders in QA', value: dashboardData.ordersInQA, color: '#8b5cf6', shortLabel: 'In QA' },
+    // Generate time periods based on selected filter
+    const getTimePeriods = () => {
+      switch (selectedFilter) {
+        case 'Last Day':
+          return Array.from({ length: 12 }, (_, i) => {
+            const hour = (new Date().getHours() - 11 + i + 24) % 24;
+            return `${hour}:00`;
+          });
+        case 'Last Week':
+          return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        case 'Last Month':
+          return Array.from({ length: 4 }, (_, i) => `Week ${i + 1}`);
+        case 'Last Year':
+        default:
+          return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      }
+    };
+
+    // Categories with colors matching the image style
+    const categories = [
+      { name: 'Total Submissions', color: '#f97316', value: dashboardData.totalSubmissions },
+      { name: 'Approved Orders', color: '#06d6a0', value: dashboardData.approvedSubmissions },
+      { name: 'Orders in Work', color: '#3b82f6', value: dashboardData.ordersInWork },
     ];
 
-    const maxValue = Math.max(...chartData.map(d => d.value), 1);
-    // Ensure minimum scale for better visibility
-    const minScale = Math.max(maxValue * 1.2, 100); // At least 100 or 20% above max value
-    const roundedMax = Math.ceil(minScale / 100) * 100; // Round up to nearest hundred
+    const timePeriods = getTimePeriods();
+
+    // Generate sample data distributed across time periods
+    const generateTimeData = () => {
+      return timePeriods.map((period, index) => {
+        const baseVariation = Math.random() * 0.6 + 0.7; // 0.7 to 1.3 multiplier
+        const periodData: { [key: string]: number } = { period };
+
+        categories.forEach((category) => {
+          // Distribute the total value across time periods with variation
+          const avgValue = category.value / timePeriods.length;
+          const variation = (Math.random() - 0.5) * 0.8; // -0.4 to +0.4
+          periodData[category.name] = Math.max(0, Math.round(avgValue * (baseVariation + variation)));
+        });
+
+        return periodData;
+      });
+    };
+
+    const timeData = generateTimeData();
+    const allValues = timeData.flatMap(period =>
+      categories.map(cat => period[cat.name] || 0)
+    );
+    const maxValue = Math.max(...allValues, 1);
+    const minScale = Math.max(maxValue * 1.1, 25);
+    const roundedMax = Math.ceil(minScale / 5) * 5;
     const yAxisSteps = 5;
     const stepValue = roundedMax / yAxisSteps;
 
-    if (chartData.every(item => item.value === 0)) {
+    if (categories.every(cat => cat.value === 0)) {
       return (
         <div className="h-80 flex items-center justify-center bg-white rounded-lg border border-gray-200">
           <div className="text-center space-y-2">
@@ -113,10 +151,10 @@ export default function Dashboard() {
         {/* Chart Container */}
         <div className="relative h-80 flex">
           {/* Y-Axis */}
-          <div className="w-16 flex flex-col justify-between text-xs text-gray-600 pr-2">
+          <div className="w-12 flex flex-col justify-between text-xs text-gray-600 pr-2">
             {Array.from({ length: yAxisSteps + 1 }, (_, i) => (
               <div key={i} className="text-right">
-                {Math.round(stepValue * (yAxisSteps - i)).toLocaleString()}
+                {Math.round(stepValue * (yAxisSteps - i))}
               </div>
             ))}
           </div>
@@ -134,42 +172,63 @@ export default function Dashboard() {
               ))}
             </div>
 
-            {/* Bars Container */}
-            <div className="absolute inset-0 flex items-end justify-center gap-8 px-4">
-              {chartData.map((item, index) => {
-                const height = roundedMax > 0 ? (item.value / roundedMax) * 100 : 0;
-                const minHeight = item.value > 0 ? 10 : 0; // Minimum 10% height for visibility
+            {/* Grouped Bars Container */}
+            <div className="absolute inset-0 flex items-end justify-between px-4">
+              {timeData.map((periodData, periodIndex) => (
+                <div key={periodIndex} className="flex items-end gap-1 flex-1 justify-center">
+                  {categories.map((category, catIndex) => {
+                    const value = periodData[category.name] || 0;
+                    const height = roundedMax > 0 ? (value / roundedMax) * 100 : 0;
+                    const minHeight = value > 0 ? 3 : 0;
 
-                return (
-                  <div key={index} className="flex flex-col items-center space-y-2 flex-shrink-0">
-                    {/* Value label above bar */}
-                    <div className="text-sm font-semibold text-gray-700 mb-1">
-                      {item.value > 0 ? item.value.toLocaleString() : ''}
-                    </div>
+                    return (
+                      <div key={catIndex} className="flex flex-col items-center">
+                        {/* Value label above bar - only show if value > 0 and height is significant */}
+                        {value > 0 && height > 15 && (
+                          <div className="text-xs font-medium text-gray-700 mb-1">
+                            {value}
+                          </div>
+                        )}
 
-                    {/* Bar */}
-                    <div
-                      className="w-16 rounded-t transition-all duration-1000 ease-out"
-                      style={{
-                        backgroundColor: item.color,
-                        height: `${Math.max(height, minHeight)}%`,
-                        animationDelay: `${index * 0.2}s`
-                      }}
-                    />
-
-                    {/* Label below bar */}
-                    <div className="text-xs font-medium text-gray-600 text-center w-16 leading-tight mt-2">
-                      {item.shortLabel}
-                    </div>
-                  </div>
-                );
-              })}
+                        {/* Bar */}
+                        <div
+                          className="w-6 rounded-t transition-all duration-1000 ease-out"
+                          style={{
+                            backgroundColor: category.color,
+                            height: `${Math.max(height, minHeight)}%`,
+                            animationDelay: `${(periodIndex * categories.length + catIndex) * 0.1}s`
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* X-Axis Line */}
-        <div className="ml-16 border-t border-gray-300 mt-2"></div>
+        {/* X-Axis Labels */}
+        <div className="ml-12 flex justify-between text-xs text-gray-600 mt-2 px-4">
+          {timePeriods.map((period, index) => (
+            <div key={index} className="text-center flex-1">
+              {period}
+            </div>
+          ))}
+        </div>
+
+        {/* Legend */}
+        <div className="flex justify-center gap-6 mt-6 pt-4 border-t border-gray-100">
+          {categories.map((category, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <div
+                className="w-4 h-4 rounded"
+                style={{ backgroundColor: category.color }}
+              />
+              <span className="text-sm text-gray-700">{category.name}</span>
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
