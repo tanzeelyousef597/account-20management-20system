@@ -46,6 +46,15 @@ import {
   handleGetWhatsAppSettings,
   handleUpdateWhatsAppSettings
 } from "./routes/settings";
+import {
+  handleSearchUsers,
+  handleGetConversations,
+  handleGetMessages,
+  handleSendMessage,
+  handleMarkAsRead,
+  handleUploadChatFile,
+  handleGetOnlineStatus
+} from "./routes/chat";
 
 export function createServer() {
   const app = express();
