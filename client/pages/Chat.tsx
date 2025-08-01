@@ -215,98 +215,30 @@ export default function Chat() {
     }
   };
 
-  const handleFileUpload = async (file: File, type: 'image' | 'file') => {
+  const handleScreenshot = async () => {
     if (!selectedConversation || !user) return;
 
-    // Check file size (2GB limit)
-    const maxSize = 2 * 1024 * 1024 * 1024; // 2GB in bytes
-    if (file.size > maxSize) {
-      toast({
-        title: 'File Too Large',
-        description: 'File size must be less than 2GB',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    const otherUser = selectedConversation.participants.find(p => p.id !== user.id);
-    if (!otherUser) return;
-
-    setIsUploading(true);
     try {
-      // Upload the file
-      const uploadResponse = await api.uploadChatFile(type);
-
-      // Send message with file
-      const message = await api.sendMessage(user.id, {
-        receiverId: otherUser.id,
-        content: file.name,
-        messageType: type,
-        fileUrl: uploadResponse.url,
-        fileName: uploadResponse.fileName,
-        fileSize: file.size,
-      });
-
-      setMessages(prev => [...prev, message]);
-
-      // Update conversation last message
-      setConversations(prev =>
-        prev.map(conv =>
-          conv.id === selectedConversation.id
-            ? { ...conv, lastMessage: message, lastActivity: message.timestamp }
-            : conv
-        )
-      );
-
-      toast({
-        title: 'File Shared',
-        description: `${type === 'image' ? 'Image' : 'File'} shared successfully`,
-      });
+      // Use the native browser Screen Capture API or fall back to clipboard
+      if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+        // Modern browsers with screen capture support
+        toast({
+          title: 'Screenshot Sharing',
+          description: 'Use your OS screenshot tool (Win+Shift+S, Cmd+Shift+4, etc.) and paste in the chat',
+        });
+      } else {
+        // Fallback message
+        toast({
+          title: 'Screenshot Sharing',
+          description: 'Take a screenshot using your system tools and paste it into the chat',
+        });
+      }
     } catch (error) {
-      console.error('Failed to upload file:', error);
+      console.error('Failed to access screen capture:', error);
       toast({
-        title: 'Upload Failed',
-        description: 'Failed to upload file',
-        variant: 'destructive',
+        title: 'Screenshot Feature',
+        description: 'Use your system screenshot tools and paste the image in chat',
       });
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const handleImageClick = () => {
-    imageInputRef.current?.click();
-  };
-
-  const handleFileClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      handleFileUpload(file, 'image');
-    } else {
-      toast({
-        title: 'Invalid File',
-        description: 'Please select a valid image file',
-        variant: 'destructive',
-      });
-    }
-    // Reset input
-    if (imageInputRef.current) {
-      imageInputRef.current.value = '';
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleFileUpload(file, 'file');
-    }
-    // Reset input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
     }
   };
 
