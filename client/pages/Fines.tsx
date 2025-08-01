@@ -10,13 +10,16 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Plus, 
-  AlertCircle, 
+import {
+  Plus,
+  AlertCircle,
   DollarSign,
   User,
   Calendar,
-  TrendingDown
+  TrendingDown,
+  Edit,
+  Trash2,
+  MoreHorizontal
 } from 'lucide-react';
 import { Fine, User as UserType } from '@shared/types';
 
