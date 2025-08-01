@@ -157,6 +157,9 @@ export default function Chat() {
             : conv
         )
       );
+
+      // Refresh global unread count
+      refreshUnreadCount();
     } catch (error) {
       console.error('Failed to send message:', error);
       toast({
