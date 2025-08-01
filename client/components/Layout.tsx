@@ -126,8 +126,9 @@ export default function Layout({ children }: LayoutProps) {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 space-y-1 p-4">
-            {navItems.map((item) => {
+          <nav className="flex-1 space-y-2 p-4 relative">
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-50/30 to-transparent pointer-events-none"></div>
+            {navItems.map((item, index) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.href;
 
@@ -135,9 +136,10 @@ export default function Layout({ children }: LayoutProps) {
                 <Link
                   key={item.name}
                   to={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)} // Close menu on mobile after click
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  style={{ animationDelay: `${index * 100}ms` }}
                   className={cn(
-                    'flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors relative',
+                    'flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative group animate-in slide-in-from-left',
                     isActive
                       ? 'bg-primary text-primary-foreground'
                       : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
