@@ -158,6 +158,13 @@ const App = () => (
                   </Layout>
                 </ProtectedRoute>
               } />
+              <Route path="/super-admin/companies" element={
+                <ProtectedRoute requiredRole="SuperAdmin">
+                  <Layout>
+                    <SuperAdminCompanies />
+                  </Layout>
+                </ProtectedRoute>
+              } />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </BrowserRouter>
