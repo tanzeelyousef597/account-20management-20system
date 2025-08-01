@@ -809,15 +809,15 @@ export default function AssignedOrders() {
       </div>
 
       {/* Search Bar */}
-      <Card>
-        <CardContent className="p-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+      <Card className="bg-white/80 backdrop-blur-xl border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-500 animate-in slide-in-from-bottom" style={{ animationDelay: '500ms' }}>
+        <CardContent className="p-6">
+          <div className="relative group">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 group-focus-within:text-blue-500 transition-colors duration-300" />
             <Input
               placeholder="Search orders by title, description, category, worker, or status..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
+              className="pl-12 h-12 border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/90 backdrop-blur-sm rounded-xl"
             />
           </div>
         </CardContent>
