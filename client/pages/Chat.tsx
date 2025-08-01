@@ -10,12 +10,10 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { 
-  Search, 
-  Send, 
-  Paperclip, 
-  Image, 
-  MoreVertical, 
+import {
+  Search,
+  Send,
+  MoreVertical,
   Phone,
   Video,
   Users,
@@ -23,7 +21,8 @@ import {
   CheckCheck,
   Check,
   Circle,
-  MessageSquare
+  MessageSquare,
+  Camera
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
