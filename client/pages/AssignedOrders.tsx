@@ -864,30 +864,7 @@ export default function AssignedOrders() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="approved">
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-                Approved Orders
-              </CardTitle>
-              <CardDescription>
-                Orders that have been completed and approved
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {approvedOrders.length > 0 ? (
-                renderOrdersTable(approvedOrders, 'approved')
-              ) : (
-                <div className="text-center py-12">
-                  <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No approved orders</h3>
-                  <p className="text-gray-500">Approved orders will appear here</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+
 
         <TabsContent value="stopped">
           <Card className="shadow-lg">
