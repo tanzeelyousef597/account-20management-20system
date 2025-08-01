@@ -53,7 +53,8 @@ import {
   handleSendMessage,
   handleMarkAsRead,
   handleUploadChatFile,
-  handleGetOnlineStatus
+  handleGetOnlineStatus,
+  handleCreateGroupChat
 } from "./routes/chat";
 
 export function createServer() {
