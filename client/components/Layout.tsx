@@ -144,7 +144,7 @@ export default function Layout({ children }: LayoutProps) {
                   onClick={() => setIsMobileMenuOpen(false)}
                   style={{ animationDelay: `${index * 100}ms` }}
                   className={cn(
-                    'flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative group animate-in slide-in-from-left transform hover:scale-105',
+                    'flex items-center px-2 sm:px-3 md:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 relative group animate-in slide-in-from-left transform hover:scale-105',
                     isActive
                       ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
                       : 'text-gray-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-gray-900 hover:shadow-md'
@@ -152,17 +152,22 @@ export default function Layout({ children }: LayoutProps) {
                 >
                   {/* Active indicator */}
                   {isActive && (
-                    <div className="absolute left-0 top-1/2 w-1 h-8 bg-white rounded-full transform -translate-y-1/2 animate-in slide-in-from-left duration-500"></div>
+                    <div className="absolute left-0 top-1/2 w-1 h-6 sm:h-7 md:h-8 bg-white rounded-full transform -translate-y-1/2 animate-in slide-in-from-left duration-500"></div>
                   )}
 
                   {/* Icon with animation */}
                   <Icon className={cn(
-                    "mr-3 h-5 w-5 transition-all duration-300",
+                    "mr-2 sm:mr-3 h-4 w-4 sm:h-5 sm:w-5 transition-all duration-300 flex-shrink-0",
                     isActive ? "text-white drop-shadow-sm" : "text-gray-500 group-hover:text-blue-600"
                   )} />
 
                   {/* Text */}
-                  <span className="relative z-10">{item.name}</span>
+                  <span className="relative z-10 truncate flex-1 min-w-0">
+                    <span className="hidden sm:inline">{item.name}</span>
+                    <span className="sm:hidden">
+                      {item.name.split(' ')[0]}
+                    </span>
+                  </span>
 
                   {/* Hover effect */}
                   {!isActive && (
