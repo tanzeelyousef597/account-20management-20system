@@ -218,7 +218,7 @@ export default function Layout({ children }: LayoutProps) {
       </div>
 
       {/* Main Content */}
-      <div className="lg:pl-64 xl:pl-72 2xl:pl-80 relative">
+      <div className="lg:pl-64 xl:pl-72 2xl:pl-80 3xl:pl-84 4xl:pl-96 5xl:pl-[26rem] relative">
         <header className="bg-white/80 backdrop-blur-xl shadow-lg border-b border-slate-200/50 sticky top-0 z-30">
           <div className="flex h-14 sm:h-16 items-center justify-between px-3 sm:px-4 md:px-6 lg:px-8">
             <div className="flex items-center min-w-0 flex-1">
