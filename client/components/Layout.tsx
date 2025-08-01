@@ -187,15 +187,18 @@ export default function Layout({ children }: LayoutProps) {
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 text-left">
-                    <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                    <div className="text-xs text-gray-500">{user.role}</div>
+                    <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-700 transition-colors duration-300">{user.name}</div>
+                    <div className="text-xs text-gray-500 group-hover:text-blue-500 transition-colors duration-300 capitalize">{user.role}</div>
                   </div>
-                  <ChevronDown className="h-4 w-4 text-gray-400" />
+                  <ChevronDown className="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-all duration-300 group-hover:rotate-180" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
+              <DropdownMenuContent align="end" className="w-56 border-slate-200 shadow-2xl backdrop-blur-xl bg-white/95">
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 hover:text-red-700 transition-all duration-300 cursor-pointer group"
+                >
+                  <LogOut className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
                   Sign Out
                 </DropdownMenuItem>
               </DropdownMenuContent>
