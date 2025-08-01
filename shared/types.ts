@@ -106,31 +106,39 @@ export interface ChatMessage {
   id: string;
   senderId: string;
   senderName: string;
-  receiverId: string;
-  receiverName: string;
+  conversationId: string;
   content: string;
   messageType: 'text' | 'image' | 'file';
   fileUrl?: string;
   fileName?: string;
   fileSize?: number;
   timestamp: string;
-  isRead: boolean;
+  readBy: string[]; // Array of user IDs who have read the message
 }
 
 export interface ChatConversation {
   id: string;
+  name?: string; // For group chats
+  isGroup: boolean;
   participantIds: string[];
   participants: User[];
   lastMessage?: ChatMessage;
   unreadCount: number;
   lastActivity: string;
+  createdBy?: string;
 }
 
 export interface SendMessageRequest {
-  receiverId: string;
+  conversationId?: string;
+  receiverId?: string; // For direct messages
   content: string;
   messageType: 'text' | 'image' | 'file';
   fileUrl?: string;
   fileName?: string;
   fileSize?: number;
+}
+
+export interface CreateGroupChatRequest {
+  name: string;
+  participantIds: string[];
 }
