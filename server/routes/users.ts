@@ -5,11 +5,19 @@ import { addActivityLog } from "./activity-logs";
 // Mock database - In production, use a real database
 let users: User[] = [
   {
+    id: 'super-admin-1',
+    email: 'superadmin@mtwebexperts.com',
+    name: 'Super Admin',
+    role: 'SuperAdmin',
+    createdAt: new Date().toISOString(),
+  },
+  {
     id: '1',
     email: 'admin@mtwebexperts.com',
     name: 'Admin User',
     role: 'Admin',
     whatsappNumber: '+923189046142',
+    companyId: 'default-company',
     createdAt: new Date().toISOString(),
   },
   {
@@ -18,12 +26,14 @@ let users: User[] = [
     name: 'John Worker',
     role: 'Worker',
     whatsappNumber: '+923280909654',
+    companyId: 'default-company',
     createdAt: new Date().toISOString(),
   }
 ];
 
 // Mock password storage - In production, use proper password hashing
 let userPasswords: Record<string, string> = {
+  'superadmin@mtwebexperts.com': 'super@admin123mtweb123411',
   'admin@mtwebexperts.com': 'admin123',
   'worker@mtwebexperts.com': 'worker123',
 };
