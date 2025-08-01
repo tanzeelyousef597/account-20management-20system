@@ -92,6 +92,8 @@ export function createServer() {
   app.get("/api/bonuses", handleGetBonuses);
   app.get("/api/bonuses/worker/:workerId", handleGetWorkerBonuses);
   app.post("/api/bonuses", handleCreateBonus);
+  app.put("/api/bonuses/:id", handleUpdateBonus);
+  app.delete("/api/bonuses/:id", handleDeleteBonus);
 
   // Fines routes
   app.get("/api/fines", handleGetFines);
