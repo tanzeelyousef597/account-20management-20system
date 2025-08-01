@@ -28,6 +28,7 @@ export default function MyInvoices() {
   useEffect(() => {
     if (user) {
       fetchMyInvoices();
+      fetchMyWorkOrders();
     }
   }, [user]);
 
