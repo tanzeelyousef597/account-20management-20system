@@ -806,7 +806,7 @@ export default function AssignedOrders() {
 
       {/* Tabbed Interface */}
       <Tabs defaultValue="work" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="work" className="flex items-center gap-2">
             <PlayCircle className="h-4 w-4" />
             Orders in Work ({ordersInWork.length})
@@ -818,6 +818,10 @@ export default function AssignedOrders() {
           <TabsTrigger value="stopped" className="flex items-center gap-2">
             <StopCircle className="h-4 w-4" />
             Stopped Orders ({stoppedOrders.length})
+          </TabsTrigger>
+          <TabsTrigger value="done" className="flex items-center gap-2">
+            <CheckCheck className="h-4 w-4" />
+            Done Orders ({doneOrders.length})
           </TabsTrigger>
         </TabsList>
 
