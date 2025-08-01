@@ -171,5 +171,16 @@ export const handleWorkerSubmitOrder: RequestHandler = (req, res) => {
   nextId++;
   updateDashboard();
 
+  // Log worker submission activity
+  const worker = users.find(u => u.id === submittedBy);
+  addActivityLog({
+    userId: submittedBy,
+    userName: worker?.name || 'Unknown Worker',
+    action: 'Work order submitted',
+    details: `Submitted work order: ${folderName} for review`,
+    timestamp: new Date().toISOString(),
+    type: 'order_updated',
+  });
+
   res.json(newOrder);
 };
