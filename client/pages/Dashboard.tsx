@@ -287,27 +287,32 @@ export default function Dashboard() {
       </div>
 
       {/* Analytics Section */}
-      <div className="space-y-6">
-        <div className="text-center space-y-2">
-          <h3 className="text-2xl font-bold text-gray-900">Performance Analytics</h3>
-          <p className="text-gray-600">Real-time visualization of your submissions and performance metrics</p>
+      <div className="space-y-8 animate-in fade-in duration-1000" style={{ animationDelay: '800ms' }}>
+        <div className="text-center space-y-3">
+          <h3 className="text-3xl font-bold bg-gradient-to-r from-slate-800 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Performance Analytics
+          </h3>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Real-time visualization of your submissions and performance metrics
+          </p>
+          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto"></div>
         </div>
 
         {/* Chart Section */}
-        <Card className="shadow-lg border border-gray-200 bg-white">
-          <CardHeader className="pb-4 px-6 border-b border-gray-100">
+        <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-1">
+          <CardHeader className="pb-6 px-8 border-b border-slate-200/50 bg-gradient-to-r from-blue-50 to-purple-50">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <CardTitle className="text-lg font-semibold text-gray-900">
+              <CardTitle className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Work categories / submissions by time
               </CardTitle>
               <Select value={selectedFilter} onValueChange={setSelectedFilter}>
-                <SelectTrigger className="w-full sm:w-40 bg-white border-gray-300 focus:border-blue-500">
+                <SelectTrigger className="w-full sm:w-40 bg-white/90 backdrop-blur-sm border-slate-300 focus:border-blue-500 hover:border-purple-400 transition-all duration-300 rounded-xl shadow-lg">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Last Day">Last Day</SelectItem>
-                  <SelectItem value="Last Week">Last Week</SelectItem>
-                  <SelectItem value="Last Month">Last Month</SelectItem>
+                <SelectContent className="bg-white/95 backdrop-blur-xl border-slate-200 shadow-2xl rounded-xl">
+                  <SelectItem value="Last Day" className="hover:bg-blue-50 rounded-lg transition-colors duration-200">Last Day</SelectItem>
+                  <SelectItem value="Last Week" className="hover:bg-blue-50 rounded-lg transition-colors duration-200">Last Week</SelectItem>
+                  <SelectItem value="Last Month" className="hover:bg-blue-50 rounded-lg transition-colors duration-200">Last Month</SelectItem>
                   <SelectItem value="Last Year">Last Year</SelectItem>
                 </SelectContent>
               </Select>
