@@ -99,8 +99,8 @@ export default function Layout({ children }: LayoutProps) {
       {/* Sidebar */}
       <div className={cn(
         "fixed inset-y-0 left-0 z-50 bg-white/95 backdrop-blur-xl shadow-2xl border-r border-slate-200/50 transform transition-all duration-500 ease-out",
-        // Responsive width: smaller on mobile, normal on larger screens
-        "w-72 sm:w-64 md:w-64 lg:w-64 xl:w-72 2xl:w-80",
+        // Responsive width: optimized for all screen sizes
+        "w-72 xs:w-64 sm:w-64 md:w-64 lg:w-64 xl:w-72 2xl:w-80 3xl:w-84 4xl:w-96 5xl:w-[26rem]",
         "lg:translate-x-0",
         isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
