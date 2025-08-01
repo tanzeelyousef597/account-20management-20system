@@ -34,8 +34,8 @@ export const handleCreateFine: RequestHandler = (req, res) => {
 
   // Log activity
   addActivityLog({
-    userId: createdBy,
-    userName: 'Admin User', // In production, get from request context
+    userId: '1', // Admin user ID
+    userName: 'Admin User',
     action: 'Fine issued',
     details: `Issued fine of $${amount} to ${workerName} - ${reason}`,
     timestamp: new Date().toISOString(),
