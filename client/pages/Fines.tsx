@@ -223,6 +223,74 @@ export default function Fines() {
             </form>
           </DialogContent>
         </Dialog>
+
+        {/* Edit Dialog */}
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Edit Fine</DialogTitle>
+              <DialogDescription>Update fine information</DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleEditFine} className="space-y-4">
+              <div>
+                <Label htmlFor="editWorker">Assign User</Label>
+                <Select value={formData.workerId} onValueChange={(value) => setFormData({...formData, workerId: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose a worker" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {users.map((user) => (
+                      <SelectItem key={user.id} value={user.id}>
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-6 w-6">
+                            <AvatarImage src={user.profilePhoto} />
+                            <AvatarFallback className="text-xs">
+                              {getUserInitials(user.name)}
+                            </AvatarFallback>
+                          </Avatar>
+                          {user.name}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="editAmount">Amount ({currency})</Label>
+                <Input
+                  id="editAmount"
+                  type="number"
+                  value={formData.amount}
+                  onChange={(e) => setFormData({...formData, amount: e.target.value})}
+                  placeholder="0"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="editReason">Reason</Label>
+                <Textarea
+                  id="editReason"
+                  value={formData.reason}
+                  onChange={(e) => setFormData({...formData, reason: e.target.value})}
+                  placeholder="Reason for fine..."
+                  rows={3}
+                  required
+                />
+              </div>
+
+              <div className="flex justify-end space-x-3">
+                <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={!formData.workerId}>
+                  Update Fine
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Summary Cards */}
