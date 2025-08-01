@@ -49,7 +49,7 @@ export default function Chat() {
 
   useEffect(() => {
     if (selectedConversation) {
-      loadMessages(selectedConversation.participants.find(p => p.id !== user?.id)?.id || '');
+      loadMessages(selectedConversation.id);
     }
   }, [selectedConversation, user]);
 
