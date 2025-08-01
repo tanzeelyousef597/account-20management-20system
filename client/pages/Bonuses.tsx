@@ -29,6 +29,8 @@ export default function Bonuses() {
   const { formatAmount, currency } = useCurrency();
   const [users, setUsers] = useState<UserType[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedBonus, setSelectedBonus] = useState<Bonus | null>(null);
   const [formData, setFormData] = useState({
     workerId: '',
     amount: '',
