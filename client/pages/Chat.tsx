@@ -644,14 +644,20 @@ export default function Chat() {
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
             className="flex-1"
           />
-          <Button 
+          <Button
             onClick={handleSendMessage}
-            disabled={!newMessage.trim()}
+            disabled={!newMessage.trim() || isUploading}
             size="sm"
           >
             <Send className="h-4 w-4" />
           </Button>
         </div>
+        {isUploading && (
+          <div className="mt-2 text-sm text-muted-foreground flex items-center gap-2">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+            Uploading file...
+          </div>
+        )}
       </div>
     </div>
   ) : (
