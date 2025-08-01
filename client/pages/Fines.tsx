@@ -30,6 +30,8 @@ export default function Fines() {
   const { formatAmount, currency } = useCurrency();
   const [users, setUsers] = useState<UserType[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedFine, setSelectedFine] = useState<Fine | null>(null);
   const [formData, setFormData] = useState({
     workerId: '',
     amount: '',
