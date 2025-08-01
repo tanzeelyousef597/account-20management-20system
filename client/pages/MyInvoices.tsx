@@ -43,6 +43,19 @@ export default function MyInvoices() {
     }
   };
 
+  const fetchMyWorkOrders = async () => {
+    try {
+      if (user?.id) {
+        const data = await api.getWorkOrders();
+        // Filter work orders for this worker
+        const myWorkOrders = data.filter(order => order.assignedTo === user.id);
+        setWorkOrders(myWorkOrders);
+      }
+    } catch (error) {
+      console.error('Error fetching work orders:', error);
+    }
+  };
+
   const handleDownloadInvoice = (invoiceId: string) => {
     // Mock download functionality
     console.log(`Downloading invoice ${invoiceId}`);
