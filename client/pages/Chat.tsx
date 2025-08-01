@@ -560,6 +560,24 @@ export default function Chat() {
 
       {/* Message Input */}
       <div className="p-4 border-t">
+        {replyingTo && (
+          <div className="mb-3 p-3 bg-blue-50 border-l-4 border-blue-500 rounded flex justify-between items-center">
+            <div>
+              <div className="text-xs font-medium text-blue-700">Replying to {replyingTo.senderName}</div>
+              <div className="text-sm text-blue-600 truncate max-w-64">
+                {replyingTo.content}
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setReplyingTo(null)}
+              className="ml-2"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
