@@ -115,22 +115,28 @@ export default function Chat() {
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !user) return;
 
-    const otherUser = selectedConversation.participants.find(p => p.id !== user.id);
-    if (!otherUser) return;
-
     try {
+      let messageContent = newMessage.trim();
+
+      // Add reply prefix if replying to a message
+      if (replyingTo) {
+        const quotedContent = replyingTo.content.substring(0, 50) + (replyingTo.content.length > 50 ? '...' : '');
+        messageContent = `@${replyingTo.senderName}: "${quotedContent}"\n\n${messageContent}`;
+      }
+
       const message = await api.sendMessage(user.id, {
-        receiverId: otherUser.id,
-        content: newMessage.trim(),
+        conversationId: selectedConversation.id,
+        content: messageContent,
         messageType: 'text',
       });
 
       setMessages(prev => [...prev, message]);
       setNewMessage('');
-      
+      setReplyingTo(null); // Clear reply state
+
       // Update conversation last message
-      setConversations(prev => 
-        prev.map(conv => 
+      setConversations(prev =>
+        prev.map(conv =>
           conv.id === selectedConversation.id
             ? { ...conv, lastMessage: message, lastActivity: message.timestamp }
             : conv
