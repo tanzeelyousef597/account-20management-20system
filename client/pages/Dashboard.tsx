@@ -104,21 +104,22 @@ export default function Dashboard() {
     }
 
     return (
-      <div className="h-80 flex items-end justify-center gap-8 p-8 bg-gray-50 rounded-lg">
+      <div className="h-64 md:h-80 flex items-end justify-center gap-3 md:gap-6 lg:gap-8 p-4 md:p-8 bg-gray-50 rounded-lg overflow-x-auto">
         {chartData.map((item, index) => {
-          const height = (item.value / maxValue) * 240; // 240px max height
-          const minHeight = item.value > 0 ? 20 : 0; // Minimum bar height for visibility
+          const maxBarHeight = window.innerWidth < 768 ? 180 : 240; // Responsive max height
+          const height = (item.value / maxValue) * maxBarHeight;
+          const minHeight = item.value > 0 ? 15 : 0; // Minimum bar height for visibility
 
           return (
-            <div key={index} className="flex flex-col items-center space-y-3">
+            <div key={index} className="flex flex-col items-center space-y-2 md:space-y-3 flex-shrink-0">
               {/* Value label above bar */}
-              <div className="text-sm font-semibold text-gray-700 min-h-5">
+              <div className="text-xs md:text-sm font-semibold text-gray-700 min-h-4 md:min-h-5">
                 {item.value > 0 ? item.value : ''}
               </div>
 
               {/* Bar */}
               <div
-                className={`${item.color} rounded-t-lg transition-all duration-1000 ease-out shadow-lg min-w-16 w-16 hover:scale-105 hover:shadow-xl`}
+                className={`${item.color} rounded-t-lg transition-all duration-1000 ease-out shadow-lg w-12 md:w-14 lg:w-16 hover:scale-105 hover:shadow-xl`}
                 style={{
                   height: `${Math.max(height, minHeight)}px`,
                   animationDelay: `${index * 0.2}s`
@@ -126,7 +127,7 @@ export default function Dashboard() {
               />
 
               {/* Label below bar */}
-              <div className="text-xs font-medium text-gray-600 text-center max-w-16 leading-tight">
+              <div className="text-xs font-medium text-gray-600 text-center w-12 md:w-14 lg:w-16 leading-tight">
                 {item.label}
               </div>
             </div>
