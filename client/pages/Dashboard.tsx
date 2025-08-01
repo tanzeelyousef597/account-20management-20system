@@ -212,17 +212,17 @@ export default function Dashboard() {
 
         {/* Chart Section */}
         <Card className="shadow-lg border-0 bg-gradient-to-br from-white to-gray-50">
-          <CardHeader className="text-center pb-6">
-            <CardTitle className="text-xl font-bold text-gray-900 flex items-center justify-center gap-3">
-              <BarChart3 className="h-6 w-6 text-blue-600" />
+          <CardHeader className="text-center pb-4 md:pb-6 px-4 md:px-6">
+            <CardTitle className="text-lg md:text-xl font-bold text-gray-900 flex items-center justify-center gap-2 md:gap-3">
+              <BarChart3 className="h-5 w-5 md:h-6 md:w-6 text-blue-600" />
               Dashboard Metrics Overview
             </CardTitle>
-            <CardDescription className="text-gray-600">
+            <CardDescription className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
               Real-time visualization of your key performance indicators for {selectedFilter.toLowerCase()}
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-0">
-            <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-inner">
+          <CardContent className="pt-0 px-4 md:px-6">
+            <div className="bg-white rounded-xl border border-gray-100 p-4 md:p-6 shadow-inner">
               <ModernBarChart data={dashboardData.categories} />
             </div>
           </CardContent>
