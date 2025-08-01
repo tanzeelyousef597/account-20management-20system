@@ -189,12 +189,14 @@ export default function Dashboard() {
                   {categories.map((category, catIndex) => {
                     const value = periodData[category.name] || 0;
                     const height = roundedMax > 0 ? (value / roundedMax) * 100 : 0;
-                    const minHeight = value > 0 ? 3 : 0;
+                    // Ensure minimum visible height for any non-zero value
+                    const minHeight = value > 0 ? Math.max(8, height) : 0;
+                    const finalHeight = value > 0 ? Math.max(minHeight, height) : 0;
 
                     return (
                       <div key={catIndex} className="flex flex-col items-center">
-                        {/* Value label above bar - only show if value > 0 and height is significant */}
-                        {value > 0 && height > 15 && (
+                        {/* Value label above bar - show for any non-zero value */}
+                        {value > 0 && (
                           <div className="text-xs font-medium text-gray-700 mb-1">
                             {value}
                           </div>
@@ -202,11 +204,12 @@ export default function Dashboard() {
 
                         {/* Bar */}
                         <div
-                          className="w-6 rounded-t transition-all duration-1000 ease-out"
+                          className="w-6 rounded-t transition-all duration-1000 ease-out border border-gray-200"
                           style={{
                             backgroundColor: category.color,
-                            height: `${Math.max(height, minHeight)}%`,
-                            animationDelay: `${(periodIndex * categories.length + catIndex) * 0.1}s`
+                            height: `${finalHeight}%`,
+                            animationDelay: `${(periodIndex * categories.length + catIndex) * 0.1}s`,
+                            minHeight: value > 0 ? '8px' : '0px'
                           }}
                         />
                       </div>
