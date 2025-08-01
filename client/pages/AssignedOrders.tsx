@@ -33,7 +33,8 @@ import {
   Search,
   PlayCircle,
   StopCircle,
-  AlertTriangle
+  AlertTriangle,
+  CheckCheck
 } from 'lucide-react';
 import { WorkOrder, User as UserType } from '@shared/types';
 
