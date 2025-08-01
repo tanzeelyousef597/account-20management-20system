@@ -37,6 +37,9 @@ export default function Chat() {
   const [onlineStatus, setOnlineStatus] = useState<Record<string, boolean>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isMobileConversationOpen, setIsMobileConversationOpen] = useState(false);
+  const [isCreateGroupOpen, setIsCreateGroupOpen] = useState(false);
+  const [groupName, setGroupName] = useState('');
+  const [selectedGroupMembers, setSelectedGroupMembers] = useState<string[]>([]);
 
   useEffect(() => {
     if (user) {
