@@ -46,11 +46,8 @@ export default function Bonuses() {
 
   const fetchBonuses = async () => {
     try {
-      const response = await fetch('/api/bonuses');
-      if (response.ok) {
-        const data = await response.json();
-        setBonuses(data);
-      }
+      const data = await api.getBonuses();
+      setBonuses(data);
     } catch (error) {
       console.error('Error fetching bonuses:', error);
     }
