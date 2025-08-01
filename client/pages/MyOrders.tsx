@@ -447,7 +447,7 @@ export default function MyOrders() {
                       )}
                     </TableCell>
                     <TableCell>
-                      {getStatusBadge(order.status)}
+                      {getWorkerStatusBadge(order, assignedOrders.includes(order))}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -503,7 +503,7 @@ export default function MyOrders() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      {getStatusBadge(order.status)}
+                      {getWorkerStatusBadge(order, assignedOrders.includes(order))}
                     </TableCell>
                   </TableRow>
                 ))}
