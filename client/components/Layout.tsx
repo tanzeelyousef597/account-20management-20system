@@ -98,24 +98,28 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out",
+        "fixed inset-y-0 left-0 z-50 w-64 bg-white/95 backdrop-blur-xl shadow-2xl border-r border-slate-200/50 transform transition-all duration-500 ease-out",
         "lg:translate-x-0",
         isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
         <div className="flex h-full flex-col">
           {/* Header */}
-          <div className="flex h-16 items-center justify-between border-b px-6">
-            <div className="flex items-center">
-              <Building2 className="h-8 w-8 text-primary" />
+          <div className="flex h-16 items-center justify-between border-b border-slate-200/50 px-6 bg-gradient-to-r from-blue-600 to-purple-600 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-purple-600/90"></div>
+            <div className="flex items-center group relative z-10">
+              <div className="relative">
+                <Building2 className="h-8 w-8 text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-lg" />
+                <div className="absolute inset-0 h-8 w-8 bg-white/20 rounded-full blur-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100"></div>
+              </div>
               <div className="ml-3">
-                <div className="text-lg font-semibold text-gray-900">MT Web Experts</div>
-                <div className="text-xs text-gray-500">Accounts Management</div>
+                <div className="text-lg font-bold text-white tracking-tight drop-shadow-sm">MT Web Experts</div>
+                <div className="text-xs text-blue-100/90">Accounts Management</div>
               </div>
             </div>
             {/* Close button for mobile */}
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+              className="lg:hidden p-2 rounded-md text-white/80 hover:text-white hover:bg-white/20 transition-all duration-200 relative z-10"
             >
               <X className="h-5 w-5" />
             </button>
