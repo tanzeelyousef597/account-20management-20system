@@ -37,6 +37,20 @@ export const handleLogin: RequestHandler = (req, res) => {
 };
 
 export const handleLogout: RequestHandler = (req, res) => {
+  const { userId, userName } = req.body;
+
+  // Log logout activity if user info provided
+  if (userId && userName) {
+    addActivityLog({
+      userId,
+      userName,
+      action: 'User logged out',
+      details: `${userName} logged out of the system`,
+      timestamp: new Date().toISOString(),
+      type: 'logout' as const,
+    });
+  }
+
   // In production, invalidate the token
   res.json({ message: 'Logged out successfully' });
 };
