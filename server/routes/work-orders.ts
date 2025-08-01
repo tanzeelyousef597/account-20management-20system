@@ -46,12 +46,15 @@ export const handleCreateWorkOrder: RequestHandler = async (req, res) => {
   nextId++;
   updateDashboard();
 
-  // WhatsApp integration has been disabled - keeping field for record only
-  console.log(`✅ Work order created successfully for ${assignedUser ? assignedUser.name : 'unassigned'}`);
-  console.log(`   - Order: ${folderName}`);
-  console.log(`   - Category: ${workCategory}`);
-  console.log(`   - Due Date: ${submissionDate || 'Not specified'}`);
-  console.log(`   - Submissions: ${totalSubmissions}`);
+  // Log activity
+  addActivityLog({
+    userId: newOrder.createdBy,
+    userName: 'Admin User', // In production, get from request context
+    action: 'Work order created',
+    details: `Created work order: ${folderName} for ${assignedUser ? assignedUser.name : 'unassigned'}`,
+    timestamp: new Date().toISOString(),
+    type: 'order_created',
+  });
 
   res.json(newOrder);
 };
