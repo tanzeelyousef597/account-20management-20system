@@ -196,24 +196,17 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* X-Axis Labels */}
-        <div className="ml-12 flex justify-between text-xs text-gray-600 mt-2 px-4">
-          {timePeriods.map((period, index) => (
-            <div key={index} className="text-center flex-1">
-              {period}
-            </div>
-          ))}
-        </div>
-
-        {/* Legend */}
-        <div className="flex justify-center gap-6 mt-6 pt-4 border-t border-gray-100">
+        {/* Enhanced Legend */}
+        <div className="flex flex-wrap justify-center gap-4 mt-8 pt-6 border-t border-gray-200">
           {categories.map((category, index) => (
-            <div key={index} className="flex items-center gap-2">
+            <div key={index} className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-lg">
               <div
-                className="w-4 h-4 rounded"
-                style={{ backgroundColor: category.color }}
+                className={`w-5 h-5 rounded-md shadow-sm bg-gradient-to-br ${category.gradient} border border-white/20`}
               />
-              <span className="text-sm text-gray-700">{category.name}</span>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-gray-800">{category.name}</span>
+                <span className="text-xs text-gray-600">{category.value.toLocaleString()}</span>
+              </div>
             </div>
           ))}
         </div>
