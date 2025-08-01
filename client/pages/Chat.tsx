@@ -285,9 +285,9 @@ export default function Chat() {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline break-all hover:opacity-80 transition-opacity"
+            className="underline break-all hover:opacity-80 transition-opacity text-white"
             style={{
-              color: '#0a66c2',
+              color: 'white',
               backgroundColor: 'transparent'
             }}
           >
