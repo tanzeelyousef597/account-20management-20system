@@ -31,7 +31,9 @@ import {
 import {
   handleGetFines,
   handleGetWorkerFines,
-  handleCreateFine
+  handleCreateFine,
+  handleUpdateFine,
+  handleDeleteFine
 } from "./routes/fines";
 import { handleGetActivityLogs } from "./routes/activity-logs";
 import {
