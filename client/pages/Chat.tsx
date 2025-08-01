@@ -66,13 +66,16 @@ export default function Chat() {
 
   const loadConversations = async () => {
     if (!user) return;
-    
+
     try {
       const data = await api.getConversations(user.id);
       setConversations(data);
-      
+
+      // Refresh global unread count
+      refreshUnreadCount();
+
       // Load online status for all participants
-      const allUserIds = data.flatMap(conv => 
+      const allUserIds = data.flatMap(conv =>
         conv.participants.filter(p => p.id !== user.id).map(p => p.id)
       );
       if (allUserIds.length > 0) {
