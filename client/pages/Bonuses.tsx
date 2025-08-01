@@ -307,6 +307,7 @@ export default function Bonuses() {
                   <TableHead>Month/Year</TableHead>
                   <TableHead>Reason</TableHead>
                   <TableHead>Date Added</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
