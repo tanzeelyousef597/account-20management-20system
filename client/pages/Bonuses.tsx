@@ -96,6 +96,54 @@ export default function Bonuses() {
     });
   };
 
+  const openEditDialog = (bonus: Bonus) => {
+    setSelectedBonus(bonus);
+    setFormData({
+      workerId: bonus.workerId,
+      amount: bonus.amount.toString(),
+      reason: bonus.reason,
+      month: bonus.month,
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleEditBonus = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedBonus || !formData.workerId) return;
+
+    const selectedUser = users.find(u => u.id === formData.workerId);
+    if (!selectedUser) return;
+
+    try {
+      await api.updateBonus(selectedBonus.id, {
+        workerId: formData.workerId,
+        workerName: selectedUser.name,
+        amount: parseFloat(formData.amount),
+        reason: formData.reason,
+        month: formData.month,
+        year: new Date(formData.month).getFullYear(),
+      });
+
+      fetchBonuses();
+      setIsEditDialogOpen(false);
+      setSelectedBonus(null);
+      resetForm();
+    } catch (error) {
+      console.error('Error updating bonus:', error);
+    }
+  };
+
+  const handleDeleteBonus = async (bonusId: string) => {
+    if (window.confirm('Are you sure you want to delete this bonus?')) {
+      try {
+        await api.deleteBonus(bonusId);
+        fetchBonuses();
+      } catch (error) {
+        console.error('Error deleting bonus:', error);
+      }
+    }
+  };
+
   const getUserInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
