@@ -14,8 +14,6 @@ import {
   Search,
   Send,
   MoreVertical,
-  Phone,
-  Video,
   Users,
   X,
   CheckCheck,
