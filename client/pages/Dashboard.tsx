@@ -105,14 +105,19 @@ export default function Dashboard() {
     // Generate sample data distributed across time periods
     const generateTimeData = () => {
       return timePeriods.map((period, index) => {
-        const baseVariation = Math.random() * 0.6 + 0.7; // 0.7 to 1.3 multiplier
         const periodData: { [key: string]: number } = { period };
 
         categories.forEach((category) => {
-          // Distribute the total value across time periods with variation
-          const avgValue = category.value / timePeriods.length;
-          const variation = (Math.random() - 0.5) * 0.8; // -0.4 to +0.4
-          periodData[category.name] = Math.max(0, Math.round(avgValue * (baseVariation + variation)));
+          // Create a more realistic distribution
+          if (category.value === 0) {
+            periodData[category.name] = 0;
+          } else {
+            // For non-zero values, distribute with some variation
+            const baseValue = Math.max(1, Math.floor(category.value / timePeriods.length));
+            const variation = Math.floor(Math.random() * Math.max(1, baseValue * 0.5));
+            const signedVariation = Math.random() > 0.5 ? variation : -variation;
+            periodData[category.name] = Math.max(0, baseValue + signedVariation);
+          }
         });
 
         return periodData;
@@ -120,12 +125,17 @@ export default function Dashboard() {
     };
 
     const timeData = generateTimeData();
-    const allValues = timeData.flatMap(period =>
+
+    // Calculate scale based on the maximum category value, not distributed values
+    const categoryMaxValue = Math.max(...categories.map(cat => cat.value), 1);
+    const distributedMaxValue = Math.max(...timeData.flatMap(period =>
       categories.map(cat => period[cat.name] || 0)
-    );
-    const maxValue = Math.max(...allValues, 1);
-    const minScale = Math.max(maxValue * 1.1, 25);
-    const roundedMax = Math.ceil(minScale / 5) * 5;
+    ), 1);
+
+    // Use a scale that makes sense for the distributed data
+    const maxValue = distributedMaxValue;
+    const minScale = Math.max(maxValue * 1.2, 10);
+    const roundedMax = Math.ceil(minScale / 10) * 10;
     const yAxisSteps = 5;
     const stepValue = roundedMax / yAxisSteps;
 
