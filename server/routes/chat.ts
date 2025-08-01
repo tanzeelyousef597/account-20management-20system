@@ -10,28 +10,32 @@ let nextConversationId = 1;
 
 // Get or create conversation between two users
 const getOrCreateConversation = (userId1: string, userId2: string): ChatConversation => {
-  // Find existing conversation
-  let conversation = conversations.find(conv => 
-    conv.participantIds.includes(userId1) && conv.participantIds.includes(userId2)
+  // Find existing direct conversation
+  let conversation = conversations.find(conv =>
+    !conv.isGroup &&
+    conv.participantIds.includes(userId1) &&
+    conv.participantIds.includes(userId2) &&
+    conv.participantIds.length === 2
   );
 
   if (!conversation) {
-    // Create new conversation
+    // Create new direct conversation
     const participant1 = users.find(u => u.id === userId1);
     const participant2 = users.find(u => u.id === userId2);
-    
+
     if (!participant1 || !participant2) {
       throw new Error('One or both users not found');
     }
 
     conversation = {
       id: nextConversationId.toString(),
+      isGroup: false,
       participantIds: [userId1, userId2],
       participants: [participant1, participant2],
       unreadCount: 0,
       lastActivity: new Date().toISOString(),
     };
-    
+
     conversations.push(conversation);
     nextConversationId++;
   }
