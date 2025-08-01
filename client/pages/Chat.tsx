@@ -626,21 +626,12 @@ export default function Chat() {
           </div>
         )}
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleScreenshot}
-            disabled={!selectedConversation}
-            title="Share screenshot (use system screenshot tools and paste)"
-          >
-            <Camera className="h-4 w-4" />
-          </Button>
           <Input
             placeholder="Type a message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            className="flex-1"
+            className="flex-1 min-w-0"
           />
           <Button
             onClick={handleSendMessage}
