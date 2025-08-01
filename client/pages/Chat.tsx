@@ -124,8 +124,11 @@ export default function Chat() {
         messageContent = `@${replyingTo.senderName}: "${quotedContent}"\n\n${messageContent}`;
       }
 
+      // For direct conversations, also send receiverId for compatibility
+      const otherUser = selectedConversation.participants.find(p => p.id !== user.id);
       const message = await api.sendMessage(user.id, {
         conversationId: selectedConversation.id,
+        receiverId: otherUser?.id, // Include for direct conversations
         content: messageContent,
         messageType: 'text',
       });
