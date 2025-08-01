@@ -35,6 +35,12 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+const superAdminNavItems = [
+  { name: 'Companies', href: '/super-admin/companies', icon: Building2 },
+  { name: 'System Logs', href: '/super-admin/logs', icon: Activity },
+  { name: 'Platform Settings', href: '/super-admin/settings', icon: Settings },
+];
+
 const adminNavItems = [
   { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
   { name: 'Assigned Orders', href: '/assigned-orders', icon: ClipboardList },
