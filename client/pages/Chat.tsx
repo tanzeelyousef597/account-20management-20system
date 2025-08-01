@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useChat } from '@/contexts/ChatContext';
 import { api } from '@shared/api-client';
 import { ChatConversation, ChatMessage, User } from '@shared/types';
 import { Button } from '@/components/ui/button';
