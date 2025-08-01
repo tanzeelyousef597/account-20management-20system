@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { ChatMessage, ChatConversation, SendMessageRequest, User } from "@shared/types";
+import { ChatMessage, ChatConversation, SendMessageRequest, User, CreateGroupChatRequest } from "@shared/types";
 import { users } from "./users";
 
 // Mock database - In production, use a real database
