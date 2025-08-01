@@ -40,9 +40,6 @@ export default function Chat() {
   const [onlineStatus, setOnlineStatus] = useState<Record<string, boolean>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isMobileConversationOpen, setIsMobileConversationOpen] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const imageInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (user) {
