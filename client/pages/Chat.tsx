@@ -535,38 +535,15 @@ export default function Chat() {
 
       {/* Message Input */}
       <div className="p-4 border-t">
-        <input
-          ref={fileInputRef}
-          type="file"
-          className="hidden"
-          onChange={handleFileChange}
-          accept="*/*"
-        />
-        <input
-          ref={imageInputRef}
-          type="file"
-          className="hidden"
-          onChange={handleImageChange}
-          accept="image/*"
-        />
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleFileClick}
-            disabled={isUploading || !selectedConversation}
-            title="Attach file (up to 2GB)"
+            onClick={handleScreenshot}
+            disabled={!selectedConversation}
+            title="Share screenshot (use system screenshot tools and paste)"
           >
-            <Paperclip className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleImageClick}
-            disabled={isUploading || !selectedConversation}
-            title="Share image"
-          >
-            <Image className="h-4 w-4" />
+            <Camera className="h-4 w-4" />
           </Button>
           <Input
             placeholder="Type a message..."
