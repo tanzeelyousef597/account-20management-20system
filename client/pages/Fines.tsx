@@ -92,6 +92,51 @@ export default function Fines() {
     });
   };
 
+  const openEditDialog = (fine: Fine) => {
+    setSelectedFine(fine);
+    setFormData({
+      workerId: fine.workerId,
+      amount: fine.amount.toString(),
+      reason: fine.reason,
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleEditFine = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedFine || !formData.workerId) return;
+
+    const selectedUser = users.find(u => u.id === formData.workerId);
+    if (!selectedUser) return;
+
+    try {
+      await api.updateFine(selectedFine.id, {
+        workerId: formData.workerId,
+        workerName: selectedUser.name,
+        amount: parseFloat(formData.amount),
+        reason: formData.reason,
+      });
+
+      fetchFines();
+      setIsEditDialogOpen(false);
+      setSelectedFine(null);
+      resetForm();
+    } catch (error) {
+      console.error('Error updating fine:', error);
+    }
+  };
+
+  const handleDeleteFine = async (fineId: string) => {
+    if (window.confirm('Are you sure you want to delete this fine?')) {
+      try {
+        await api.deleteFine(fineId);
+        fetchFines();
+      } catch (error) {
+        console.error('Error deleting fine:', error);
+      }
+    }
+  };
+
   const getUserInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
