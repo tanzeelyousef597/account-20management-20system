@@ -487,12 +487,16 @@ export default function Chat() {
                   </Avatar>
                 )}
                 
-                <div className={cn(
-                  "rounded-lg px-3 py-2 max-w-full",
-                  isOwn 
-                    ? "bg-primary text-primary-foreground" 
-                    : "bg-muted"
-                )}>
+                <div
+                  className={cn(
+                    "rounded-lg px-3 py-2 max-w-full cursor-pointer hover:ring-2 hover:ring-blue-200 transition-all",
+                    isOwn
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
+                  )}
+                  onDoubleClick={() => setReplyingTo(message)}
+                  title="Double-click to reply"
+                >
                   {message.messageType === 'text' && (
                     <p className="text-sm break-words">
                       {renderMessageWithLinks(message.content)}
