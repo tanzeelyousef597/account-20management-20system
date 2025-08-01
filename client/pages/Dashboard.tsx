@@ -289,13 +289,13 @@ export default function Dashboard() {
       {/* Analytics Section */}
       <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-in fade-in duration-1000" style={{ animationDelay: '800ms' }}>
         <div className="text-center space-y-2 sm:space-y-3">
-          <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-800 via-blue-600 to-purple-600 bg-clip-text text-transparent px-2">
+          <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl font-bold bg-gradient-to-r from-slate-800 via-blue-600 to-purple-600 bg-clip-text text-transparent px-2">
             Performance Analytics
           </h3>
-          <p className="text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto px-4">
+          <p className="text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl 3xl:max-w-7xl mx-auto px-4">
             Real-time visualization of your submissions and performance metrics
           </p>
-          <div className="w-16 sm:w-20 md:w-24 lg:w-28 h-0.5 sm:h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto"></div>
+          <div className="w-16 sm:w-20 md:w-24 lg:w-28 xl:w-32 2xl:w-36 3xl:w-40 h-0.5 sm:h-1 md:h-1.5 lg:h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto"></div>
         </div>
 
         {/* Chart Section */}
