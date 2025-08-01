@@ -237,13 +237,13 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4 lg:gap-6 animate-in slide-in-from-top duration-500">
         <div className="relative">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent drop-shadow-sm">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl 3xl:text-8xl 4xl:text-9xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent drop-shadow-sm">
             Dashboard
           </h2>
-          <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base md:text-lg lg:text-xl animate-in slide-in-from-left duration-700" style={{ animationDelay: '200ms' }}>
+          <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl 3xl:text-4xl animate-in slide-in-from-left duration-700" style={{ animationDelay: '200ms' }}>
             Overview of submissions and performance
           </p>
-          <div className="absolute -bottom-1 sm:-bottom-2 left-0 w-12 sm:w-16 md:w-20 lg:w-24 h-0.5 sm:h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-in slide-in-from-left duration-1000" style={{ animationDelay: '500ms' }}></div>
+          <div className="absolute -bottom-1 sm:-bottom-2 left-0 w-12 sm:w-16 md:w-20 lg:w-24 xl:w-28 2xl:w-32 3xl:w-36 4xl:w-40 h-0.5 sm:h-1 md:h-1.5 lg:h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-in slide-in-from-left duration-1000" style={{ animationDelay: '500ms' }}></div>
         </div>
       </div>
 
