@@ -76,7 +76,17 @@ export const handleUpdateWorkOrder: RequestHandler = (req, res) => {
     dueDate: submissionDate,
     payRate: parseInt(totalSubmissions),
   };
-  
+
+  // Log activity
+  addActivityLog({
+    userId: workOrders[orderIndex].createdBy,
+    userName: 'Admin User', // In production, get from request context
+    action: 'Work order updated',
+    details: `Updated work order: ${workOrders[orderIndex].title}`,
+    timestamp: new Date().toISOString(),
+    type: 'order_updated',
+  });
+
   res.json(workOrders[orderIndex]);
 };
 
