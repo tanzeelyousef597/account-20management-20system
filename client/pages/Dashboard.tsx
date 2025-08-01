@@ -189,14 +189,14 @@ export default function Dashboard() {
 
         {/* Filter Controls */}
         <Card className="shadow-sm bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-          <CardContent className="p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4">
-              <div className="flex items-center gap-3">
-                <Calendar className="h-5 w-5 text-blue-600" />
+          <CardContent className="p-4 md:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 md:gap-4">
+              <div className="flex items-center gap-2 md:gap-3 justify-center sm:justify-start">
+                <Calendar className="h-4 w-4 md:h-5 md:w-5 text-blue-600" />
                 <span className="text-sm font-medium text-gray-700">Time Period:</span>
               </div>
               <Select value={selectedFilter} onValueChange={setSelectedFilter}>
-                <SelectTrigger className="w-full sm:w-60 bg-white border-blue-300 focus:border-blue-500 shadow-sm">
+                <SelectTrigger className="w-full sm:w-48 md:w-60 bg-white border-blue-300 focus:border-blue-500 shadow-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
