@@ -112,6 +112,8 @@ export const api = {
   },
   getWorkerFines: (workerId: string) => apiClient.get(`/api/fines/worker/${workerId}`),
   createFine: (data: any) => apiClient.post('/api/fines', data),
+  updateFine: (id: string, data: any) => apiClient.put(`/api/fines/${id}`, data),
+  deleteFine: (id: string) => apiClient.delete(`/api/fines/${id}`),
 
   // Dashboard
   getDashboardData: (month?: string) => apiClient.get(`/api/dashboard/data${month ? `?month=${month}` : ''}`),
