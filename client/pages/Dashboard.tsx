@@ -66,26 +66,26 @@ export default function Dashboard() {
     index?: number
   }) => (
     <div
-      className={`${bgColor} rounded-2xl p-6 text-white shadow-2xl transform hover:scale-105 transition-all duration-500 hover:shadow-3xl relative overflow-hidden group animate-in slide-in-from-bottom`}
+      className={`${bgColor} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 text-white shadow-2xl transform hover:scale-105 transition-all duration-500 hover:shadow-3xl relative overflow-hidden group animate-in slide-in-from-bottom`}
       style={{ animationDelay: `${index * 150}ms` }}
     >
       {/* Background animation */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-      {/* Floating orbs */}
-      <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
-      <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-white/10 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+      {/* Floating orbs - responsive sizes */}
+      <div className="absolute -top-2 sm:-top-4 -right-2 sm:-right-4 w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 bg-white/10 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
+      <div className="absolute -bottom-2 sm:-bottom-4 -left-2 sm:-left-4 w-8 sm:w-12 md:w-14 lg:w-16 h-8 sm:h-12 md:h-14 lg:h-16 bg-white/10 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
 
       <div className="flex items-center justify-between relative z-10">
-        <div className="space-y-2">
-          <p className="text-white/90 text-sm font-medium tracking-wide">{title}</p>
-          <p className="text-4xl font-bold mt-2 tabular-nums animate-in zoom-in duration-700" style={{ animationDelay: `${index * 200 + 300}ms` }}>
+        <div className="space-y-1 sm:space-y-2 min-w-0 flex-1 mr-2 sm:mr-3">
+          <p className="text-white/90 text-xs sm:text-sm font-medium tracking-wide truncate">{title}</p>
+          <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tabular-nums animate-in zoom-in duration-700 leading-none" style={{ animationDelay: `${index * 200 + 300}ms` }}>
             {value.toLocaleString()}
           </p>
-          <div className="w-12 h-1 bg-white/30 rounded-full group-hover:bg-white/50 transition-colors duration-300"></div>
+          <div className="w-8 sm:w-10 md:w-12 h-0.5 sm:h-1 bg-white/30 rounded-full group-hover:bg-white/50 transition-colors duration-300"></div>
         </div>
-        <div className="relative">
-          <Icon className="h-10 w-10 text-white/90 drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
+        <div className="relative flex-shrink-0">
+          <Icon className="h-6 w-6 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10 xl:h-12 xl:w-12 text-white/90 drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
           <div className="absolute inset-0 bg-white/20 rounded-full blur-xl scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         </div>
       </div>
