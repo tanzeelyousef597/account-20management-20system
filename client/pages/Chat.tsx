@@ -40,6 +40,7 @@ export default function Chat() {
   const [isCreateGroupOpen, setIsCreateGroupOpen] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [selectedGroupMembers, setSelectedGroupMembers] = useState<string[]>([]);
+  const [replyingTo, setReplyingTo] = useState<ChatMessage | null>(null);
 
   useEffect(() => {
     if (user) {
