@@ -151,41 +151,47 @@ export default function Dashboard() {
               ))}
             </div>
 
-            {/* Grouped Bars Container */}
-            <div className="absolute inset-0 flex items-end justify-between px-4">
-              {timeData.map((periodData, periodIndex) => (
-                <div key={periodIndex} className="flex items-end gap-1 flex-1 justify-center">
-                  {categories.map((category, catIndex) => {
-                    const value = periodData[category.name] || 0;
-                    const height = roundedMax > 0 ? (value / roundedMax) * 100 : 0;
-                    // Ensure minimum visible height for any non-zero value
-                    const minHeight = value > 0 ? Math.max(8, height) : 0;
-                    const finalHeight = value > 0 ? Math.max(minHeight, height) : 0;
+            {/* Real Data Bars Container */}
+            <div className="absolute inset-0 flex items-end justify-center gap-8 px-8">
+              {categories.map((category, index) => {
+                const value = category.value;
+                const height = roundedMax > 0 ? (value / roundedMax) * 100 : 0;
+                const minHeight = value > 0 ? Math.max(5, height) : 0;
+                const finalHeight = Math.max(minHeight, height);
 
-                    return (
-                      <div key={catIndex} className="flex flex-col items-center">
-                        {/* Value label above bar - show for any non-zero value */}
-                        {value > 0 && (
-                          <div className="text-xs font-medium text-gray-700 mb-1">
-                            {value}
-                          </div>
-                        )}
+                return (
+                  <div key={index} className="flex flex-col items-center space-y-2">
+                    {/* Value label above bar */}
+                    <div className="text-sm font-bold text-gray-800 mb-2 min-h-[20px] flex items-end">
+                      {value > 0 && (
+                        <span className="bg-white px-2 py-1 rounded shadow-sm border">
+                          {value.toLocaleString()}
+                        </span>
+                      )}
+                    </div>
 
-                        {/* Bar */}
-                        <div
-                          className="w-6 rounded-t transition-all duration-1000 ease-out border border-gray-200"
-                          style={{
-                            backgroundColor: category.color,
-                            height: `${finalHeight}%`,
-                            animationDelay: `${(periodIndex * categories.length + catIndex) * 0.1}s`,
-                            minHeight: value > 0 ? '8px' : '0px'
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
+                    {/* Enhanced Bar with gradient and shadow */}
+                    <div
+                      className={`w-16 rounded-lg transition-all duration-1000 ease-out shadow-lg hover:shadow-xl hover:scale-105 bg-gradient-to-t ${category.gradient} border border-white/20`}
+                      style={{
+                        height: `${finalHeight}%`,
+                        minHeight: value > 0 ? '12px' : '0px',
+                        animationDelay: `${index * 0.2}s`,
+                        backgroundImage: `linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.1) 50%, transparent 50%, transparent 75%, rgba(255,255,255,0.1) 75%)`,
+                        backgroundSize: '8px 8px'
+                      }}
+                    >
+                      {/* Inner glow effect */}
+                      <div className="w-full h-full rounded-lg bg-gradient-to-t from-transparent to-white/10"></div>
+                    </div>
+
+                    {/* Category label below bar */}
+                    <div className="text-xs font-medium text-gray-700 text-center w-16 leading-tight mt-3">
+                      {category.name.replace(' Submissions', '').replace(' Orders', '')}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
