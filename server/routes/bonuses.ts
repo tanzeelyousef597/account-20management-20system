@@ -17,7 +17,7 @@ export const handleGetWorkerBonuses: RequestHandler = (req, res) => {
 
 export const handleCreateBonus: RequestHandler = (req, res) => {
   const { workerId, workerName, amount, reason, month, year } = req.body;
-  
+
   const newBonus: Bonus = {
     id: nextId.toString(),
     workerId,
@@ -29,9 +29,45 @@ export const handleCreateBonus: RequestHandler = (req, res) => {
     createdBy: 'admin',
     createdAt: new Date().toISOString(),
   };
-  
+
   bonuses.push(newBonus);
   nextId++;
-  
+
   res.json(newBonus);
+};
+
+export const handleUpdateBonus: RequestHandler = (req, res) => {
+  const { id } = req.params;
+  const { workerId, workerName, amount, reason, month, year } = req.body;
+
+  const bonusIndex = bonuses.findIndex(bonus => bonus.id === id);
+
+  if (bonusIndex === -1) {
+    return res.status(404).json({ error: 'Bonus not found' });
+  }
+
+  bonuses[bonusIndex] = {
+    ...bonuses[bonusIndex],
+    workerId,
+    workerName,
+    amount,
+    reason,
+    month,
+    year,
+  };
+
+  res.json(bonuses[bonusIndex]);
+};
+
+export const handleDeleteBonus: RequestHandler = (req, res) => {
+  const { id } = req.params;
+
+  const bonusIndex = bonuses.findIndex(bonus => bonus.id === id);
+
+  if (bonusIndex === -1) {
+    return res.status(404).json({ error: 'Bonus not found' });
+  }
+
+  bonuses.splice(bonusIndex, 1);
+  res.json({ message: 'Bonus deleted successfully' });
 };
