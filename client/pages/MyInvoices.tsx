@@ -16,7 +16,7 @@ import {
   Gift,
   AlertCircle
 } from 'lucide-react';
-import { Invoice } from '@shared/types';
+import { Invoice, WorkOrder } from '@shared/types';
 import { api } from '@shared/api-client';
 
 export default function MyInvoices() {
