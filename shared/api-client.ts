@@ -102,6 +102,8 @@ export const api = {
   },
   getWorkerBonuses: (workerId: string) => apiClient.get(`/api/bonuses/worker/${workerId}`),
   createBonus: (data: any) => apiClient.post('/api/bonuses', data),
+  updateBonus: (id: string, data: any) => apiClient.put(`/api/bonuses/${id}`, data),
+  deleteBonus: (id: string) => apiClient.delete(`/api/bonuses/${id}`),
 
   // Fines
   getFines: (params?: any) => {
