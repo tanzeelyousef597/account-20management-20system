@@ -493,7 +493,9 @@ export default function Chat() {
                     : "bg-muted"
                 )}>
                   {message.messageType === 'text' && (
-                    <p className="text-sm break-words">{message.content}</p>
+                    <p className="text-sm break-words">
+                      {renderMessageWithLinks(message.content)}
+                    </p>
                   )}
                   
                   {message.messageType === 'image' && (
