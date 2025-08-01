@@ -134,7 +134,7 @@ export const api = {
   getMessages: (conversationId: string, page = 1, limit = 50) =>
     apiClient.get(`/api/chat/messages/${conversationId}?page=${page}&limit=${limit}`),
   sendMessage: (senderId: string, messageData: any) => apiClient.post(`/api/chat/send/${senderId}`, messageData),
-  markMessagesAsRead: (userId: string, otherUserId: string) => apiClient.put(`/api/chat/mark-read/${userId}/${otherUserId}`),
+  markMessagesAsRead: (conversationId: string, userId: string) => apiClient.put(`/api/chat/mark-read/${conversationId}`, { userId }),
   uploadChatFile: (fileType: 'image' | 'file') => apiClient.post('/api/chat/upload-file', { fileType }),
   getOnlineStatus: (userIds: string[]) => apiClient.post('/api/chat/online-status', { userIds }),
   createGroupChat: (data: any) => apiClient.post('/api/chat/group', data),
