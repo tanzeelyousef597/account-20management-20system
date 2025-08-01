@@ -129,11 +129,12 @@ export function createServer() {
   // Chat routes
   app.get("/api/chat/search-users", handleSearchUsers);
   app.get("/api/chat/conversations/:userId", handleGetConversations);
-  app.get("/api/chat/messages/:userId/:otherUserId", handleGetMessages);
+  app.get("/api/chat/messages/:conversationId", handleGetMessages);
   app.post("/api/chat/send/:senderId", handleSendMessage);
   app.put("/api/chat/mark-read/:userId/:otherUserId", handleMarkAsRead);
   app.post("/api/chat/upload-file", handleUploadChatFile);
   app.post("/api/chat/online-status", handleGetOnlineStatus);
+  app.post("/api/chat/group", handleCreateGroupChat);
 
   return app;
 }
