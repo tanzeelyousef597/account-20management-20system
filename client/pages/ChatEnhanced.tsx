@@ -1140,12 +1140,12 @@ export default function ChatEnhanced() {
                         setReplyingTo(null);
                       }
                     }}
-                    className="flex-1 bg-white border-slate-300 focus:border-blue-400 rounded-full px-4"
+                    className="flex-1 bg-white border-slate-300 focus:border-blue-400 rounded-full px-3 sm:px-4 text-sm sm:text-base"
                   />
-                  <Button 
-                    onClick={handleSendMessage} 
+                  <Button
+                    onClick={handleSendMessage}
                     disabled={!newMessage.trim()}
-                    className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 rounded-full h-10 w-10 p-0"
+                    className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 rounded-full h-10 w-10 sm:h-10 sm:w-10 p-0 flex-shrink-0"
                   >
                     <Send className="h-4 w-4" />
                   </Button>
