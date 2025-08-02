@@ -1099,7 +1099,7 @@ export default function ChatEnhanced() {
               </ScrollArea>
 
               {/* Message Input */}
-              <div className="border-t border-slate-200/50 p-4 bg-gradient-to-r from-white/90 to-blue-50/30 backdrop-blur-sm rounded-br-xl">
+              <div className="border-t border-slate-200/50 p-3 sm:p-4 bg-gradient-to-r from-white/90 to-blue-50/30 backdrop-blur-sm rounded-b-xl sm:rounded-br-xl">
                 {/* Reply indicator */}
                 {replyingTo && (
                   <div className="mb-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 rounded-lg shadow-sm">
