@@ -386,9 +386,14 @@ export default function AssignedOrders() {
       <div className="space-y-3 sm:space-y-4">
         {/* Mobile Card View */}
         <div className="block md:hidden space-y-4">
-          {paginatedOrders.map((order) => (
-            <Card key={order.id} className="bg-white border-slate-200 shadow-sm">
-              <CardContent className="p-4">
+          {paginatedOrders.map((order, index) => (
+            <Card
+              key={order.id}
+              className="bg-gradient-to-br from-white to-slate-50/50 border border-slate-200/60 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 backdrop-blur-sm group"
+              style={{ animationDelay: `${index * 50}ms` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 to-indigo-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+              <CardContent className="p-4 relative z-10">
                 <div className="space-y-3">
                   <div className="flex justify-between items-start gap-3">
                     <div className="flex-1 min-w-0">
@@ -458,22 +463,26 @@ export default function AssignedOrders() {
         </div>
 
         {/* Desktop Table View */}
-        <div className="hidden md:block overflow-x-auto bg-white border border-slate-200 rounded-lg">
+        <div className="hidden md:block overflow-x-auto bg-gradient-to-br from-white to-slate-50/30 border border-slate-200/60 rounded-lg shadow-sm backdrop-blur-sm">
           <Table>
           <TableHeader>
-            <TableRow className="border-slate-100">
-              <TableHead className="text-slate-600 font-medium">Order Details</TableHead>
-              <TableHead className="text-slate-600 font-medium hidden lg:table-cell">Category</TableHead>
-              <TableHead className="text-slate-600 font-medium">Assigned To</TableHead>
-              <TableHead className="text-slate-600 font-medium">Status</TableHead>
-              <TableHead className="text-slate-600 font-medium hidden xl:table-cell">Files</TableHead>
-              <TableHead className="text-slate-600 font-medium hidden lg:table-cell">Created</TableHead>
-              <TableHead className="text-slate-600 font-medium">Actions</TableHead>
+            <TableRow className="border-slate-100 bg-gradient-to-r from-slate-50/50 to-slate-100/30 backdrop-blur-sm">
+              <TableHead className="text-slate-700 font-semibold bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent">Order Details</TableHead>
+              <TableHead className="text-slate-700 font-semibold bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent hidden lg:table-cell">Category</TableHead>
+              <TableHead className="text-slate-700 font-semibold bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent">Assigned To</TableHead>
+              <TableHead className="text-slate-700 font-semibold bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent">Status</TableHead>
+              <TableHead className="text-slate-700 font-semibold bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent hidden xl:table-cell">Files</TableHead>
+              <TableHead className="text-slate-700 font-semibold bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent hidden lg:table-cell">Created</TableHead>
+              <TableHead className="text-slate-700 font-semibold bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedOrders.map((order) => (
-              <TableRow key={order.id} className="border-slate-100 hover:bg-slate-50">
+            {paginatedOrders.map((order, index) => (
+              <TableRow
+                key={order.id}
+                className="border-slate-100/50 hover:bg-gradient-to-r hover:from-blue-50/30 hover:to-indigo-50/30 transition-all duration-200 group animate-fade-in"
+                style={{ animationDelay: `${index * 30}ms` }}
+              >
                 <TableCell className="min-w-48">
                   <div className="space-y-1">
                     <p className="font-medium text-slate-700 truncate" title={order.title}>{order.title}</p>
@@ -504,7 +513,7 @@ export default function AssignedOrders() {
                           <div key={index} className="flex items-center gap-2">
                             <button
                               onClick={() => handleFileDownload(url, order.attachmentNames?.[index] || `attachment-${index + 1}`)}
-                              className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded text-xs font-medium transition-colors cursor-pointer"
+                              className="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-600 hover:from-blue-100 hover:to-blue-200 hover:text-blue-800 rounded-md text-xs font-medium transition-all duration-200 cursor-pointer transform hover:scale-105 shadow-sm hover:shadow-md"
                             >
                               <FileText className="h-3 w-3" />
                               {order.attachmentNames?.[index] || `File ${index + 1}`}
@@ -516,7 +525,7 @@ export default function AssignedOrders() {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => handleFileDownload(order.attachmentUrl, order.attachmentName || 'attachment')}
-                              className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-md text-sm font-medium transition-colors cursor-pointer"
+                              className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-600 hover:from-blue-100 hover:to-blue-200 hover:text-blue-800 rounded-md text-sm font-medium transition-all duration-200 cursor-pointer transform hover:scale-105 shadow-sm hover:shadow-md"
                             >
                               <FileText className="h-4 w-4" />
                               Download File
