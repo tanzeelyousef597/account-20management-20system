@@ -480,7 +480,19 @@ export default function ChatEnhanced() {
       console.log('Created group conversation:', mockGroupConversation);
 
       // Add to conversations list
-      setConversations(prev => [mockGroupConversation, ...prev]);
+      setConversations(prev => {
+        const newConversations = [mockGroupConversation, ...prev];
+        // Immediately save groups to localStorage
+        setTimeout(() => {
+          try {
+            const groups = newConversations.filter(c => c.isGroup);
+            localStorage.setItem(`chat-groups-${user.id}`, JSON.stringify(groups));
+          } catch (error) {
+            console.error('Failed to save group immediately:', error);
+          }
+        }, 0);
+        return newConversations;
+      });
 
       // Close dialog and reset form
       setIsCreateGroupOpen(false);
