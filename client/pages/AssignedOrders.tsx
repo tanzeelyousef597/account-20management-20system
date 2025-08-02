@@ -917,18 +917,14 @@ export default function AssignedOrders() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="work" className="animate-in fade-in duration-500">
-          <Card className="shadow-2xl bg-white/95 backdrop-blur-xl border-slate-200/50 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-1">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 border-b border-slate-200/50">
-              <CardTitle className="flex items-center gap-3 text-xl">
-                <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg">
-                  <PlayCircle className="h-5 w-5 text-white" />
-                </div>
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold">
-                  Orders in Work
-                </span>
+        <TabsContent value="work">
+          <Card className="shadow-sm bg-white border-slate-200">
+            <CardHeader className="border-b border-slate-100">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <PlayCircle className="h-5 w-5 text-blue-500" />
+                <span className="text-slate-700 font-semibold">Orders in Work</span>
               </CardTitle>
-              <CardDescription className="text-base text-gray-600 ml-12">
+              <CardDescription className="text-slate-500">
                 Orders currently in progress or under QA
               </CardDescription>
             </CardHeader>
