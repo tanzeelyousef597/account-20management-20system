@@ -1162,13 +1162,13 @@ export default function ChatEnhanced() {
             >
               Cancel
             </Button>
-            <Button 
+            <Button
               onClick={handleCreateGroup}
-              disabled={!groupName.trim() || selectedGroupMembers.length === 0}
-              className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
+              disabled={!groupName.trim() || selectedGroupMembers.length === 0 || allUsers.length === 0}
+              className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 disabled:opacity-50"
             >
               <Hash className="h-4 w-4 mr-2" />
-              Create Group
+              {allUsers.length === 0 ? 'Loading...' : 'Create Group'}
             </Button>
           </div>
         </DialogContent>
