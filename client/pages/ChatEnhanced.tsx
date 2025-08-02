@@ -734,24 +734,40 @@ export default function ChatEnhanced() {
                         onDoubleClick={() => setReplyingTo(message)}
                       >
                         <div className="relative">
-                          {/* WhatsApp-style quoted message */}
+                          {/* WhatsApp-style quoted message - Enhanced */}
                           {message.replyTo && (
                             <div className="mb-2">
                               <div className={cn(
-                                "border-l-4 pl-3 py-2 rounded-r-lg text-xs max-w-full relative",
-                                isOwnMessage 
-                                  ? "border-blue-300 bg-blue-50/40" 
-                                  : "border-green-400 bg-green-50"
-                              )}>
-                                <div className={cn(
-                                  "font-semibold mb-1 text-xs",
-                                  isOwnMessage ? "text-blue-600" : "text-green-600"
-                                )}>
-                                  {message.replyTo.senderName}
+                                "border-l-4 pl-3 py-2 rounded-r-md text-xs max-w-full relative cursor-pointer hover:bg-opacity-80 transition-colors",
+                                isOwnMessage
+                                  ? "border-blue-400 bg-blue-100/60"
+                                  : "border-green-500 bg-green-100/80"
+                              )}
+                              onClick={() => {
+                                // Scroll to original message if visible
+                                const originalMsg = document.getElementById(`message-${message.replyTo?.id}`);
+                                if (originalMsg) {
+                                  originalMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                  originalMsg.style.backgroundColor = isOwnMessage ? '#dbeafe' : '#dcfce7';
+                                  setTimeout(() => {
+                                    originalMsg.style.backgroundColor = '';
+                                  }, 2000);
+                                }
+                              }}
+                              title="Click to jump to original message"
+                              >
+                                <div className="flex items-center gap-1 mb-1">
+                                  <Reply className="h-2.5 w-2.5" />
+                                  <span className={cn(
+                                    "font-semibold text-xs",
+                                    isOwnMessage ? "text-blue-700" : "text-green-700"
+                                  )}>
+                                    {message.replyTo.senderName}
+                                  </span>
                                 </div>
                                 <div className={cn(
-                                  "text-opacity-90 line-clamp-2 text-xs",
-                                  isOwnMessage ? "text-blue-700" : "text-gray-600"
+                                  "text-xs leading-relaxed line-clamp-2",
+                                  isOwnMessage ? "text-blue-800" : "text-gray-700"
                                 )}>
                                   {message.replyTo.content}
                                 </div>
