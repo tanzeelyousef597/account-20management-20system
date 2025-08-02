@@ -199,8 +199,8 @@ export default function UserManagement() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">User Management</h2>
-          <p className="text-gray-600 mt-1">Manage user accounts and permissions</p>
+          <h2 className="text-2xl md:text-3xl font-semibold text-slate-700">User Management</h2>
+        <p className="text-slate-500 mt-1 text-sm md:text-base">Manage user accounts and permissions</p>
         </div>
         
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
