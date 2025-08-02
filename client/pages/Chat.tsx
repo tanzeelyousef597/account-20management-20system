@@ -251,7 +251,54 @@ export default function Chat() {
     }
   };
 
+  const loadAllUsers = async () => {
+    try {
+      const response = await api.get('/users');
+      if (response.ok) {
+        const users = await response.json();
+        setAllUsers(users.filter((u: User) => u.id !== user?.id));
+      }
+    } catch (error) {
+      console.error('Failed to load users:', error);
+    }
+  };
 
+  const handleCreateGroup = async () => {
+    if (!groupName.trim() || selectedGroupMembers.length === 0) {
+      toast({
+        title: 'Error',
+        description: 'Please enter a group name and select at least one member',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      const response = await api.post('/chat/groups', {
+        name: groupName.trim(),
+        members: [...selectedGroupMembers, user!.id],
+        createdBy: user!.id
+      });
+
+      if (response.ok) {
+        setIsCreateGroupOpen(false);
+        setGroupName('');
+        setSelectedGroupMembers([]);
+        loadConversations();
+        toast({
+          title: 'Success',
+          description: 'Group chat created successfully',
+        });
+      }
+    } catch (error) {
+      console.error('Failed to create group:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create group chat',
+        variant: 'destructive',
+      });
+    }
+  };
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
