@@ -458,17 +458,17 @@ export default function AssignedOrders() {
         </div>
 
         {/* Desktop Table View */}
-        <div className="hidden md:block overflow-x-auto border rounded-lg">
+        <div className="hidden md:block overflow-x-auto bg-white border border-slate-200 rounded-lg">
           <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="whitespace-nowrap text-xs lg:text-sm">Order Details</TableHead>
-              <TableHead className="whitespace-nowrap text-xs lg:text-sm hidden lg:table-cell">Category</TableHead>
-              <TableHead className="whitespace-nowrap text-xs lg:text-sm">Assigned To</TableHead>
-              <TableHead className="whitespace-nowrap text-xs lg:text-sm">Status</TableHead>
-              <TableHead className="whitespace-nowrap text-xs lg:text-sm hidden xl:table-cell">Files</TableHead>
-              <TableHead className="whitespace-nowrap text-xs lg:text-sm hidden lg:table-cell">Created</TableHead>
-              <TableHead className="whitespace-nowrap text-xs lg:text-sm">Actions</TableHead>
+            <TableRow className="border-slate-100">
+              <TableHead className="text-slate-600 font-medium">Order Details</TableHead>
+              <TableHead className="text-slate-600 font-medium hidden lg:table-cell">Category</TableHead>
+              <TableHead className="text-slate-600 font-medium">Assigned To</TableHead>
+              <TableHead className="text-slate-600 font-medium">Status</TableHead>
+              <TableHead className="text-slate-600 font-medium hidden xl:table-cell">Files</TableHead>
+              <TableHead className="text-slate-600 font-medium hidden lg:table-cell">Created</TableHead>
+              <TableHead className="text-slate-600 font-medium">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
