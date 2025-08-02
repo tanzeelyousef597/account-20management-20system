@@ -346,21 +346,59 @@ export default function OrdersFromWorkers() {
 
       {/* Tabbed Interface */}
       <Tabs defaultValue="under-qa" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="under-qa">Under QA ({underQAOrders.length})</TabsTrigger>
-          <TabsTrigger value="approved">Approved ({workOrders.filter(o => o.createdBy !== 'admin' && o.status === 'Approved').length})</TabsTrigger>
-          <TabsTrigger value="rejected">Rejected ({workOrders.filter(o => o.createdBy !== 'admin' && o.status === 'Rejected').length})</TabsTrigger>
-          <TabsTrigger value="deleted">Deleted ({workOrders.filter(o => o.createdBy !== 'admin' && o.status === 'Deleted').length})</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-slate-100 to-slate-50 p-1.5 rounded-xl shadow-sm border border-slate-200">
+          <TabsTrigger
+            value="under-qa"
+            className="flex items-center gap-2 rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-400 data-[state=active]:to-amber-500 data-[state=active]:text-white data-[state=active]:shadow-md hover:bg-white/60 relative overflow-hidden group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-50 to-amber-100 opacity-0 group-hover:opacity-50 transition-opacity duration-200"></div>
+            <span className="relative z-10 text-xs sm:text-sm">Under QA</span>
+            <span className="bg-amber-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium relative z-10 transition-colors duration-200">
+              {underQAOrders.length}
+            </span>
+          </TabsTrigger>
+          <TabsTrigger
+            value="approved"
+            className="flex items-center gap-2 rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-400 data-[state=active]:to-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-md hover:bg-white/60 relative overflow-hidden group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-50 to-emerald-100 opacity-0 group-hover:opacity-50 transition-opacity duration-200"></div>
+            <span className="relative z-10 text-xs sm:text-sm">Approved</span>
+            <span className="bg-emerald-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium relative z-10 transition-colors duration-200">
+              {workOrders.filter(o => o.createdBy !== 'admin' && o.status === 'Approved').length}
+            </span>
+          </TabsTrigger>
+          <TabsTrigger
+            value="rejected"
+            className="flex items-center gap-2 rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-400 data-[state=active]:to-red-500 data-[state=active]:text-white data-[state=active]:shadow-md hover:bg-white/60 relative overflow-hidden group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-red-50 to-red-100 opacity-0 group-hover:opacity-50 transition-opacity duration-200"></div>
+            <span className="relative z-10 text-xs sm:text-sm">Rejected</span>
+            <span className="bg-red-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium relative z-10 transition-colors duration-200">
+              {workOrders.filter(o => o.createdBy !== 'admin' && o.status === 'Rejected').length}
+            </span>
+          </TabsTrigger>
+          <TabsTrigger
+            value="deleted"
+            className="flex items-center gap-2 rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-400 data-[state=active]:to-gray-500 data-[state=active]:text-white data-[state=active]:shadow-md hover:bg-white/60 relative overflow-hidden group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-gray-50 to-gray-100 opacity-0 group-hover:opacity-50 transition-opacity duration-200"></div>
+            <span className="relative z-10 text-xs sm:text-sm">Deleted</span>
+            <span className="bg-gray-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium relative z-10 transition-colors duration-200">
+              {workOrders.filter(o => o.createdBy !== 'admin' && o.status === 'Deleted').length}
+            </span>
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="under-qa">
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-yellow-600" />
-                Under QA - Pending Review
+          <Card className="shadow-lg bg-gradient-to-br from-white to-amber-50/30 border border-amber-200/50 backdrop-blur-sm">
+            <CardHeader className="border-b border-amber-100/50 bg-gradient-to-r from-amber-50/50 to-transparent">
+              <CardTitle className="flex items-center gap-3 text-lg">
+                <div className="bg-gradient-to-r from-amber-400 to-amber-500 p-2 rounded-lg shadow-sm">
+                  <Clock className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-slate-700 font-semibold bg-gradient-to-r from-amber-600 to-amber-700 bg-clip-text text-transparent">Under QA - Pending Review</span>
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-slate-600">
                 Worker submissions pending review and approval
               </CardDescription>
             </CardHeader>
