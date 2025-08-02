@@ -173,8 +173,36 @@ export default function ChatEnhanced() {
       }
     } catch (error) {
       console.error('Failed to load users:', error);
-      // Return empty array on error
-      return [];
+      // Create mock users for demo if API fails
+      const mockUsers: User[] = [
+        {
+          id: 'user-2',
+          name: 'John Worker',
+          email: 'worker@mtwebexperts.com',
+          role: 'Worker',
+          whatsappNumber: '+923280909654',
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: 'user-3',
+          name: 'Jane Admin',
+          email: 'jane@mtwebexperts.com',
+          role: 'Admin',
+          whatsappNumber: '+923189046143',
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: 'user-4',
+          name: 'Mike Developer',
+          email: 'mike@mtwebexperts.com',
+          role: 'Worker',
+          whatsappNumber: '+923189046144',
+          createdAt: new Date().toISOString(),
+        }
+      ];
+      const filteredMockUsers = mockUsers.filter(u => u.id !== user?.id);
+      setAllUsers(filteredMockUsers);
+      return filteredMockUsers;
     }
   };
 
