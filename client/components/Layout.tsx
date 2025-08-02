@@ -81,9 +81,10 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_rgba(255,255,255,0.3)_1px,_transparent_0)] bg-[length:20px_20px] opacity-40"></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
+      {/* Animated background pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_rgba(59,130,246,0.1)_1px,_transparent_0)] bg-[length:20px_20px] opacity-60 animate-pulse"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-50/20 via-transparent to-indigo-50/20"></div>
 
       {/* Mobile menu overlay */}
       {isMobileMenuOpen && (
@@ -103,18 +104,22 @@ export default function Layout({ children }: LayoutProps) {
       )}>
         <div className="flex h-full flex-col">
           {/* Header */}
-          <div className="flex h-14 sm:h-16 items-center justify-between border-b border-slate-200 px-3 sm:px-4 md:px-6 bg-gradient-to-r from-blue-500 to-indigo-500">
+          <div className="flex h-14 sm:h-16 items-center justify-between border-b border-blue-200/50 px-3 sm:px-4 md:px-6 bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-500 relative overflow-hidden">
+            {/* Animated background elements */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/10 animate-pulse"></div>
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+
             <div className="flex items-center group relative z-10 min-w-0 flex-1">
               <div className="relative flex-shrink-0">
-                <Building2 className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-lg" />
-                <div className="absolute inset-0 h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 bg-white/20 rounded-full blur-xl transition-opacity duration-300 opacity-0 group-hover:opacity-100"></div>
+                <Building2 className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-white transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 drop-shadow-lg" />
+                <div className="absolute inset-0 h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 bg-white/30 rounded-full blur-lg transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:scale-150"></div>
               </div>
               <div className="ml-2 sm:ml-3 min-w-0 flex-1">
-                <div className="text-sm sm:text-base md:text-lg font-bold text-white tracking-tight drop-shadow-sm truncate">
+                <div className="text-sm sm:text-base md:text-lg font-bold text-white tracking-tight drop-shadow-sm truncate transition-all duration-200 group-hover:scale-105">
                   <span className="hidden sm:inline">MT Web Experts</span>
                   <span className="sm:hidden">MT Web</span>
                 </div>
-                <div className="text-xs text-blue-100/90 hidden sm:block">Accounts Management</div>
+                <div className="text-xs text-blue-100/90 hidden sm:block transition-colors duration-200 group-hover:text-white">Accounts Management</div>
               </div>
             </div>
             {/* Close button for mobile */}
@@ -127,8 +132,9 @@ export default function Layout({ children }: LayoutProps) {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 space-y-2 p-4 relative">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-50/30 to-transparent pointer-events-none"></div>
+          <nav className="flex-1 space-y-2 p-4 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-blue-50/20 via-transparent to-indigo-50/20 pointer-events-none"></div>
+            <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-blue-200/50 to-transparent"></div>
             {navItems.map((item, index) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.href;
@@ -140,10 +146,10 @@ export default function Layout({ children }: LayoutProps) {
                   onClick={() => setIsMobileMenuOpen(false)}
                   style={{ animationDelay: `${index * 100}ms` }}
                   className={cn(
-                    'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 relative group',
+                    'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 relative group overflow-hidden animate-slide-up',
                     isActive
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                      ? 'bg-gradient-to-r from-blue-400 to-blue-500 text-white shadow-lg transform scale-105'
+                      : 'text-slate-600 hover:bg-gradient-to-r hover:from-slate-100 hover:to-blue-50/50 hover:text-slate-900 hover:scale-102'
                   )}
                 >
                   {/* Active indicator */}
@@ -215,14 +221,16 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Main Content */}
       <div className="lg:pl-64 xl:pl-72 2xl:pl-80 3xl:pl-84 4xl:pl-96 5xl:pl-[26rem] relative">
-        <header className="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-30">
-          <div className="flex h-14 sm:h-16 items-center justify-between px-3 sm:px-4 md:px-6 lg:px-8">
+        <header className="bg-gradient-to-r from-white via-slate-50/80 to-blue-50/50 border-b border-slate-200/60 sticky top-0 z-30 backdrop-blur-md shadow-lg">
+          <div className="flex h-14 sm:h-16 items-center justify-between px-3 sm:px-4 md:px-6 lg:px-8 relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-50/20 via-transparent to-indigo-50/20 opacity-0 animate-pulse"></div>
             <div className="flex items-center min-w-0 flex-1">
               {/* Mobile menu button */}
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 mr-3 transition-all duration-200 flex-shrink-0"
+                className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-gradient-to-r hover:from-slate-100 hover:to-blue-50/50 mr-3 transition-all duration-300 flex-shrink-0 relative z-10 group"
               >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
                 <Menu className="h-5 w-5" />
               </button>
               <div className="min-w-0 flex-1">
@@ -253,9 +261,12 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </header>
 
-        <main className="p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10 2xl:p-12 3xl:p-16 4xl:p-20 5xl:p-24 animate-in fade-in duration-700 relative min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)]">
+        <main className="p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10 2xl:p-12 3xl:p-16 4xl:p-20 5xl:p-24 animate-fade-in relative min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] bg-gradient-to-br from-slate-50/80 via-white/60 to-blue-50/40 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(59,130,246,0.03)_0%,_transparent_70%)] pointer-events-none"></div>
           <div className="relative z-10 max-w-full 3xl:max-w-[2000px] 4xl:max-w-[2400px] 5xl:max-w-[2800px] mx-auto">
-            {children}
+            <div className="animate-scale-in">
+              {children}
+            </div>
           </div>
         </main>
       </div>
