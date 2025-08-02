@@ -139,10 +139,15 @@ export default function Chat() {
     try {
       let messageContent = newMessage.trim();
 
-      // Add reply prefix if replying to a message
+      // Handle reply data structure for better rendering
+      let replyData = null;
       if (replyingTo) {
-        const quotedContent = replyingTo.content.substring(0, 50) + (replyingTo.content.length > 50 ? '...' : '');
-        messageContent = `@${replyingTo.senderName}: "${quotedContent}"\n\n${messageContent}`;
+        replyData = {
+          id: replyingTo.id,
+          content: replyingTo.content,
+          senderName: replyingTo.senderName,
+          senderId: replyingTo.senderId
+        };
       }
 
       // For direct conversations, also send receiverId for compatibility
@@ -152,6 +157,7 @@ export default function Chat() {
         receiverId: otherUser?.id, // Include for direct conversations
         content: messageContent,
         messageType: 'text',
+        replyTo: replyData, // Include reply data for WhatsApp-style rendering
       });
 
       setMessages(prev => [...prev, message]);
