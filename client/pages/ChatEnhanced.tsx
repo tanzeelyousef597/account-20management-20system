@@ -382,45 +382,65 @@ export default function ChatEnhanced() {
   };
 
   const handleCreateGroup = async () => {
-    if (!groupName.trim() || selectedGroupMembers.length === 0) {
+    console.log('Creating group:', { groupName, selectedGroupMembers, allUsers });
+
+    if (!groupName.trim()) {
       toast({
         title: 'Error',
-        description: 'Please enter a group name and select at least one member',
+        description: 'Please enter a group name',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (selectedGroupMembers.length === 0) {
+      toast({
+        title: 'Error',
+        description: 'Please select at least one member',
         variant: 'destructive',
       });
       return;
     }
 
     try {
-      // For demo purposes, create a mock group conversation since backend might not have group API
+      // Get selected users
+      const selectedUsers = allUsers.filter(u => selectedGroupMembers.includes(u.id));
+      console.log('Selected users for group:', selectedUsers);
+
+      // Create group conversation
       const mockGroupConversation = {
         id: `group-${Date.now()}`,
         name: groupName.trim(),
         isGroup: true,
-        participants: [
-          user!,
-          ...allUsers.filter(u => selectedGroupMembers.includes(u.id))
-        ],
-        participantNames: [user!.name, ...allUsers.filter(u => selectedGroupMembers.includes(u.id)).map(u => u.name)],
-        lastMessage: null,
+        participants: [user!, ...selectedUsers],
+        participantNames: [user!.name, ...selectedUsers.map(u => u.name)],
+        lastMessage: {
+          content: `Group "${groupName.trim()}" created by ${user!.name}`,
+          timestamp: new Date().toISOString(),
+          senderId: user!.id,
+          senderName: user!.name
+        },
         lastActivity: new Date().toISOString(),
         unreadCount: 0,
         createdAt: new Date().toISOString()
       };
 
-      // Add to conversations
+      console.log('Created group conversation:', mockGroupConversation);
+
+      // Add to conversations list
       setConversations(prev => [mockGroupConversation, ...prev]);
 
+      // Close dialog and reset form
       setIsCreateGroupOpen(false);
       setGroupName('');
       setSelectedGroupMembers([]);
 
       toast({
         title: 'Success',
-        description: 'Group chat created successfully',
+        description: `Group "${groupName.trim()}" created with ${selectedUsers.length} members`,
       });
 
-      // Optionally select the newly created group
+      // Select the newly created group
       setSelectedConversation(mockGroupConversation);
 
     } catch (error) {
