@@ -1102,7 +1102,7 @@ export default function ChatEnhanced() {
               <div className="border-t border-slate-200/50 p-3 sm:p-4 bg-gradient-to-r from-white/90 to-blue-50/30 backdrop-blur-sm rounded-b-xl sm:rounded-br-xl">
                 {/* Reply indicator */}
                 {replyingTo && (
-                  <div className="mb-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 rounded-lg shadow-sm">
+                  <div className="mb-3 p-2 sm:p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 rounded-lg shadow-sm">
                     <div className="flex justify-between items-start">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
