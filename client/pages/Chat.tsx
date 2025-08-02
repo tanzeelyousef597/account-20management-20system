@@ -55,6 +55,7 @@ export default function Chat() {
   useEffect(() => {
     if (user) {
       loadConversations();
+      loadAllUsers();
     }
   }, [user]);
 
