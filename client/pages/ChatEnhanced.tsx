@@ -95,14 +95,14 @@ export default function ChatEnhanced() {
         const demoConversations = [
           {
             id: 'demo-conv-1',
-            name: allUsers[0]?.name || 'Demo User',
+            name: usersToUse[0]?.name || 'Demo User',
             isGroup: false,
-            participants: [user, allUsers[0]].filter(Boolean),
-            participantNames: [user.name, allUsers[0]?.name].filter(Boolean),
+            participants: [user, usersToUse[0]].filter(Boolean),
+            participantNames: [user.name, usersToUse[0]?.name].filter(Boolean),
             lastMessage: {
               content: 'Hey! How are you doing?',
               timestamp: new Date(Date.now() - 300000).toISOString(),
-              senderId: allUsers[0]?.id || 'demo'
+              senderId: usersToUse[0]?.id || 'demo'
             },
             lastActivity: new Date(Date.now() - 300000).toISOString(),
             unreadCount: 0,
@@ -111,13 +111,13 @@ export default function ChatEnhanced() {
         ];
 
         // Add a demo group if we have multiple users
-        if (allUsers.length > 1) {
+        if (usersToUse.length > 1) {
           demoConversations.push({
             id: 'demo-group-1',
             name: 'Team Chat',
             isGroup: true,
-            participants: [user, ...allUsers.slice(0, 3)].filter(Boolean),
-            participantNames: [user.name, ...allUsers.slice(0, 3).map(u => u.name)].filter(Boolean),
+            participants: [user, ...usersToUse.slice(0, 3)].filter(Boolean),
+            participantNames: [user.name, ...usersToUse.slice(0, 3).map(u => u.name)].filter(Boolean),
             lastMessage: {
               content: 'Welcome to the team chat!',
               timestamp: new Date(Date.now() - 600000).toISOString(),
