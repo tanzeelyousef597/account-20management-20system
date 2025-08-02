@@ -1192,7 +1192,8 @@ export default function ChatEnhanced() {
               <div className="max-h-48 overflow-y-auto border border-blue-200 rounded-md p-3 space-y-2 bg-white mt-1">
                 {allUsers.length === 0 ? (
                   <div className="text-center py-4">
-                    <p className="text-sm text-gray-500">Loading users...</p>
+                    <p className="text-sm text-gray-500 mb-2">No users available from User Management</p>
+                    <p className="text-xs text-gray-400 mb-3">Make sure users exist in your User Management page</p>
                     <Button
                       size="sm"
                       variant="outline"
