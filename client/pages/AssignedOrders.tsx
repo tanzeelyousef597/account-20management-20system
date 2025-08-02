@@ -673,7 +673,7 @@ export default function AssignedOrders() {
 
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-500 hover:bg-blue-600 shadow-sm transition-colors duration-200">
+            <Button className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-0">
               <Plus className="h-4 w-4 mr-2" />
               Create Order
             </Button>
@@ -879,15 +879,16 @@ export default function AssignedOrders() {
       </div>
 
       {/* Search Bar */}
-      <Card className="bg-white border-slate-200 shadow-sm">
+      <Card className="bg-gradient-to-r from-white to-slate-50/50 border border-slate-200/60 shadow-md backdrop-blur-sm">
         <CardContent className="p-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 opacity-0 group-hover:opacity-30 rounded-lg transition-opacity duration-200"></div>
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4 z-10 transition-colors duration-200 group-focus-within:text-blue-500" />
             <Input
               placeholder="Search orders by title, description, category, worker, or status..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 border-slate-300 focus:border-blue-400 focus:ring-1 focus:ring-blue-200 transition-colors duration-200"
+              className="pl-10 border-slate-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-200/50 transition-all duration-200 bg-white/80 backdrop-blur-sm hover:bg-white relative z-10"
             />
           </div>
         </CardContent>
@@ -895,62 +896,72 @@ export default function AssignedOrders() {
 
       {/* Tabbed Interface */}
       <Tabs defaultValue="work" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 bg-slate-100 p-1 rounded-lg">
+        <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-slate-100 to-slate-50 p-1.5 rounded-xl shadow-sm border border-slate-200">
           <TabsTrigger
             value="work"
-            className="flex items-center gap-2 rounded-md transition-all duration-200 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=active]:shadow-sm"
+            className="flex items-center gap-2 rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-400 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-md hover:bg-white/60 relative overflow-hidden group"
           >
-            <PlayCircle className="h-4 w-4" />
-            <span className="hidden sm:inline">Orders in Work</span>
-            <span className="sm:hidden">Work</span>
-            <span className="bg-blue-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-blue-100 opacity-0 group-hover:opacity-50 transition-opacity duration-200"></div>
+            <PlayCircle className="h-4 w-4 relative z-10" />
+            <span className="hidden sm:inline relative z-10">Orders in Work</span>
+            <span className="sm:hidden relative z-10">Work</span>
+            <span className="bg-blue-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium relative z-10 transition-colors duration-200">
               {ordersInWork.length}
             </span>
           </TabsTrigger>
           <TabsTrigger
             value="stopped"
-            className="flex items-center gap-2 rounded-md transition-all duration-200 data-[state=active]:bg-amber-500 data-[state=active]:text-white data-[state=active]:shadow-sm"
+            className="flex items-center gap-2 rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-400 data-[state=active]:to-amber-500 data-[state=active]:text-white data-[state=active]:shadow-md hover:bg-white/60 relative overflow-hidden group"
           >
-            <StopCircle className="h-4 w-4" />
-            <span className="hidden sm:inline">Stopped Orders</span>
-            <span className="sm:hidden">Stopped</span>
-            <span className="bg-amber-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium">
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-50 to-amber-100 opacity-0 group-hover:opacity-50 transition-opacity duration-200"></div>
+            <StopCircle className="h-4 w-4 relative z-10" />
+            <span className="hidden sm:inline relative z-10">Stopped Orders</span>
+            <span className="sm:hidden relative z-10">Stopped</span>
+            <span className="bg-amber-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium relative z-10 transition-colors duration-200">
               {stoppedOrders.length}
             </span>
           </TabsTrigger>
           <TabsTrigger
             value="done"
-            className="flex items-center gap-2 rounded-md transition-all duration-200 data-[state=active]:bg-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-sm"
+            className="flex items-center gap-2 rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-400 data-[state=active]:to-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-md hover:bg-white/60 relative overflow-hidden group"
           >
-            <CheckCheck className="h-4 w-4" />
-            <span className="hidden sm:inline">Done Orders</span>
-            <span className="sm:hidden">Done</span>
-            <span className="bg-emerald-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-50 to-emerald-100 opacity-0 group-hover:opacity-50 transition-opacity duration-200"></div>
+            <CheckCheck className="h-4 w-4 relative z-10" />
+            <span className="hidden sm:inline relative z-10">Done Orders</span>
+            <span className="sm:hidden relative z-10">Done</span>
+            <span className="bg-emerald-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium relative z-10 transition-colors duration-200">
               {doneOrders.length}
             </span>
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="work">
-          <Card className="shadow-sm bg-white border-slate-200">
-            <CardHeader className="border-b border-slate-100">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <PlayCircle className="h-5 w-5 text-blue-500" />
-                <span className="text-slate-700 font-semibold">Orders in Work</span>
+          <Card className="shadow-lg bg-gradient-to-br from-white to-blue-50/30 border border-blue-200/50 backdrop-blur-sm">
+            <CardHeader className="border-b border-blue-100/50 bg-gradient-to-r from-blue-50/50 to-transparent">
+              <CardTitle className="flex items-center gap-3 text-lg">
+                <div className="bg-gradient-to-r from-blue-400 to-blue-500 p-2 rounded-lg shadow-sm">
+                  <PlayCircle className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-slate-700 font-semibold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Orders in Work</span>
               </CardTitle>
-              <CardDescription className="text-slate-500">
+              <CardDescription className="text-slate-600">
                 Orders currently in progress or under QA
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="bg-gradient-to-br from-transparent to-blue-50/20">
               {ordersInWork.length > 0 ? (
                 renderOrdersTable(ordersInWork, 'work')
               ) : (
                 <div className="text-center py-12">
-                  <PlayCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No orders in work</h3>
-                  <p className="text-gray-500 mb-4">Assign new orders to workers to get started</p>
-                  <Button onClick={() => setIsCreateDialogOpen(true)}>
+                  <div className="bg-gradient-to-r from-blue-100 to-blue-200 p-4 rounded-full w-fit mx-auto mb-4">
+                    <PlayCircle className="h-12 w-12 text-blue-500" />
+                  </div>
+                  <h3 className="text-lg font-medium text-slate-700 mb-2">No orders in work</h3>
+                  <p className="text-slate-500 mb-4">Assign new orders to workers to get started</p>
+                  <Button
+                    onClick={() => setIsCreateDialogOpen(true)}
+                    className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 shadow-md transition-all duration-200"
+                  >
                     <Plus className="h-4 w-4 mr-2" />
                     Create Order
                   </Button>
@@ -963,24 +974,28 @@ export default function AssignedOrders() {
 
 
         <TabsContent value="stopped">
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <StopCircle className="h-5 w-5 text-gray-600" />
-                Stopped Orders
+          <Card className="shadow-lg bg-gradient-to-br from-white to-amber-50/30 border border-amber-200/50 backdrop-blur-sm">
+            <CardHeader className="border-b border-amber-100/50 bg-gradient-to-r from-amber-50/50 to-transparent">
+              <CardTitle className="flex items-center gap-3 text-lg">
+                <div className="bg-gradient-to-r from-amber-400 to-amber-500 p-2 rounded-lg shadow-sm">
+                  <StopCircle className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-slate-700 font-semibold bg-gradient-to-r from-amber-600 to-amber-700 bg-clip-text text-transparent">Stopped Orders</span>
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-slate-600">
                 Orders that have been stopped or paused
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="bg-gradient-to-br from-transparent to-amber-50/20">
               {stoppedOrders.length > 0 ? (
                 renderOrdersTable(stoppedOrders, 'stopped')
               ) : (
                 <div className="text-center py-12">
-                  <StopCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No stopped orders</h3>
-                  <p className="text-gray-500">Stopped orders will appear here</p>
+                  <div className="bg-gradient-to-r from-amber-100 to-amber-200 p-4 rounded-full w-fit mx-auto mb-4">
+                    <StopCircle className="h-12 w-12 text-amber-500" />
+                  </div>
+                  <h3 className="text-lg font-medium text-slate-700 mb-2">No stopped orders</h3>
+                  <p className="text-slate-500">Stopped orders will appear here</p>
                 </div>
               )}
             </CardContent>
@@ -988,24 +1003,28 @@ export default function AssignedOrders() {
         </TabsContent>
 
         <TabsContent value="done">
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CheckCheck className="h-5 w-5 text-purple-600" />
-                Done Orders
+          <Card className="shadow-lg bg-gradient-to-br from-white to-emerald-50/30 border border-emerald-200/50 backdrop-blur-sm">
+            <CardHeader className="border-b border-emerald-100/50 bg-gradient-to-r from-emerald-50/50 to-transparent">
+              <CardTitle className="flex items-center gap-3 text-lg">
+                <div className="bg-gradient-to-r from-emerald-400 to-emerald-500 p-2 rounded-lg shadow-sm">
+                  <CheckCheck className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-slate-700 font-semibold bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent">Done Orders</span>
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-slate-600">
                 Orders that have been completed and marked as done
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="bg-gradient-to-br from-transparent to-emerald-50/20">
               {doneOrders.length > 0 ? (
                 renderOrdersTable(doneOrders, 'done')
               ) : (
                 <div className="text-center py-12">
-                  <CheckCheck className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No done orders</h3>
-                  <p className="text-gray-500">Completed orders marked as done will appear here</p>
+                  <div className="bg-gradient-to-r from-emerald-100 to-emerald-200 p-4 rounded-full w-fit mx-auto mb-4">
+                    <CheckCheck className="h-12 w-12 text-emerald-500" />
+                  </div>
+                  <h3 className="text-lg font-medium text-slate-700 mb-2">No done orders</h3>
+                  <p className="text-slate-500">Completed orders marked as done will appear here</p>
                 </div>
               )}
             </CardContent>
