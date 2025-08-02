@@ -1260,7 +1260,7 @@ export default function ChatEnhanced() {
               className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 disabled:opacity-50"
             >
               <Hash className="h-4 w-4 mr-2" />
-              {allUsers.length === 0 ? 'Loading...' : 'Create Group'}
+              {allUsers.length === 0 ? 'No Users Available' : 'Create Group'}
             </Button>
           </div>
         </DialogContent>
