@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import {
   Search,
   Send,
@@ -18,10 +19,13 @@ import {
   X,
   CheckCheck,
   Check,
+  Circle,
+  MessageSquare,
   Reply,
-  Edit3,
-  Trash2,
   UserPlus,
+  UserMinus,
+  Settings,
+  Crown,
   Hash,
   MoreHorizontal
 } from 'lucide-react';
@@ -39,183 +43,337 @@ export default function ChatEnhanced() {
   const [searchEmail, setSearchEmail] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [users, setUsers] = useState<User[]>([]);
-  const [replyingTo, setReplyingTo] = useState<ChatMessage | null>(null);
-  const [editingMessage, setEditingMessage] = useState<ChatMessage | null>(null);
-  const [editText, setEditText] = useState('');
+  const [onlineStatus, setOnlineStatus] = useState<Record<string, boolean>>({});
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isMobileConversationOpen, setIsMobileConversationOpen] = useState(false);
   const [isCreateGroupOpen, setIsCreateGroupOpen] = useState(false);
+  const [isManageGroupOpen, setIsManageGroupOpen] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [selectedGroupMembers, setSelectedGroupMembers] = useState<string[]>([]);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [replyingTo, setReplyingTo] = useState<ChatMessage | null>(null);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [groupMembers, setGroupMembers] = useState<User[]>([]);
 
   useEffect(() => {
     if (user) {
       loadConversations();
-      loadUsers();
+      loadAllUsers();
     }
   }, [user]);
 
   useEffect(() => {
     if (selectedConversation) {
-      loadMessages();
+      loadMessages(selectedConversation.id);
     }
-  }, [selectedConversation]);
+  }, [selectedConversation, user]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    scrollToBottom();
   }, [messages]);
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const loadConversations = async () => {
+    if (!user) return;
+
     try {
-      const response = await api.get('/chat/conversations');
-      if (response.ok) {
-        const data = await response.json();
-        setConversations(data);
+      const data = await api.getConversations(user.id);
+      setConversations(data);
+      refreshUnreadCount();
+
+      const allUserIds = data.flatMap(conv =>
+        conv.participants.filter(p => p.id !== user.id).map(p => p.id)
+      );
+      if (allUserIds.length > 0) {
+        const status = await api.getOnlineStatus(allUserIds);
+        setOnlineStatus(status);
       }
     } catch (error) {
-      console.error('Error loading conversations:', error);
+      console.error('Failed to load conversations:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load conversations',
+        variant: 'destructive',
+      });
     }
   };
 
-  const loadUsers = async () => {
+  const loadAllUsers = async () => {
     try {
       const response = await api.get('/users');
       if (response.ok) {
-        const userData = await response.json();
-        setUsers(userData);
+        const users = await response.json();
+        setAllUsers(users.filter((u: User) => u.id !== user?.id));
       }
     } catch (error) {
-      console.error('Error loading users:', error);
+      console.error('Failed to load users:', error);
     }
   };
 
-  const loadMessages = async () => {
-    if (!selectedConversation) return;
-    
+  const loadMessages = async (conversationId: string) => {
+    if (!user) return;
+
     try {
-      const response = await api.get(`/chat/conversations/${selectedConversation.id}/messages`);
-      if (response.ok) {
-        const data = await response.json();
-        setMessages(data);
+      const response = await api.getMessages(conversationId);
+      setMessages(response.messages);
+
+      try {
+        await api.markMessagesAsRead(conversationId, user.id);
+        setConversations(prev =>
+          prev.map(conv =>
+            conv.id === conversationId
+              ? { ...conv, unreadCount: 0 }
+              : conv
+          )
+        );
+      } catch (readError) {
+        console.error('Failed to mark messages as read:', readError);
       }
     } catch (error) {
-      console.error('Error loading messages:', error);
-    }
-  };
-
-  const handleReplyToMessage = (message: ChatMessage) => {
-    setReplyingTo(message);
-    document.getElementById('message-input')?.focus();
-  };
-
-  const handleEditMessage = (message: ChatMessage) => {
-    setEditingMessage(message);
-    setEditText(message.content);
-  };
-
-  const handleDeleteMessage = async (messageId: string) => {
-    if (!confirm('Are you sure you want to delete this message?')) {
-      return;
-    }
-    
-    try {
-      const response = await api.delete(`/chat/messages/${messageId}`);
-      if (response.ok) {
-        loadMessages();
-        toast({ title: 'Message deleted', variant: 'default' });
-      }
-    } catch (error) {
-      console.error('Error deleting message:', error);
-      toast({ title: 'Failed to delete message', variant: 'destructive' });
-    }
-  };
-
-  const handleSaveEdit = async () => {
-    if (!editingMessage || !editText.trim()) return;
-    
-    try {
-      const response = await api.put(`/chat/messages/${editingMessage.id}`, {
-        content: editText.trim()
+      console.error('Failed to load messages:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load messages',
+        variant: 'destructive',
       });
-      
-      if (response.ok) {
-        setEditingMessage(null);
-        setEditText('');
-        loadMessages();
-        toast({ title: 'Message updated', variant: 'default' });
-      }
-    } catch (error) {
-      console.error('Error updating message:', error);
-      toast({ title: 'Failed to update message', variant: 'destructive' });
     }
   };
 
-  const handleClearChat = async () => {
-    if (!selectedConversation || !confirm('Are you sure you want to clear this entire chat? This action cannot be undone.')) {
-      return;
-    }
-    
+  const handleSendMessage = async () => {
+    if (!newMessage.trim() || !selectedConversation || !user) return;
+
     try {
-      const response = await api.delete(`/chat/conversations/${selectedConversation.id}/messages`);
-      if (response.ok) {
-        setMessages([]);
-        toast({ title: 'Chat cleared', variant: 'default' });
+      const messageContent = newMessage.trim();
+
+      // Handle reply data structure for WhatsApp-style rendering
+      let replyData = null;
+      if (replyingTo) {
+        replyData = {
+          id: replyingTo.id,
+          content: replyingTo.content,
+          senderName: replyingTo.senderName,
+          senderId: replyingTo.senderId
+        };
       }
+
+      const otherUser = selectedConversation.participants.find(p => p.id !== user.id);
+      const message = await api.sendMessage(user.id, {
+        conversationId: selectedConversation.id,
+        receiverId: otherUser?.id,
+        content: messageContent,
+        messageType: 'text',
+        replyTo: replyData,
+      });
+
+      setMessages(prev => [...prev, message]);
+      setNewMessage('');
+      setReplyingTo(null);
+
+      setConversations(prev =>
+        prev.map(conv =>
+          conv.id === selectedConversation.id
+            ? { ...conv, lastMessage: message, lastActivity: message.timestamp }
+            : conv
+        )
+      );
+
+      refreshUnreadCount();
     } catch (error) {
-      console.error('Error clearing chat:', error);
-      toast({ title: 'Failed to clear chat', variant: 'destructive' });
+      console.error('Failed to send message:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to send message',
+        variant: 'destructive',
+      });
     }
   };
 
   const handleCreateGroup = async () => {
     if (!groupName.trim() || selectedGroupMembers.length === 0) {
-      toast({ title: 'Please enter group name and select members', variant: 'destructive' });
+      toast({
+        title: 'Error',
+        description: 'Please enter a group name and select at least one member',
+        variant: 'destructive',
+      });
       return;
     }
-    
+
     try {
       const response = await api.post('/chat/groups', {
         name: groupName.trim(),
-        members: [...selectedGroupMembers, user!.id]
+        members: [...selectedGroupMembers, user!.id],
+        createdBy: user!.id
       });
-      
+
       if (response.ok) {
         setIsCreateGroupOpen(false);
         setGroupName('');
         setSelectedGroupMembers([]);
         loadConversations();
-        toast({ title: 'Group created successfully', variant: 'default' });
+        toast({
+          title: 'Success',
+          description: 'Group chat created successfully',
+        });
       }
     } catch (error) {
-      console.error('Error creating group:', error);
-      toast({ title: 'Failed to create group', variant: 'destructive' });
+      console.error('Failed to create group:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create group chat',
+        variant: 'destructive',
+      });
     }
   };
 
-  const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedConversation) return;
-
+  const handleManageGroup = async () => {
+    if (!selectedConversation?.isGroup) return;
+    
     try {
-      const messageData: any = {
-        conversationId: selectedConversation.id,
-        content: newMessage.trim(),
-      };
-      
-      // Add reply reference if replying to a message
-      if (replyingTo) {
-        messageData.replyToId = replyingTo.id;
-      }
-      
-      const response = await api.post('/chat/send', messageData);
-
+      const response = await api.get(`/chat/groups/${selectedConversation.id}/members`);
       if (response.ok) {
-        setNewMessage('');
-        setReplyingTo(null);
-        loadMessages();
-        refreshUnreadCount();
+        const members = await response.json();
+        setGroupMembers(members);
+        setIsManageGroupOpen(true);
       }
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Failed to load group members:', error);
+    }
+  };
+
+  const handleAddGroupMember = async (userId: string) => {
+    if (!selectedConversation?.isGroup) return;
+    
+    try {
+      const response = await api.post(`/chat/groups/${selectedConversation.id}/members`, {
+        userId,
+        addedBy: user!.id
+      });
+      
+      if (response.ok) {
+        handleManageGroup();
+        toast({
+          title: 'Success',
+          description: 'Member added to group',
+        });
+      }
+    } catch (error) {
+      console.error('Failed to add member:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to add member to group',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleRemoveGroupMember = async (userId: string) => {
+    if (!selectedConversation?.isGroup) return;
+    
+    try {
+      const response = await api.delete(`/chat/groups/${selectedConversation.id}/members/${userId}`);
+      
+      if (response.ok) {
+        handleManageGroup();
+        toast({
+          title: 'Success',
+          description: 'Member removed from group',
+        });
+      }
+    } catch (error) {
+      console.error('Failed to remove member:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to remove member from group',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleSearchUser = async () => {
+    if (!searchEmail.trim() || !user) return;
+
+    setIsSearching(true);
+    try {
+      const foundUser = await api.searchUserByEmail(searchEmail.trim(), user.id);
+      setSelectedUser(foundUser);
+      setSearchEmail('');
+      toast({
+        title: 'User Found',
+        description: `Found ${foundUser.name} (${foundUser.email})`,
+      });
+    } catch (error: any) {
+      console.error('Search error:', error);
+      toast({
+        title: 'User Not Found',
+        description: 'User not found in teams',
+        variant: 'destructive',
+      });
+      setSelectedUser(null);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleStartChat = async (targetUser: User) => {
+    if (!user) return;
+
+    let existingConv = conversations.find(conv =>
+      !conv.isGroup &&
+      conv.participants.some(p => p.id === targetUser.id) &&
+      conv.participants.some(p => p.id === user.id) &&
+      conv.participants.length === 2
+    );
+
+    if (!existingConv) {
+      try {
+        const message = await api.sendMessage(user.id, {
+          receiverId: targetUser.id,
+          content: `Hello ${targetUser.name}! 👋`,
+          messageType: 'text',
+        });
+
+        await loadConversations();
+
+        existingConv = conversations.find(conv =>
+          conv.id === message.conversationId ||
+          (!conv.isGroup &&
+           conv.participants.some(p => p.id === targetUser.id) &&
+           conv.participants.some(p => p.id === user.id))
+        );
+      } catch (error) {
+        console.error('Failed to start chat:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to start chat',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+
+    if (existingConv) {
+      setSelectedConversation(existingConv);
+      setSelectedUser(null);
+      setIsMobileConversationOpen(true);
+    }
+  };
+
+  const formatTime = (timestamp: string) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } else if (diffDays === 1) {
+      return 'Yesterday';
+    } else if (diffDays < 7) {
+      return date.toLocaleDateString([], { weekday: 'short' });
+    } else {
+      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
     }
   };
 
@@ -223,9 +381,31 @@ export default function ChatEnhanced() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
-  const formatTime = (timestamp: string) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const renderMessageWithLinks = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[^\s]+\.[a-z]{2,}(?:\/[^\s]*)?)/gi;
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, index) => {
+      if (urlRegex.test(part)) {
+        let href = part;
+        if (!part.startsWith('http')) {
+          href = `https://${part}`;
+        }
+
+        return (
+          <a
+            key={index}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline break-all hover:opacity-80 transition-opacity"
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
   };
 
   return (
@@ -233,27 +413,30 @@ export default function ChatEnhanced() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold text-slate-700">
+          <h2 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
             Enhanced Chat System
           </h2>
           <p className="text-slate-500 mt-1 text-sm md:text-base">
-            Communicate with team members, reply to messages, and create groups
+            WhatsApp-style messaging with group management
           </p>
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 rounded-xl border border-slate-200/60 shadow-lg backdrop-blur-sm h-[600px] flex">
+      <div className="bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 rounded-xl border border-slate-200/60 shadow-lg backdrop-blur-sm h-[700px] flex">
         {/* Conversations Sidebar */}
         <div className="w-80 bg-gradient-to-br from-white to-slate-50/50 border-r border-slate-200/60 flex flex-col rounded-l-xl">
-          <div className="flex h-14 items-center justify-between px-4 border-b border-slate-200/50 bg-gradient-to-r from-slate-50/50 to-blue-50/30">
-            <h3 className="font-semibold text-slate-700">Conversations</h3>
+          <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/30">
+            <h3 className="font-semibold text-slate-700 flex items-center gap-2">
+              <MessageSquare className="h-5 w-5 text-blue-500" />
+              Conversations
+            </h3>
             <div className="flex space-x-1">
               <Button 
                 size="sm" 
                 variant="ghost"
                 onClick={() => setIsCreateGroupOpen(true)} 
                 title="Create group"
-                className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50"
+                className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 h-8 w-8 p-0"
               >
                 <UserPlus className="h-4 w-4" />
               </Button>
@@ -261,7 +444,7 @@ export default function ChatEnhanced() {
                 size="sm" 
                 variant="ghost"
                 onClick={() => setIsSearching(!isSearching)}
-                className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50"
+                className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 h-8 w-8 p-0"
               >
                 <Search className="h-4 w-4" />
               </Button>
@@ -276,55 +459,124 @@ export default function ChatEnhanced() {
                   placeholder="Search by email..."
                   value={searchEmail}
                   onChange={(e) => setSearchEmail(e.target.value)}
-                  className="flex-1"
+                  className="flex-1 bg-white border-blue-200 focus:border-blue-400"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSearchUser();
+                    }
+                  }}
                 />
-                <Button size="sm" onClick={() => {/* Add search logic */}}>
+                <Button size="sm" onClick={handleSearchUser} disabled={isSearching}>
                   <Search className="h-4 w-4" />
                 </Button>
               </div>
+              
+              {selectedUser && (
+                <Card className="mt-3 p-3 border-green-200 bg-gradient-to-r from-green-50 to-emerald-50">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={selectedUser.profilePhoto} />
+                        <AvatarFallback>
+                          {getUserInitials(selectedUser.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <div className="font-medium text-green-800">{selectedUser.name}</div>
+                        <div className="text-xs text-green-600">{selectedUser.email}</div>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => handleStartChat(selectedUser)}
+                        className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
+                      >
+                        Start Chat
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedUser(null)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              )}
             </div>
           )}
 
           {/* Conversations List */}
           <ScrollArea className="flex-1 p-2">
             <div className="space-y-2">
-              {conversations.map((conversation) => (
-                <Card
-                  key={conversation.id}
-                  className={cn(
-                    "p-3 cursor-pointer transition-all duration-200 hover:shadow-md border border-slate-200/60",
-                    selectedConversation?.id === conversation.id
-                      ? "bg-gradient-to-r from-blue-100 to-blue-50 border-blue-300"
-                      : "bg-white hover:bg-gradient-to-r hover:from-slate-50 hover:to-blue-50/30"
-                  )}
-                  onClick={() => setSelectedConversation(conversation)}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="flex-shrink-0">
-                      <div className="h-8 w-8 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+              {conversations.map((conversation) => {
+                const otherUser = conversation.participants.find(p => p.id !== user?.id);
+                
+                return (
+                  <Card
+                    key={conversation.id}
+                    className={cn(
+                      "p-3 cursor-pointer transition-all duration-200 hover:shadow-md border border-slate-200/60 group",
+                      selectedConversation?.id === conversation.id
+                        ? "bg-gradient-to-r from-blue-100 to-blue-50 border-blue-300 shadow-md"
+                        : "bg-white hover:bg-gradient-to-r hover:from-slate-50 hover:to-blue-50/30"
+                    )}
+                    onClick={() => setSelectedConversation(conversation)}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="flex-shrink-0 relative">
                         {conversation.isGroup ? (
-                          <Hash className="h-4 w-4" />
+                          <div className="h-10 w-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                            <Hash className="h-5 w-5 text-white" />
+                          </div>
                         ) : (
-                          getUserInitials(conversation.name || 'U')
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={otherUser?.profilePhoto} />
+                            <AvatarFallback>
+                              {otherUser ? getUserInitials(otherUser.name) : 'U'}
+                            </AvatarFallback>
+                          </Avatar>
+                        )}
+                        {conversation.isGroup && (
+                          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">{conversation.participants.length}</span>
+                          </div>
                         )}
                       </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <div className="font-medium text-slate-700 truncate flex items-center gap-1">
+                            {conversation.isGroup && <Hash className="h-3 w-3 text-gray-500" />}
+                            {conversation.name || otherUser?.name || 'Unknown'}
+                            {conversation.isGroup && (
+                              <Badge variant="secondary" className="text-xs px-1 py-0 ml-1">
+                                Group
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {conversation.lastMessage && (
+                              <span className="text-xs text-slate-400">
+                                {formatTime(conversation.lastMessage.timestamp)}
+                              </span>
+                            )}
+                            {conversation.unreadCount > 0 && (
+                              <Badge className="bg-gradient-to-r from-red-400 to-red-500 text-white text-xs min-w-5 h-5 flex items-center justify-center">
+                                {conversation.unreadCount > 99 ? '99+' : conversation.unreadCount}
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                        <p className="text-sm text-slate-500 truncate mt-1">
+                          {conversation.lastMessage?.content || 'No messages yet'}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-700 truncate">
-                        {conversation.isGroup && '# '}{conversation.name}
-                      </p>
-                      <p className="text-xs text-slate-500 truncate">
-                        {conversation.lastMessage?.content || 'No messages yet'}
-                      </p>
-                    </div>
-                    {conversation.unreadCount > 0 && (
-                      <Badge className="bg-gradient-to-r from-red-400 to-red-500 text-white text-xs">
-                        {conversation.unreadCount}
-                      </Badge>
-                    )}
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                );
+              })}
             </div>
           </ScrollArea>
         </div>
@@ -334,34 +586,53 @@ export default function ChatEnhanced() {
           {selectedConversation ? (
             <>
               {/* Chat Header */}
-              <div className="flex h-14 items-center justify-between px-4 border-b border-slate-200/50 bg-gradient-to-r from-white/80 to-blue-50/30 backdrop-blur-sm rounded-tr-xl">
+              <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200/50 bg-gradient-to-r from-white/80 to-blue-50/30 backdrop-blur-sm rounded-tr-xl">
                 <div className="flex items-center space-x-3">
-                  <div className="h-8 w-8 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                  <div className="flex-shrink-0">
                     {selectedConversation.isGroup ? (
-                      <Hash className="h-4 w-4" />
+                      <div className="h-10 w-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                        <Hash className="h-5 w-5 text-white" />
+                      </div>
                     ) : (
-                      getUserInitials(selectedConversation.name || 'U')
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={selectedConversation.participants.find(p => p.id !== user?.id)?.profilePhoto} />
+                        <AvatarFallback>
+                          {getUserInitials(selectedConversation.participants.find(p => p.id !== user?.id)?.name || 'U')}
+                        </AvatarFallback>
+                      </Avatar>
                     )}
                   </div>
                   <div>
-                    <h3 className="font-medium text-slate-700">
-                      {selectedConversation.isGroup && '# '}{selectedConversation.name}
+                    <h3 className="font-semibold text-slate-700 flex items-center gap-2">
+                      {selectedConversation.isGroup && <Hash className="h-4 w-4 text-gray-500" />}
+                      {selectedConversation.name}
+                      {selectedConversation.isGroup && (
+                        <Badge variant="secondary" className="text-xs">
+                          Group
+                        </Badge>
+                      )}
                     </h3>
                     <p className="text-xs text-slate-500">
-                      {selectedConversation.participantNames?.join(', ')}
+                      {selectedConversation.isGroup 
+                        ? `${selectedConversation.participants.length} members`
+                        : `${selectedConversation.participants.find(p => p.id !== user?.id)?.name || 'User'}`
+                      }
                     </p>
                   </div>
                 </div>
+                
                 <div className="flex items-center space-x-2">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={handleClearChat}
-                    title="Clear chat"
-                    className="hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 hover:text-red-600"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  {selectedConversation.isGroup && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleManageGroup}
+                      title="Manage group"
+                      className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50"
+                    >
+                      <Settings className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
               </div>
 
@@ -376,127 +647,85 @@ export default function ChatEnhanced() {
                       <div
                         key={message.id}
                         className={cn(
-                          'flex group',
-                          isOwnMessage ? 'justify-end' : 'justify-start'
+                          'flex group max-w-[80%]',
+                          isOwnMessage ? 'ml-auto justify-end' : 'justify-start'
                         )}
-                        onDoubleClick={() => handleReplyToMessage(message)}
+                        onDoubleClick={() => setReplyingTo(message)}
                       >
-                        <div className="relative max-w-xs lg:max-w-md">
-                          {/* Reply indicator */}
+                        <div className="relative">
+                          {/* WhatsApp-style quoted message */}
                           {message.replyTo && (
-                            <div className="mb-2 pl-4 border-l-2 border-blue-300 bg-blue-50/50 rounded p-2">
-                              <p className="text-xs text-blue-600 font-medium">
-                                Replying to {message.replyTo.senderName === user?.name ? 'You' : message.replyTo.senderName}
-                              </p>
-                              <p className="text-xs text-slate-500 truncate">
-                                {message.replyTo.content}
-                              </p>
+                            <div className="mb-2">
+                              <div className={cn(
+                                "border-l-4 pl-3 py-2 rounded-r-lg text-xs max-w-full relative",
+                                isOwnMessage 
+                                  ? "border-blue-300 bg-blue-50/40" 
+                                  : "border-green-400 bg-green-50"
+                              )}>
+                                <div className={cn(
+                                  "font-semibold mb-1 text-xs",
+                                  isOwnMessage ? "text-blue-600" : "text-green-600"
+                                )}>
+                                  {message.replyTo.senderName}
+                                </div>
+                                <div className={cn(
+                                  "text-opacity-90 line-clamp-2 text-xs",
+                                  isOwnMessage ? "text-blue-700" : "text-gray-600"
+                                )}>
+                                  {message.replyTo.content}
+                                </div>
+                              </div>
                             </div>
                           )}
                           
                           <div
                             className={cn(
-                              'px-4 py-2 rounded-lg relative shadow-sm',
+                              "rounded-xl px-4 py-2 max-w-full relative shadow-sm transition-all duration-200 group",
                               isOwnMessage
-                                ? 'bg-gradient-to-r from-blue-400 to-blue-500 text-white'
-                                : 'bg-white border border-slate-200 text-slate-700'
+                                ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-sm"
+                                : "bg-white border border-slate-200 text-slate-700 rounded-bl-sm"
                             )}
                           >
-                            {/* Sender name for group chats */}
-                            {selectedConversation?.isGroup && !isOwnMessage && (
-                              <p className="text-xs font-medium text-slate-600 mb-1">
-                                {senderName}
-                              </p>
-                            )}
-                            
-                            {/* Message content or edit input */}
-                            {editingMessage?.id === message.id ? (
-                              <div className="space-y-2">
-                                <Input
-                                  value={editText}
-                                  onChange={(e) => setEditText(e.target.value)}
-                                  className="text-sm bg-white"
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      e.preventDefault();
-                                      handleSaveEdit();
-                                    } else if (e.key === 'Escape') {
-                                      setEditingMessage(null);
-                                      setEditText('');
-                                    }
-                                  }}
-                                />
-                                <div className="flex space-x-2">
-                                  <Button size="sm" onClick={handleSaveEdit}>
-                                    Save
-                                  </Button>
-                                  <Button 
-                                    size="sm" 
-                                    variant="outline" 
-                                    onClick={() => {
-                                      setEditingMessage(null);
-                                      setEditText('');
-                                    }}
-                                  >
-                                    Cancel
-                                  </Button>
-                                </div>
-                              </div>
-                            ) : (
-                              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                            )}
-                            
-                            {/* Message actions */}
-                            <div className="absolute -right-16 top-0 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1">
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-6 w-6 p-0 bg-white shadow-sm hover:bg-blue-50"
-                                onClick={() => handleReplyToMessage(message)}
-                                title="Reply to message"
-                              >
-                                <Reply className="h-3 w-3" />
-                              </Button>
-                              {isOwnMessage && editingMessage?.id !== message.id && (
-                                <>
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="h-6 w-6 p-0 bg-white shadow-sm hover:bg-yellow-50"
-                                    onClick={() => handleEditMessage(message)}
-                                    title="Edit message"
-                                  >
-                                    <Edit3 className="h-3 w-3" />
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="h-6 w-6 p-0 bg-white shadow-sm hover:bg-red-50 text-red-500 hover:text-red-700"
-                                    onClick={() => handleDeleteMessage(message.id)}
-                                    title="Delete message"
-                                  >
-                                    <Trash2 className="h-3 w-3" />
-                                  </Button>
-                                </>
+                            {/* Reply button overlay */}
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className={cn(
+                                "absolute -top-2 -right-2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-md",
+                                isOwnMessage 
+                                  ? "bg-blue-100 hover:bg-blue-200 text-blue-700" 
+                                  : "bg-white hover:bg-gray-50 text-gray-600"
                               )}
-                            </div>
+                              onClick={() => setReplyingTo(message)}
+                              title="Reply to this message"
+                            >
+                              <Reply className="h-3 w-3" />
+                            </Button>
                             
-                            <div className="flex items-center justify-between mt-1">
-                              <p className={cn(
-                                'text-xs',
-                                isOwnMessage ? 'text-blue-100' : 'text-slate-500'
+                            {/* Group chat sender name */}
+                            {selectedConversation.isGroup && !isOwnMessage && (
+                              <div className="text-xs font-semibold text-blue-600 mb-1">
+                                {senderName}
+                              </div>
+                            )}
+                            
+                            <p className="text-sm break-words leading-relaxed">
+                              {renderMessageWithLinks(message.content)}
+                            </p>
+                            
+                            <div className="flex items-center justify-between mt-2 gap-2">
+                              <span className={cn(
+                                "text-xs",
+                                isOwnMessage ? "text-blue-100" : "text-slate-500"
                               )}>
                                 {formatTime(message.timestamp)}
-                                {message.edited && (
-                                  <span className="ml-1 italic">(edited)</span>
-                                )}
-                              </p>
+                              </span>
                               {isOwnMessage && (
-                                <div className="ml-2">
-                                  {message.readBy && message.readBy.length > 1 ? (
-                                    <CheckCheck className="h-3 w-3 text-blue-200" />
+                                <div className="text-blue-100">
+                                  {message.isRead ? (
+                                    <CheckCheck className="h-3 w-3" />
                                   ) : (
-                                    <Check className="h-3 w-3 text-blue-200" />
+                                    <Check className="h-3 w-3" />
                                   )}
                                 </div>
                               )}
@@ -514,21 +743,24 @@ export default function ChatEnhanced() {
               <div className="border-t border-slate-200/50 p-4 bg-gradient-to-r from-white/90 to-blue-50/30 backdrop-blur-sm rounded-br-xl">
                 {/* Reply indicator */}
                 {replyingTo && (
-                  <div className="mb-3 p-2 bg-blue-50 rounded-lg border-l-4 border-blue-400">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-medium text-blue-600">
-                          Replying to {replyingTo.senderName === user?.name ? 'yourself' : replyingTo.senderName}
-                        </p>
-                        <p className="text-sm text-slate-500 truncate max-w-md">
+                  <div className="mb-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 rounded-lg shadow-sm">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Reply className="h-3 w-3 text-blue-600" />
+                          <span className="text-xs font-semibold text-blue-700">
+                            Replying to {replyingTo.senderName}
+                          </span>
+                        </div>
+                        <div className="text-sm text-blue-800 bg-white/60 rounded px-2 py-1 line-clamp-2">
                           {replyingTo.content}
-                        </p>
+                        </div>
                       </div>
                       <Button
-                        size="sm"
                         variant="ghost"
+                        size="sm"
                         onClick={() => setReplyingTo(null)}
-                        className="h-6 w-6 p-0"
+                        className="ml-2 h-6 w-6 p-0 hover:bg-blue-100"
                       >
                         <X className="h-3 w-3" />
                       </Button>
@@ -538,42 +770,50 @@ export default function ChatEnhanced() {
                 
                 <div className="flex space-x-2">
                   <Input
-                    id="message-input"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder={replyingTo ? 'Reply to message...' : 'Type a message...'}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
+                      if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
-                        sendMessage();
+                        handleSendMessage();
                       } else if (e.key === 'Escape' && replyingTo) {
                         setReplyingTo(null);
                       }
                     }}
-                    className="flex-1 bg-white border-slate-300 focus:border-blue-400"
+                    className="flex-1 bg-white border-slate-300 focus:border-blue-400 rounded-full px-4"
                   />
                   <Button 
-                    onClick={sendMessage} 
+                    onClick={handleSendMessage} 
                     disabled={!newMessage.trim()}
-                    className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600"
+                    className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 rounded-full h-10 w-10 p-0"
                   >
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>
                 
-                <p className="text-xs text-slate-500 mt-2">
-                  Double-click on any message to reply • Press Escape to cancel reply
-                </p>
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-xs text-slate-500">
+                    Double-click any message to reply • Press Esc to cancel
+                  </span>
+                </div>
               </div>
             </>
           ) : (
             <div className="flex-1 flex items-center justify-center">
-              <div className="text-center space-y-3">
-                <div className="bg-gradient-to-r from-blue-100 to-blue-200 p-4 rounded-full w-fit mx-auto">
-                  <MessageSquare className="h-12 w-12 text-blue-500" />
+              <div className="text-center space-y-4">
+                <div className="bg-gradient-to-r from-blue-100 to-indigo-200 p-6 rounded-full w-fit mx-auto">
+                  <MessageSquare className="h-16 w-16 text-blue-500" />
                 </div>
-                <h3 className="text-lg font-medium text-slate-700">Select a conversation</h3>
+                <h3 className="text-xl font-semibold text-slate-700">Select a conversation</h3>
                 <p className="text-slate-500">Choose a conversation to start messaging</p>
+                <Button 
+                  onClick={() => setIsCreateGroupOpen(true)}
+                  className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
+                >
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Create Group Chat
+                </Button>
               </div>
             </div>
           )}
@@ -582,58 +822,174 @@ export default function ChatEnhanced() {
 
       {/* Create Group Dialog */}
       <Dialog open={isCreateGroupOpen} onOpenChange={setIsCreateGroupOpen}>
-        <DialogContent className="bg-gradient-to-br from-white to-blue-50/30 border border-blue-200/60">
+        <DialogContent className="bg-gradient-to-br from-white to-blue-50/30 border border-blue-200/60 max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-gradient-blue">Create Group Chat</DialogTitle>
+            <DialogTitle className="text-gradient-blue flex items-center gap-2">
+              <Hash className="h-5 w-5" />
+              Create Group Chat
+            </DialogTitle>
             <DialogDescription>
-              Create a new group conversation with multiple members
+              Create a new group conversation with multiple team members
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4">
             <div>
-              <Label htmlFor="groupName">Group Name</Label>
+              <Label htmlFor="groupName" className="text-sm font-medium">Group Name</Label>
               <Input
                 id="groupName"
                 value={groupName}
                 onChange={(e) => setGroupName(e.target.value)}
                 placeholder="Enter group name..."
-                className="bg-white border-blue-200 focus:border-blue-400"
+                className="bg-white border-blue-200 focus:border-blue-400 mt-1"
               />
             </div>
             
             <div>
-              <Label>Select Members</Label>
-              <div className="max-h-48 overflow-y-auto border border-blue-200 rounded-md p-2 space-y-2 bg-white">
-                {users.filter(u => u.id !== user?.id).map((u) => (
-                  <div key={u.id} className="flex items-center space-x-2 p-2 hover:bg-blue-50 rounded">
+              <Label className="text-sm font-medium">Select Members</Label>
+              <div className="max-h-48 overflow-y-auto border border-blue-200 rounded-md p-3 space-y-2 bg-white mt-1">
+                {allUsers.map((u) => (
+                  <div 
+                    key={u.id} 
+                    className="flex items-center space-x-3 p-2 hover:bg-blue-50 rounded-md cursor-pointer transition-colors"
+                    onClick={() => {
+                      if (selectedGroupMembers.includes(u.id)) {
+                        setSelectedGroupMembers(selectedGroupMembers.filter(id => id !== u.id));
+                      } else {
+                        setSelectedGroupMembers([...selectedGroupMembers, u.id]);
+                      }
+                    }}
+                  >
                     <input
                       type="checkbox"
                       checked={selectedGroupMembers.includes(u.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedGroupMembers([...selectedGroupMembers, u.id]);
-                        } else {
-                          setSelectedGroupMembers(selectedGroupMembers.filter(id => id !== u.id));
-                        }
-                      }}
+                      onChange={() => {}}
+                      className="rounded border-gray-300"
                     />
-                    <span className="text-sm">{u.name} ({u.role})</span>
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={u.profilePhoto} />
+                      <AvatarFallback className="text-xs">
+                        {getUserInitials(u.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <div className="text-sm font-medium">{u.name}</div>
+                      <div className="text-xs text-gray-500">{u.role}</div>
+                    </div>
                   </div>
                 ))}
               </div>
+              <p className="text-xs text-gray-500 mt-2">
+                Selected: {selectedGroupMembers.length} members
+              </p>
             </div>
           </div>
           
-          <div className="flex justify-end space-x-2">
-            <Button variant="outline" onClick={() => setIsCreateGroupOpen(false)}>
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setIsCreateGroupOpen(false);
+                setGroupName('');
+                setSelectedGroupMembers([]);
+              }}
+            >
               Cancel
             </Button>
             <Button 
               onClick={handleCreateGroup}
-              className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600"
+              disabled={!groupName.trim() || selectedGroupMembers.length === 0}
+              className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
             >
+              <Hash className="h-4 w-4 mr-2" />
               Create Group
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Manage Group Dialog */}
+      <Dialog open={isManageGroupOpen} onOpenChange={setIsManageGroupOpen}>
+        <DialogContent className="bg-gradient-to-br from-white to-blue-50/30 border border-blue-200/60">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              Manage Group: {selectedConversation?.name}
+            </DialogTitle>
+            <DialogDescription>
+              Add or remove members from this group
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div>
+              <Label className="text-sm font-medium">Current Members</Label>
+              <div className="space-y-2 mt-2">
+                {groupMembers.map((member) => (
+                  <div key={member.id} className="flex items-center justify-between p-2 bg-white rounded-md border">
+                    <div className="flex items-center space-x-3">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={member.profilePhoto} />
+                        <AvatarFallback className="text-xs">
+                          {getUserInitials(member.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <div className="text-sm font-medium">{member.name}</div>
+                        <div className="text-xs text-gray-500">{member.role}</div>
+                      </div>
+                    </div>
+                    {member.id !== user?.id && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleRemoveGroupMember(member.id)}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <UserMinus className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <Label className="text-sm font-medium">Add Members</Label>
+              <div className="max-h-32 overflow-y-auto space-y-2 mt-2">
+                {allUsers
+                  .filter(u => !groupMembers.some(m => m.id === u.id))
+                  .map((u) => (
+                    <div key={u.id} className="flex items-center justify-between p-2 bg-white rounded-md border">
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={u.profilePhoto} />
+                          <AvatarFallback className="text-xs">
+                            {getUserInitials(u.name)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <div className="text-sm font-medium">{u.name}</div>
+                          <div className="text-xs text-gray-500">{u.role}</div>
+                        </div>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleAddGroupMember(u.id)}
+                        className="text-green-600 hover:text-green-700"
+                      >
+                        <UserPlus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setIsManageGroupOpen(false)}>
+              Close
             </Button>
           </div>
         </DialogContent>
