@@ -83,22 +83,7 @@ export default function ChatEnhanced() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const loadPersistedGroups = () => {
-    try {
-      const saved = localStorage.getItem(`chat-groups-${user?.id}`);
-      if (saved) {
-        const persistedGroups = JSON.parse(saved);
-        setConversations(prev => {
-          // Merge persisted groups with existing conversations, avoiding duplicates
-          const existingIds = prev.map(c => c.id);
-          const newGroups = persistedGroups.filter((g: any) => !existingIds.includes(g.id));
-          return [...prev, ...newGroups];
-        });
-      }
-    } catch (error) {
-      console.error('Failed to load persisted groups:', error);
-    }
-  };
+
 
   const saveGroupsToStorage = () => {
     try {
