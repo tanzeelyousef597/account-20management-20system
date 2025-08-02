@@ -56,8 +56,9 @@ export default function ChatEnhanced() {
 
   useEffect(() => {
     if (user) {
-      loadConversations();
-      loadAllUsers();
+      loadAllUsers().then(() => {
+        loadConversations();
+      });
     }
   }, [user]);
 
