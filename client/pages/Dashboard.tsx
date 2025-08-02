@@ -202,8 +202,8 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4 lg:gap-6 animate-in slide-in-from-top duration-500">
-        <div className="relative">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div>
           <h2 className="text-2xl md:text-3xl font-semibold text-slate-700">
             Dashboard
           </h2>
