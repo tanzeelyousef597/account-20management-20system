@@ -1039,7 +1039,7 @@ export default function ChatEnhanced() {
                           
                           <div
                             className={cn(
-                              "rounded-xl px-4 py-2 max-w-full relative shadow-sm transition-all duration-200 group",
+                              "rounded-xl px-3 py-2 sm:px-4 max-w-full relative shadow-sm transition-all duration-200 group",
                               isOwnMessage
                                 ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-sm"
                                 : "bg-white border border-slate-200 text-slate-700 rounded-bl-sm"
