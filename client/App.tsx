@@ -28,7 +28,7 @@ import MyInvoices from "./pages/MyInvoices";
 import MyBonuses from "./pages/MyBonuses";
 import MyFines from "./pages/MyFines";
 import Settings from "./pages/Settings";
-import Chat from "./pages/Chat";
+import ChatEnhanced from "./pages/ChatEnhanced";
 import SuperAdminCompanies from "./pages/SuperAdminCompanies";
 import NotFound from "./pages/NotFound";
 
