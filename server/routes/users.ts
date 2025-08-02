@@ -126,37 +126,108 @@ export const handleUploadProfilePhoto: RequestHandler = (req, res) => {
   res.json({ url: mockUrl });
 };
 
+// In-memory file storage for demo purposes (in production, use proper file storage)
+const fileStorage = new Map<string, { name: string; data: Buffer; mimeType: string; uploadedAt: Date }>();
+
 export const handleUploadWorkOrderFile: RequestHandler = (req, res) => {
-  // Mock file upload for work orders - In production, use proper file upload service
-  // Return a local downloadable URL that bypasses CORS
-  const fileName = `sample-document-${Date.now()}.pdf`;
-  const fileId = Date.now().toString();
-  const localUrl = `/api/download/${fileId}?filename=${encodeURIComponent(fileName)}`;
-  res.json({ url: localUrl });
+  try {
+    // In a real implementation, you would handle multipart/form-data here
+    // For demo, we'll create a proper file entry
+    const fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const fileName = req.body?.fileName || `document-${Date.now()}.pdf`;
+
+    // Create a sample PDF content (in real implementation, this would be the uploaded file)
+    const samplePdfContent = Buffer.from(`%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 44
+>>
+stream
+BT
+/F1 12 Tf
+100 700 Td
+(Sample Document) Tj
+ET
+endstream
+endobj
+xref
+0 5
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000115 00000 n
+0000000204 00000 n
+trailer
+<<
+/Size 5
+/Root 1 0 R
+>>
+startxref
+296
+%%EOF`);
+
+    // Store file in memory
+    fileStorage.set(fileId, {
+      name: fileName,
+      data: samplePdfContent,
+      mimeType: 'application/pdf',
+      uploadedAt: new Date()
+    });
+
+    const downloadUrl = `/api/download/${fileId}`;
+    res.json({
+      url: downloadUrl,
+      fileId: fileId,
+      fileName: fileName
+    });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ error: 'Upload failed' });
+  }
 };
 
 export const handleDownloadFile: RequestHandler = async (req, res) => {
   const { fileId } = req.params;
-  const { filename } = req.query;
 
   try {
-    // For demo purposes, we'll fetch the dummy PDF and serve it with proper headers
-    const response = await fetch('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+    // Get file from storage
+    const fileData = fileStorage.get(fileId);
 
-    if (!response.ok) {
+    if (!fileData) {
       return res.status(404).json({ error: 'File not found' });
     }
 
-    const buffer = await response.arrayBuffer();
-    const finalFilename = filename || `document-${fileId}.pdf`;
-
     // Set proper headers for file download
-    res.setHeader('Content-Type', 'application/octet-stream');
-    res.setHeader('Content-Disposition', `attachment; filename="${finalFilename}"`);
-    res.setHeader('Content-Length', buffer.byteLength);
-    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Content-Type', fileData.mimeType);
+    res.setHeader('Content-Disposition', `attachment; filename="${fileData.name}"`);
+    res.setHeader('Content-Length', fileData.data.length.toString());
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
 
-    res.send(Buffer.from(buffer));
+    // Send the file data
+    res.send(fileData.data);
   } catch (error) {
     console.error('Download error:', error);
     res.status(500).json({ error: 'Download failed' });
