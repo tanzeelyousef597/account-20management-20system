@@ -217,8 +217,8 @@ export default function MyOrders() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">My Orders</h2>
-          <p className="text-gray-600 mt-1">View assigned orders and submit new work</p>
+          <h2 className="text-2xl md:text-3xl font-semibold text-slate-700">My Orders</h2>
+          <p className="text-slate-500 mt-1 text-sm md:text-base">View assigned orders and submit new work</p>
         </div>
         
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
