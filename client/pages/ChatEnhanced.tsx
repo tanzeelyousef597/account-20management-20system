@@ -544,11 +544,21 @@ export default function ChatEnhanced() {
       };
 
       // Update conversations list
-      setConversations(prev =>
-        prev.map(conv =>
+      setConversations(prev => {
+        const newConversations = prev.map(conv =>
           conv.id === selectedConversation.id ? updatedConversation : conv
-        )
-      );
+        );
+        // Save groups to localStorage
+        setTimeout(() => {
+          try {
+            const groups = newConversations.filter(c => c.isGroup);
+            localStorage.setItem(`chat-groups-${user.id}`, JSON.stringify(groups));
+          } catch (error) {
+            console.error('Failed to save updated group:', error);
+          }
+        }, 0);
+        return newConversations;
+      });
 
       // Update selected conversation
       setSelectedConversation(updatedConversation);
@@ -583,11 +593,21 @@ export default function ChatEnhanced() {
       };
 
       // Update conversations list
-      setConversations(prev =>
-        prev.map(conv =>
+      setConversations(prev => {
+        const newConversations = prev.map(conv =>
           conv.id === selectedConversation.id ? updatedConversation : conv
-        )
-      );
+        );
+        // Save groups to localStorage
+        setTimeout(() => {
+          try {
+            const groups = newConversations.filter(c => c.isGroup);
+            localStorage.setItem(`chat-groups-${user.id}`, JSON.stringify(groups));
+          } catch (error) {
+            console.error('Failed to save updated group:', error);
+          }
+        }, 0);
+        return newConversations;
+      });
 
       // Update selected conversation
       setSelectedConversation(updatedConversation);
