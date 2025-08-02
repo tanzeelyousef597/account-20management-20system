@@ -59,8 +59,6 @@ export default function ChatEnhanced() {
       loadAllUsers().then((users) => {
         loadConversations(users);
       });
-      // Load persisted groups from localStorage
-      loadPersistedGroups();
     }
   }, [user]);
 
