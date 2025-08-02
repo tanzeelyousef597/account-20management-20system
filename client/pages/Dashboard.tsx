@@ -103,11 +103,11 @@ export default function Dashboard() {
 
     if (categories.every(cat => cat.value === 0)) {
       return (
-        <div className="h-80 flex items-center justify-center bg-white rounded-lg border border-gray-200">
-          <div className="text-center space-y-2">
-            <BarChart3 className="h-12 w-12 text-gray-400 mx-auto" />
-            <p className="text-gray-500 font-medium">No data available</p>
-            <p className="text-sm text-gray-400">
+        <div className="h-80 flex items-center justify-center bg-slate-50 rounded-xl border border-slate-200">
+          <div className="text-center space-y-3">
+            <BarChart3 className="h-12 w-12 text-slate-400 mx-auto" />
+            <p className="text-slate-600 font-medium">No data available</p>
+            <p className="text-sm text-slate-400">
               {user?.role === 'Admin'
                 ? 'Data will appear when workers submit orders'
                 : 'Submit work orders to see your progress'
