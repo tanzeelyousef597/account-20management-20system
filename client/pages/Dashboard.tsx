@@ -66,10 +66,13 @@ export default function Dashboard() {
     index?: number
   }) => (
     <div
-      className={`${bgColor} rounded-xl p-4 md:p-5 text-white shadow-md hover:shadow-lg transition-all duration-200 relative overflow-hidden group`}
+      className={`${bgColor} rounded-xl p-4 md:p-5 text-white shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group transform hover:scale-105 animate-scale-in`}
+      style={{ animationDelay: `${index * 100}ms` }}
     >
-      {/* Subtle background animation */}
-      <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      {/* Enhanced background animations */}
+      <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
+      <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
 
       <div className="flex items-center justify-between relative z-10">
         <div className="space-y-2 min-w-0 flex-1 mr-3">
@@ -119,9 +122,10 @@ export default function Dashboard() {
     }
 
     return (
-      <div className="bg-white rounded-xl border border-slate-200 p-6">
+      <div className="bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 rounded-xl border border-slate-200/60 p-6 shadow-lg backdrop-blur-sm animate-fade-in">
         {/* Chart Container */}
-        <div className="relative h-80">
+        <div className="relative h-80 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-50/20 via-transparent to-indigo-50/20 rounded-lg opacity-50"></div>
           {/* Y-Axis */}
           <div className="absolute left-0 top-0 bottom-0 w-10 flex flex-col justify-between text-xs text-slate-500 pr-2">
             {Array.from({ length: yAxisSteps + 1 }, (_, i) => (
@@ -160,15 +164,18 @@ export default function Dashboard() {
 
                     {/* Bar */}
                     <div
-                      className="w-12 rounded-t-lg transition-all duration-300 hover:opacity-80 relative group"
+                      className="w-12 rounded-t-lg transition-all duration-500 hover:opacity-90 relative group transform hover:scale-105 animate-slide-up shadow-lg"
                       style={{
-                        backgroundColor: category.color,
+                        background: `linear-gradient(45deg, ${category.color}, ${category.color}dd)`,
                         height: `${minHeight}%`,
-                        minHeight: value > 0 ? '8px' : '0px'
+                        minHeight: value > 0 ? '8px' : '0px',
+                        animationDelay: `${index * 100}ms`
                       }}
                     >
-                      {/* Hover effect */}
+                      {/* Enhanced hover effects */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-white/30 opacity-0 group-hover:opacity-100 rounded-t-lg transition-all duration-300"></div>
                       <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 rounded-t-lg transition-opacity duration-200"></div>
+                      <div className="absolute -top-px left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
 
                     {/* Category label */}
@@ -264,10 +271,10 @@ export default function Dashboard() {
         </div>
 
         {/* Chart Section */}
-        <Card className="shadow-sm border border-slate-200 bg-white">
-          <CardHeader className="pb-4 px-6 border-b border-slate-100">
+        <Card className="shadow-lg border border-slate-200/60 bg-gradient-to-br from-white via-slate-50/30 to-blue-50/30 backdrop-blur-sm animate-scale-in">
+          <CardHeader className="pb-4 px-6 border-b border-slate-100/50 bg-gradient-to-r from-slate-50/30 to-blue-50/30">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <CardTitle className="text-lg font-semibold text-slate-700">
+              <CardTitle className="text-lg font-semibold bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text text-transparent">
                 Work Categories / Submissions by Time
               </CardTitle>
               <Select value={selectedFilter} onValueChange={setSelectedFilter}>
