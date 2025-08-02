@@ -253,8 +253,8 @@ export default function Dashboard() {
       </div>
 
       {/* Analytics Section */}
-      <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-in fade-in duration-1000" style={{ animationDelay: '800ms' }}>
-        <div className="text-center space-y-2 sm:space-y-3">
+      <div className="space-y-6">
+        <div className="text-center space-y-2">
           <h3 className="text-xl md:text-2xl font-semibold text-slate-700">
             Work Categories / Submissions by Time
           </h3>
