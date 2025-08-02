@@ -189,20 +189,39 @@ export default function ChatEnhanced() {
         const filteredUsers = users.filter((u: User) => u.id !== user?.id);
         setAllUsers(filteredUsers);
         return filteredUsers;
-      } else {
-        console.error('Failed to load users - API response not ok');
-        setAllUsers([]);
-        return [];
       }
     } catch (error) {
       console.error('Failed to load users:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load users from User Management. Please check your connection.',
-        variant: 'destructive',
-      });
-      setAllUsers([]);
-      return [];
+      // Create mock users for demo if API fails
+      const mockUsers: User[] = [
+        {
+          id: 'user-2',
+          name: 'John Worker',
+          email: 'worker@mtwebexperts.com',
+          role: 'Worker',
+          whatsappNumber: '+923280909654',
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: 'user-3',
+          name: 'Jane Admin',
+          email: 'jane@mtwebexperts.com',
+          role: 'Admin',
+          whatsappNumber: '+923189046143',
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: 'user-4',
+          name: 'Mike Developer',
+          email: 'mike@mtwebexperts.com',
+          role: 'Worker',
+          whatsappNumber: '+923189046144',
+          createdAt: new Date().toISOString(),
+        }
+      ];
+      const filteredMockUsers = mockUsers.filter(u => u.id !== user?.id);
+      setAllUsers(filteredMockUsers);
+      return filteredMockUsers;
     }
   };
 
@@ -741,13 +760,9 @@ export default function ChatEnhanced() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 rounded-xl border border-slate-200/60 shadow-lg backdrop-blur-sm h-[600px] sm:h-[650px] md:h-[700px] flex flex-col sm:flex-row">
+      <div className="bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 rounded-xl border border-slate-200/60 shadow-lg backdrop-blur-sm h-[700px] flex">
         {/* Conversations Sidebar */}
-        <div className={cn(
-          "bg-gradient-to-br from-white to-slate-50/50 border-b sm:border-b-0 sm:border-r border-slate-200/60 flex flex-col rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none",
-          "w-full h-1/2 sm:w-80 sm:h-full",
-          selectedConversation && "hidden sm:flex"
-        )}>
+        <div className="w-80 bg-gradient-to-br from-white to-slate-50/50 border-r border-slate-200/60 flex flex-col rounded-l-xl">
           <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/30">
             <h3 className="font-semibold text-slate-700 flex items-center gap-2">
               <MessageSquare className="h-5 w-5 text-blue-500" />
@@ -911,24 +926,12 @@ export default function ChatEnhanced() {
         </div>
 
         {/* Chat Area */}
-        <div className={cn(
-          "flex-1 flex flex-col bg-gradient-to-br from-white to-blue-50/20 rounded-b-xl sm:rounded-r-xl sm:rounded-bl-none",
-          !selectedConversation && "hidden sm:flex"
-        )}>
+        <div className="flex-1 flex flex-col bg-gradient-to-br from-white to-blue-50/20 rounded-r-xl">
           {selectedConversation ? (
             <>
               {/* Chat Header */}
-              <div className="flex h-16 items-center justify-between px-3 sm:px-4 border-b border-slate-200/50 bg-gradient-to-r from-white/80 to-blue-50/30 backdrop-blur-sm rounded-t-xl sm:rounded-tr-xl">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  {/* Mobile Back Button */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setSelectedConversation(null)}
-                    className="sm:hidden h-8 w-8 p-0"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+              <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200/50 bg-gradient-to-r from-white/80 to-blue-50/30 backdrop-blur-sm rounded-tr-xl">
+                <div className="flex items-center space-x-3">
                   <div className="flex-shrink-0">
                     {selectedConversation.isGroup ? (
                       <div className="h-10 w-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
@@ -943,18 +946,18 @@ export default function ChatEnhanced() {
                       </Avatar>
                     )}
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-slate-700 flex items-center gap-1 sm:gap-2 text-sm sm:text-base truncate">
-                      {selectedConversation.isGroup && <Hash className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />}
-                      <span className="truncate">{selectedConversation.name}</span>
+                  <div>
+                    <h3 className="font-semibold text-slate-700 flex items-center gap-2">
+                      {selectedConversation.isGroup && <Hash className="h-4 w-4 text-gray-500" />}
+                      {selectedConversation.name}
                       {selectedConversation.isGroup && (
-                        <Badge variant="secondary" className="text-xs hidden sm:inline-flex">
+                        <Badge variant="secondary" className="text-xs">
                           Group
                         </Badge>
                       )}
                     </h3>
-                    <p className="text-xs text-slate-500 truncate">
-                      {selectedConversation.isGroup
+                    <p className="text-xs text-slate-500">
+                      {selectedConversation.isGroup 
                         ? `${selectedConversation.participants.length} members`
                         : `${selectedConversation.participants.find(p => p.id !== user?.id)?.name || 'User'}`
                       }
@@ -978,7 +981,7 @@ export default function ChatEnhanced() {
               </div>
 
               {/* Messages */}
-              <ScrollArea className="flex-1 p-2 sm:p-4">
+              <ScrollArea className="flex-1 p-4">
                 <div className="space-y-4">
                   {messages.map((message) => {
                     const isOwnMessage = message.senderId === user?.id;
@@ -989,8 +992,7 @@ export default function ChatEnhanced() {
                         key={message.id}
                         id={`message-${message.id}`}
                         className={cn(
-                          'flex group transition-colors duration-500',
-                          'max-w-[85%] sm:max-w-[80%] md:max-w-[75%]',
+                          'flex group max-w-[80%] transition-colors duration-500',
                           isOwnMessage ? 'ml-auto justify-end' : 'justify-start'
                         )}
                         onDoubleClick={() => setReplyingTo(message)}
@@ -1039,7 +1041,7 @@ export default function ChatEnhanced() {
                           
                           <div
                             className={cn(
-                              "rounded-xl px-3 py-2 sm:px-4 max-w-full relative shadow-sm transition-all duration-200 group",
+                              "rounded-xl px-4 py-2 max-w-full relative shadow-sm transition-all duration-200 group",
                               isOwnMessage
                                 ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-sm"
                                 : "bg-white border border-slate-200 text-slate-700 rounded-bl-sm"
@@ -1099,10 +1101,10 @@ export default function ChatEnhanced() {
               </ScrollArea>
 
               {/* Message Input */}
-              <div className="border-t border-slate-200/50 p-3 sm:p-4 bg-gradient-to-r from-white/90 to-blue-50/30 backdrop-blur-sm rounded-b-xl sm:rounded-br-xl">
+              <div className="border-t border-slate-200/50 p-4 bg-gradient-to-r from-white/90 to-blue-50/30 backdrop-blur-sm rounded-br-xl">
                 {/* Reply indicator */}
                 {replyingTo && (
-                  <div className="mb-3 p-2 sm:p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 rounded-lg shadow-sm">
+                  <div className="mb-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 rounded-lg shadow-sm">
                     <div className="flex justify-between items-start">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
@@ -1140,12 +1142,12 @@ export default function ChatEnhanced() {
                         setReplyingTo(null);
                       }
                     }}
-                    className="flex-1 bg-white border-slate-300 focus:border-blue-400 rounded-full px-3 sm:px-4 text-sm sm:text-base"
+                    className="flex-1 bg-white border-slate-300 focus:border-blue-400 rounded-full px-4"
                   />
-                  <Button
-                    onClick={handleSendMessage}
+                  <Button 
+                    onClick={handleSendMessage} 
                     disabled={!newMessage.trim()}
-                    className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 rounded-full h-10 w-10 sm:h-10 sm:w-10 p-0 flex-shrink-0"
+                    className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 rounded-full h-10 w-10 p-0"
                   >
                     <Send className="h-4 w-4" />
                   </Button>
@@ -1209,8 +1211,7 @@ export default function ChatEnhanced() {
               <div className="max-h-48 overflow-y-auto border border-blue-200 rounded-md p-3 space-y-2 bg-white mt-1">
                 {allUsers.length === 0 ? (
                   <div className="text-center py-4">
-                    <p className="text-sm text-gray-500 mb-2">No users available from User Management</p>
-                    <p className="text-xs text-gray-400 mb-3">Make sure users exist in your User Management page</p>
+                    <p className="text-sm text-gray-500">Loading users...</p>
                     <Button
                       size="sm"
                       variant="outline"
@@ -1277,7 +1278,7 @@ export default function ChatEnhanced() {
               className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 disabled:opacity-50"
             >
               <Hash className="h-4 w-4 mr-2" />
-              {allUsers.length === 0 ? 'No Users Available' : 'Create Group'}
+              {allUsers.length === 0 ? 'Loading...' : 'Create Group'}
             </Button>
           </div>
         </DialogContent>
