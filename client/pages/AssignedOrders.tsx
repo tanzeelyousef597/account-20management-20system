@@ -55,6 +55,9 @@ export default function AssignedOrders() {
   });
   const [attachmentFiles, setAttachmentFiles] = useState<File[]>([]);
   const [isAssignPopoverOpen, setIsAssignPopoverOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<string>('');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Pagination state
@@ -162,15 +165,36 @@ export default function AssignedOrders() {
 
   const handleCreateOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Prevent multiple submissions
+    if (isCreating) {
+      return;
+    }
+
+    setIsCreating(true);
+    setUploadProgress('');
+
     try {
       let attachmentUrls: string[] = [];
       let attachmentNames: string[] = [];
 
       // Upload files if provided
       if (attachmentFiles.length > 0) {
-        for (const file of attachmentFiles) {
+        setIsUploading(true);
+        setUploadProgress(`Uploading ${attachmentFiles.length} file(s)...`);
+
+        for (let i = 0; i < attachmentFiles.length; i++) {
+          const file = attachmentFiles[i];
+          setUploadProgress(`Uploading file ${i + 1} of ${attachmentFiles.length}: ${file.name}`);
+
+          // For large files (like ZIP), show progress
+          if (file.size > 10 * 1024 * 1024) { // > 10MB
+            setUploadProgress(`Uploading large file: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)}MB)`);
+          }
+
           const fileFormData = new FormData();
           fileFormData.append('file', file);
+          fileFormData.append('fileName', file.name);
 
           const uploadResponse = await fetch('/api/upload/work-order-file', {
             method: 'POST',
@@ -181,8 +205,11 @@ export default function AssignedOrders() {
             const uploadData = await uploadResponse.json();
             attachmentUrls.push(uploadData.url);
             attachmentNames.push(file.name);
+          } else {
+            throw new Error(`Failed to upload file: ${file.name}`);
           }
         }
+        setIsUploading(false);
       }
 
       // If no workers assigned, create one unassigned order
@@ -222,11 +249,19 @@ export default function AssignedOrders() {
         }
       }
 
+      setUploadProgress('Creating work orders...');
+
       fetchWorkOrders();
       setIsCreateDialogOpen(false);
       resetForm();
+      setUploadProgress('Work orders created successfully!');
     } catch (error) {
       console.error('Error creating work order:', error);
+      setUploadProgress('Error creating work order. Please try again.');
+    } finally {
+      setIsCreating(false);
+      setIsUploading(false);
+      setTimeout(() => setUploadProgress(''), 3000);
     }
   };
 
@@ -296,6 +331,9 @@ export default function AssignedOrders() {
     });
     setAttachmentFiles([]);
     setIsAssignPopoverOpen(false);
+    setIsCreating(false);
+    setIsUploading(false);
+    setUploadProgress('');
   };
 
   const openEditDialog = (order: WorkOrder) => {
@@ -874,12 +912,40 @@ export default function AssignedOrders() {
                 )}
               </div>
               
+              {/* Upload Progress */}
+              {(isUploading || uploadProgress) && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <div className="flex items-center gap-2">
+                    {isUploading && (
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                    )}
+                    <span className="text-sm text-blue-700 font-medium">{uploadProgress}</span>
+                  </div>
+                </div>
+              )}
+
               <div className="flex justify-end space-x-3">
-                <Button type="button" variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsCreateDialogOpen(false)}
+                  disabled={isCreating || isUploading}
+                >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={formData.assignedTo.length === 0}>
-                  Create Order
+                <Button
+                  type="submit"
+                  disabled={formData.assignedTo.length === 0 || isCreating || isUploading}
+                  className="relative"
+                >
+                  {isCreating ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Creating...
+                    </>
+                  ) : (
+                    'Create Order'
+                  )}
                 </Button>
               </div>
             </form>
