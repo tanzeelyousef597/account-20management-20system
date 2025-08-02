@@ -65,7 +65,10 @@ export default function ChatEnhanced() {
   // Save groups to localStorage whenever conversations change
   useEffect(() => {
     if (user && conversations.length > 0) {
-      saveGroupsToStorage();
+      const groups = conversations.filter(c => c.isGroup);
+      if (groups.length > 0) {
+        saveGroupsToStorage();
+      }
     }
   }, [conversations, user]);
 
