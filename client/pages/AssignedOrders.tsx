@@ -880,38 +880,38 @@ export default function AssignedOrders() {
       </Card>
 
       {/* Tabbed Interface */}
-      <Tabs defaultValue="work" className="space-y-8 animate-in slide-in-from-bottom duration-700" style={{ animationDelay: '700ms' }}>
-        <TabsList className="grid w-full grid-cols-3 bg-slate-100/80 backdrop-blur-xl border border-slate-200/50 p-1 rounded-2xl shadow-lg">
+      <Tabs defaultValue="work" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-3 bg-slate-100 p-1 rounded-lg">
           <TabsTrigger
             value="work"
-            className="flex items-center gap-2 rounded-xl transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-white/60"
+            className="flex items-center gap-2 rounded-md transition-all duration-200 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=active]:shadow-sm"
           >
             <PlayCircle className="h-4 w-4" />
             <span className="hidden sm:inline">Orders in Work</span>
             <span className="sm:hidden">Work</span>
-            <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-semibold">
+            <span className="bg-blue-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium">
               {ordersInWork.length}
             </span>
           </TabsTrigger>
           <TabsTrigger
             value="stopped"
-            className="flex items-center gap-2 rounded-xl transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-500 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-white/60"
+            className="flex items-center gap-2 rounded-md transition-all duration-200 data-[state=active]:bg-amber-500 data-[state=active]:text-white data-[state=active]:shadow-sm"
           >
             <StopCircle className="h-4 w-4" />
             <span className="hidden sm:inline">Stopped Orders</span>
             <span className="sm:hidden">Stopped</span>
-            <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-semibold">
+            <span className="bg-amber-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium">
               {stoppedOrders.length}
             </span>
           </TabsTrigger>
           <TabsTrigger
             value="done"
-            className="flex items-center gap-2 rounded-xl transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-white/60"
+            className="flex items-center gap-2 rounded-md transition-all duration-200 data-[state=active]:bg-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-sm"
           >
             <CheckCheck className="h-4 w-4" />
             <span className="hidden sm:inline">Done Orders</span>
             <span className="sm:hidden">Done</span>
-            <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-semibold">
+            <span className="bg-emerald-100 data-[state=active]:bg-white/20 px-2 py-0.5 rounded-full text-xs font-medium">
               {doneOrders.length}
             </span>
           </TabsTrigger>
