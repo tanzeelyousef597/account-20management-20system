@@ -685,10 +685,16 @@ export default function ChatEnhanced() {
               Conversations
             </h3>
             <div className="flex space-x-1">
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 variant="ghost"
-                onClick={() => setIsCreateGroupOpen(true)} 
+                onClick={() => {
+                  setIsCreateGroupOpen(true);
+                  // Refresh users when opening dialog
+                  if (allUsers.length === 0) {
+                    loadAllUsers();
+                  }
+                }}
                 title="Create group"
                 className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 h-8 w-8 p-0"
               >
