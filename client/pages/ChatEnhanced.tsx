@@ -1099,39 +1099,54 @@ export default function ChatEnhanced() {
             <div>
               <Label className="text-sm font-medium">Select Members</Label>
               <div className="max-h-48 overflow-y-auto border border-blue-200 rounded-md p-3 space-y-2 bg-white mt-1">
-                {allUsers.map((u) => (
-                  <div 
-                    key={u.id} 
-                    className="flex items-center space-x-3 p-2 hover:bg-blue-50 rounded-md cursor-pointer transition-colors"
-                    onClick={() => {
-                      if (selectedGroupMembers.includes(u.id)) {
-                        setSelectedGroupMembers(selectedGroupMembers.filter(id => id !== u.id));
-                      } else {
-                        setSelectedGroupMembers([...selectedGroupMembers, u.id]);
-                      }
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedGroupMembers.includes(u.id)}
-                      onChange={() => {}}
-                      className="rounded border-gray-300"
-                    />
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={u.profilePhoto} />
-                      <AvatarFallback className="text-xs">
-                        {getUserInitials(u.name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
-                      <div className="text-sm font-medium">{u.name}</div>
-                      <div className="text-xs text-gray-500">{u.role}</div>
-                    </div>
+                {allUsers.length === 0 ? (
+                  <div className="text-center py-4">
+                    <p className="text-sm text-gray-500">Loading users...</p>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={loadAllUsers}
+                      className="mt-2"
+                    >
+                      Refresh Users
+                    </Button>
                   </div>
-                ))}
+                ) : (
+                  allUsers.map((u) => (
+                    <div
+                      key={u.id}
+                      className="flex items-center space-x-3 p-2 hover:bg-blue-50 rounded-md cursor-pointer transition-colors"
+                      onClick={() => {
+                        if (selectedGroupMembers.includes(u.id)) {
+                          setSelectedGroupMembers(selectedGroupMembers.filter(id => id !== u.id));
+                        } else {
+                          setSelectedGroupMembers([...selectedGroupMembers, u.id]);
+                        }
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedGroupMembers.includes(u.id)}
+                        onChange={() => {}}
+                        className="rounded border-gray-300"
+                      />
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={u.profilePhoto} />
+                        <AvatarFallback className="text-xs">
+                          {getUserInitials(u.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="text-sm font-medium">{u.name}</div>
+                        <div className="text-xs text-gray-500">{u.role}</div>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
               <p className="text-xs text-gray-500 mt-2">
                 Selected: {selectedGroupMembers.length} members
+                {allUsers.length > 0 && ` (${allUsers.length} available)`}
               </p>
             </div>
           </div>
