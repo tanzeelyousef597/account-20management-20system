@@ -126,7 +126,7 @@ const App = () => (
               <Route path="/chat" element={
                 <ProtectedRoute>
                   <Layout>
-                    <Chat />
+                    <ChatEnhanced />
                   </Layout>
                 </ProtectedRoute>
               } />
