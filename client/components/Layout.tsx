@@ -140,10 +140,10 @@ export default function Layout({ children }: LayoutProps) {
                   onClick={() => setIsMobileMenuOpen(false)}
                   style={{ animationDelay: `${index * 100}ms` }}
                   className={cn(
-                    'flex items-center px-2 sm:px-3 md:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 relative group animate-in slide-in-from-left transform hover:scale-105',
+                    'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 relative group',
                     isActive
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
-                      : 'text-gray-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-gray-900 hover:shadow-md'
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   )}
                 >
                   {/* Active indicator */}
