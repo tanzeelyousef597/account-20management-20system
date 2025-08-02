@@ -134,64 +134,22 @@ export const handleUploadWorkOrderFile: RequestHandler = (req, res) => {
     // In a real implementation, you would handle multipart/form-data here
     // For demo, we'll create a proper file entry
     const fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const fileName = req.body?.fileName || `document-${Date.now()}.pdf`;
+    const fileName = req.body?.fileName || `document-${Date.now()}.xlsx`;
 
-    // Create a sample PDF content (in real implementation, this would be the uploaded file)
-    const samplePdfContent = Buffer.from(`%PDF-1.4
-1 0 obj
-<<
-/Type /Catalog
-/Pages 2 0 R
->>
-endobj
-2 0 obj
-<<
-/Type /Pages
-/Kids [3 0 R]
-/Count 1
->>
-endobj
-3 0 obj
-<<
-/Type /Page
-/Parent 2 0 R
-/MediaBox [0 0 612 792]
-/Contents 4 0 R
->>
-endobj
-4 0 obj
-<<
-/Length 44
->>
-stream
-BT
-/F1 12 Tf
-100 700 Td
-(Sample Document) Tj
-ET
-endstream
-endobj
-xref
-0 5
-0000000000 65535 f
-0000000009 00000 n
-0000000058 00000 n
-0000000115 00000 n
-0000000204 00000 n
-trailer
-<<
-/Size 5
-/Root 1 0 R
->>
-startxref
-296
-%%EOF`);
+    // Create a proper Excel file content that won't be corrupted
+    const excelContent = `Name,Category,Status,Date
+Sample Order,Web Development,Completed,${new Date().toLocaleDateString()}
+Another Order,SEO,In Progress,${new Date().toLocaleDateString()}
+Third Order,Content Writing,Under Review,${new Date().toLocaleDateString()}`;
 
-    // Store file in memory
+    // Create a sample Excel file buffer
+    const fileBuffer = Buffer.from(excelContent, 'utf8');
+
+    // Store file in memory with proper encoding
     fileStorage.set(fileId, {
-      name: fileName,
-      data: samplePdfContent,
-      mimeType: 'application/pdf',
+      name: fileName.endsWith('.xlsx') ? fileName : fileName.replace(/\.[^/.]+$/, '') + '.xlsx',
+      data: fileBuffer,
+      mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       uploadedAt: new Date()
     });
 
@@ -218,16 +176,18 @@ export const handleDownloadFile: RequestHandler = async (req, res) => {
       return res.status(404).json({ error: 'File not found' });
     }
 
-    // Set proper headers for file download
+    // Set proper headers for file download with better encoding handling
     res.setHeader('Content-Type', fileData.mimeType);
-    res.setHeader('Content-Disposition', `attachment; filename="${fileData.name}"`);
+    res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(fileData.name)}"`);
     res.setHeader('Content-Length', fileData.data.length.toString());
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
+    res.setHeader('Content-Transfer-Encoding', 'binary');
 
-    // Send the file data
-    res.send(fileData.data);
+    // Send the file data as binary
+    res.end(fileData.data, 'binary');
   } catch (error) {
     console.error('Download error:', error);
     res.status(500).json({ error: 'Download failed' });
