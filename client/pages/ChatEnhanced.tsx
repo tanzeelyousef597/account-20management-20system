@@ -165,10 +165,14 @@ export default function ChatEnhanced() {
       const response = await api.get('/users');
       if (response.ok) {
         const users = await response.json();
-        setAllUsers(users.filter((u: User) => u.id !== user?.id));
+        const filteredUsers = users.filter((u: User) => u.id !== user?.id);
+        setAllUsers(filteredUsers);
+        return filteredUsers;
       }
     } catch (error) {
       console.error('Failed to load users:', error);
+      // Return empty array on error
+      return [];
     }
   };
 
