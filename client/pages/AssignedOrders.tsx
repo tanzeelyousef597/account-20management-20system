@@ -473,31 +473,28 @@ export default function AssignedOrders() {
           </TableHeader>
           <TableBody>
             {paginatedOrders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell className="min-w-64">
+              <TableRow key={order.id} className="border-slate-100 hover:bg-slate-50">
+                <TableCell className="min-w-48">
                   <div className="space-y-1">
-                    <p className="font-medium truncate" title={order.title}>{order.title}</p>
-                    <p className="text-sm text-gray-500 truncate" title={order.description}>{order.description}</p>
+                    <p className="font-medium text-slate-700 truncate" title={order.title}>{order.title}</p>
+                    <p className="text-sm text-slate-500 truncate" title={order.description}>{order.description}</p>
                   </div>
                 </TableCell>
-                <TableCell>
-                  <Badge variant="outline" className="whitespace-nowrap">{order.category}</Badge>
+                <TableCell className="hidden lg:table-cell">
+                  <Badge variant="outline" className="text-slate-600 border-slate-300">{order.category}</Badge>
                 </TableCell>
                 <TableCell>
                   {order.assignedToName ? (
-                    <div className="flex items-center gap-2 whitespace-nowrap">
-                      <User className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                      <span className="truncate max-w-24" title={order.assignedToName}>{order.assignedToName}</span>
+                    <div className="flex items-center gap-2">
+                      <User className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                      <span className="truncate text-slate-700" title={order.assignedToName}>{order.assignedToName}</span>
                     </div>
                   ) : (
-                    <span className="text-gray-400 text-sm whitespace-nowrap">Unassigned</span>
+                    <span className="text-slate-400 text-sm">Unassigned</span>
                   )}
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-2 whitespace-nowrap">
-                    {getStatusIcon(order.status)}
-                    {getStatusBadge(order.status)}
-                  </div>
+                  {getStatusBadge(order.status)}
                 </TableCell>
                 <TableCell>
                   {(order.attachmentUrls && order.attachmentUrls.length > 0) || order.attachmentUrl ? (
