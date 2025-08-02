@@ -918,8 +918,17 @@ export default function ChatEnhanced() {
           {selectedConversation ? (
             <>
               {/* Chat Header */}
-              <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200/50 bg-gradient-to-r from-white/80 to-blue-50/30 backdrop-blur-sm rounded-tr-xl">
-                <div className="flex items-center space-x-3">
+              <div className="flex h-16 items-center justify-between px-3 sm:px-4 border-b border-slate-200/50 bg-gradient-to-r from-white/80 to-blue-50/30 backdrop-blur-sm rounded-t-xl sm:rounded-tr-xl">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  {/* Mobile Back Button */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedConversation(null)}
+                    className="sm:hidden h-8 w-8 p-0"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
                   <div className="flex-shrink-0">
                     {selectedConversation.isGroup ? (
                       <div className="h-10 w-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
