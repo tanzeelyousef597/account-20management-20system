@@ -44,8 +44,8 @@ export default function MyBonuses() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-gray-900">My Bonuses</h2>
-        <p className="text-gray-600 mt-1">View your performance bonuses and rewards</p>
+        <h2 className="text-2xl md:text-3xl font-semibold text-slate-700">My Bonuses</h2>
+        <p className="text-slate-500 mt-1 text-sm md:text-base">View your performance bonuses and rewards</p>
       </div>
 
       {/* Summary Cards */}
