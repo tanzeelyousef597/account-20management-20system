@@ -119,68 +119,61 @@ export default function Dashboard() {
     }
 
     return (
-      <div className="relative bg-white border border-gray-200 rounded-lg p-6">
+      <div className="bg-white rounded-xl border border-slate-200 p-6">
         {/* Chart Container */}
-        <div className="relative h-80 flex">
+        <div className="relative h-80">
           {/* Y-Axis */}
-          <div className="w-12 flex flex-col justify-between text-xs text-gray-600 pr-2">
+          <div className="absolute left-0 top-0 bottom-0 w-10 flex flex-col justify-between text-xs text-slate-500 pr-2">
             {Array.from({ length: yAxisSteps + 1 }, (_, i) => (
-              <div key={i} className="text-right">
+              <div key={i} className="text-right leading-none">
                 {Math.round(stepValue * (yAxisSteps - i))}
               </div>
             ))}
           </div>
 
-          {/* Chart Area with Grid */}
-          <div className="flex-1 relative">
+          {/* Chart Area */}
+          <div className="ml-12 h-full relative">
             {/* Horizontal Grid Lines */}
-            <div className="absolute inset-0">
-              {Array.from({ length: yAxisSteps + 1 }, (_, i) => (
-                <div
-                  key={i}
-                  className="absolute w-full border-t border-gray-200"
-                  style={{ top: `${(i / yAxisSteps) * 100}%` }}
-                />
-              ))}
-            </div>
+            {Array.from({ length: yAxisSteps + 1 }, (_, i) => (
+              <div
+                key={i}
+                className="absolute w-full border-t border-slate-100"
+                style={{ top: `${(i / yAxisSteps) * 100}%` }}
+              />
+            ))}
 
-            {/* Real Data Bars Container */}
-            <div className="absolute inset-0 flex items-end justify-center gap-8 px-8">
+            {/* Bars Container */}
+            <div className="absolute inset-0 flex items-end justify-center gap-4 px-4">
               {categories.map((category, index) => {
                 const value = category.value;
-                const height = roundedMax > 0 ? (value / roundedMax) * 100 : 0;
-                const minHeight = value > 0 ? Math.max(5, height) : 0;
-                const finalHeight = Math.max(minHeight, height);
+                const heightPercentage = roundedMax > 0 ? (value / roundedMax) * 100 : 0;
+                const minHeight = value > 0 ? Math.max(heightPercentage, 3) : 0;
 
                 return (
-                  <div key={index} className="flex flex-col items-center space-y-2">
+                  <div key={index} className="flex flex-col items-center flex-1 max-w-16">
                     {/* Value label above bar */}
-                    <div className="text-sm font-bold text-gray-800 mb-2 min-h-[20px] flex items-end">
-                      {value > 0 && (
-                        <span className="bg-white px-2 py-1 rounded shadow-sm border">
-                          {value.toLocaleString()}
-                        </span>
-                      )}
-                    </div>
+                    {value > 0 && (
+                      <div className="text-xs font-semibold text-slate-700 mb-1 bg-white px-2 py-1 rounded shadow-sm border border-slate-200">
+                        {value}
+                      </div>
+                    )}
 
-                    {/* Enhanced Bar with gradient and shadow */}
+                    {/* Bar */}
                     <div
-                      className={`w-16 rounded-lg transition-all duration-1000 ease-out shadow-lg hover:shadow-xl hover:scale-105 bg-gradient-to-t ${category.gradient} border border-white/20`}
+                      className="w-12 rounded-t-lg transition-all duration-300 hover:opacity-80 relative group"
                       style={{
-                        height: `${finalHeight}%`,
-                        minHeight: value > 0 ? '12px' : '0px',
-                        animationDelay: `${index * 0.2}s`,
-                        backgroundImage: `linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.1) 50%, transparent 50%, transparent 75%, rgba(255,255,255,0.1) 75%)`,
-                        backgroundSize: '8px 8px'
+                        backgroundColor: category.color,
+                        height: `${minHeight}%`,
+                        minHeight: value > 0 ? '8px' : '0px'
                       }}
                     >
-                      {/* Inner glow effect */}
-                      <div className="w-full h-full rounded-lg bg-gradient-to-t from-transparent to-white/10"></div>
+                      {/* Hover effect */}
+                      <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 rounded-t-lg transition-opacity duration-200"></div>
                     </div>
 
-                    {/* Category label below bar */}
-                    <div className="text-xs font-medium text-gray-700 text-center w-16 leading-tight mt-3">
-                      {category.name.replace(' Submissions', '').replace(' Orders', '')}
+                    {/* Category label */}
+                    <div className="text-xs font-medium text-slate-600 text-center mt-2 leading-tight">
+                      {category.name}
                     </div>
                   </div>
                 );
@@ -189,17 +182,16 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Enhanced Legend */}
-        <div className="flex flex-wrap justify-center gap-4 mt-8 pt-6 border-t border-gray-200">
+        {/* Legend */}
+        <div className="flex flex-wrap justify-center gap-4 mt-6 pt-4 border-t border-slate-100">
           {categories.map((category, index) => (
-            <div key={index} className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-lg">
+            <div key={index} className="flex items-center gap-2">
               <div
-                className={`w-5 h-5 rounded-md shadow-sm bg-gradient-to-br ${category.gradient} border border-white/20`}
+                className="w-3 h-3 rounded"
+                style={{ backgroundColor: category.color }}
               />
-              <div className="flex flex-col">
-                <span className="text-sm font-medium text-gray-800">{category.name}</span>
-                <span className="text-xs text-gray-600">{category.value.toLocaleString()}</span>
-              </div>
+              <span className="text-sm text-slate-600">{category.name}</span>
+              <span className="text-xs text-slate-400">({category.value})</span>
             </div>
           ))}
         </div>
