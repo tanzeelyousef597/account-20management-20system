@@ -252,35 +252,35 @@ export default function Dashboard() {
           icon={FileText}
           title="Total Submissions"
           value={dashboardData.totalSubmissions}
-          bgColor="bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600"
+          bgColor="bg-gradient-to-br from-blue-400 to-blue-500"
           index={0}
         />
         <MetricCard
           icon={CheckCircle}
           title="Approved Submissions"
           value={dashboardData.approvedSubmissions}
-          bgColor="bg-gradient-to-br from-emerald-500 via-green-600 to-teal-600"
+          bgColor="bg-gradient-to-br from-emerald-400 to-emerald-500"
           index={1}
         />
         <MetricCard
           icon={Clock}
           title="Orders in QA"
           value={dashboardData.ordersInQA}
-          bgColor="bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-600"
+          bgColor="bg-gradient-to-br from-amber-400 to-amber-500"
           index={2}
         />
         <MetricCard
           icon={XCircle}
           title="Rejected Submissions"
           value={dashboardData.rejectedSubmissions}
-          bgColor="bg-gradient-to-br from-red-500 via-rose-600 to-pink-600"
+          bgColor="bg-gradient-to-br from-rose-400 to-rose-500"
           index={3}
         />
         <MetricCard
           icon={Clock}
           title={user?.role === 'Admin' ? "Orders in Work" : "Orders in Work"}
           value={dashboardData.ordersInWork}
-          bgColor="bg-gradient-to-br from-purple-500 via-violet-600 to-indigo-600"
+          bgColor="bg-gradient-to-br from-violet-400 to-violet-500"
           index={4}
         />
       </div>
