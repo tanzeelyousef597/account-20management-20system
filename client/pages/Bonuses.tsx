@@ -154,8 +154,8 @@ export default function Bonuses() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">Bonus Management</h2>
-          <p className="text-gray-600 mt-1">Manage and track worker bonuses</p>
+          <h2 className="text-2xl md:text-3xl font-semibold text-slate-700">Bonus Management</h2>
+        <p className="text-slate-500 mt-1 text-sm md:text-base">Manage and track worker bonuses</p>
         </div>
         
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
