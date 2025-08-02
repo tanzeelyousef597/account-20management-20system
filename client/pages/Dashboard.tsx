@@ -86,36 +86,18 @@ export default function Dashboard() {
   );
 
   const ModernBarChart = ({ data }: { data: { category: string; submissions: number }[] }) => {
-    // Generate time periods based on selected filter
-    const getTimePeriods = () => {
-      switch (selectedFilter) {
-        case 'Last Day':
-          return Array.from({ length: 12 }, (_, i) => {
-            const hour = (new Date().getHours() - 11 + i + 24) % 24;
-            return `${hour}:00`;
-          });
-        case 'Last Week':
-          return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        case 'Last Month':
-          return Array.from({ length: 4 }, (_, i) => `Week ${i + 1}`);
-        case 'Last Year':
-        default:
-          return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      }
-    };
-
-    // Categories with real dashboard data - all 5 requested categories
+    // Categories with real dashboard data and soft colors
     const categories = [
-      { name: 'Total Submissions', color: '#8b5cf6', value: dashboardData.totalSubmissions, gradient: 'from-purple-500 to-purple-600' },
-      { name: 'Approved Submissions', color: '#10b981', value: dashboardData.approvedSubmissions, gradient: 'from-emerald-500 to-emerald-600' },
-      { name: 'Rejected Submissions', color: '#ef4444', value: dashboardData.rejectedSubmissions, gradient: 'from-red-500 to-red-600' },
-      { name: 'Orders in QA', color: '#f59e0b', value: dashboardData.ordersInQA, gradient: 'from-amber-500 to-amber-600' },
-      { name: 'Orders in Work', color: '#3b82f6', value: dashboardData.ordersInWork, gradient: 'from-blue-500 to-blue-600' },
+      { name: 'Total Submissions', color: '#3b82f6', value: dashboardData.totalSubmissions },
+      { name: 'Approved', color: '#10b981', value: dashboardData.approvedSubmissions },
+      { name: 'In QA', color: '#f59e0b', value: dashboardData.ordersInQA },
+      { name: 'Rejected', color: '#ef4444', value: dashboardData.rejectedSubmissions },
+      { name: 'In Work', color: '#8b5cf6', value: dashboardData.ordersInWork },
     ];
 
-    // Use actual dashboard values directly - no dummy data
+    // Calculate max value for scaling
     const maxValue = Math.max(...categories.map(cat => cat.value), 1);
-    const roundedMax = Math.max(maxValue * 1.2, 10); // Add 20% padding and minimum of 10
+    const roundedMax = Math.ceil(maxValue * 1.1 / 10) * 10; // Round up to nearest 10
     const yAxisSteps = 5;
     const stepValue = roundedMax / yAxisSteps;
 
