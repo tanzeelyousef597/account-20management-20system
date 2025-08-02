@@ -59,8 +59,17 @@ export default function ChatEnhanced() {
       loadAllUsers().then((users) => {
         loadConversations(users);
       });
+      // Load persisted groups from localStorage
+      loadPersistedGroups();
     }
   }, [user]);
+
+  // Save groups to localStorage whenever conversations change
+  useEffect(() => {
+    if (user && conversations.length > 0) {
+      saveGroupsToStorage();
+    }
+  }, [conversations, user]);
 
   useEffect(() => {
     if (selectedConversation) {
@@ -74,6 +83,32 @@ export default function ChatEnhanced() {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const loadPersistedGroups = () => {
+    try {
+      const saved = localStorage.getItem(`chat-groups-${user?.id}`);
+      if (saved) {
+        const persistedGroups = JSON.parse(saved);
+        setConversations(prev => {
+          // Merge persisted groups with existing conversations, avoiding duplicates
+          const existingIds = prev.map(c => c.id);
+          const newGroups = persistedGroups.filter((g: any) => !existingIds.includes(g.id));
+          return [...prev, ...newGroups];
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load persisted groups:', error);
+    }
+  };
+
+  const saveGroupsToStorage = () => {
+    try {
+      const groups = conversations.filter(c => c.isGroup);
+      localStorage.setItem(`chat-groups-${user?.id}`, JSON.stringify(groups));
+    } catch (error) {
+      console.error('Failed to save groups:', error);
+    }
   };
 
   const loadConversations = async (users?: User[]) => {
@@ -109,25 +144,6 @@ export default function ChatEnhanced() {
             createdAt: new Date(Date.now() - 86400000).toISOString() // 1 day ago
           }
         ];
-
-        // Add a demo group if we have multiple users
-        if (usersToUse.length > 1) {
-          demoConversations.push({
-            id: 'demo-group-1',
-            name: 'Team Chat',
-            isGroup: true,
-            participants: [user, ...usersToUse.slice(0, 3)].filter(Boolean),
-            participantNames: [user.name, ...usersToUse.slice(0, 3).map(u => u.name)].filter(Boolean),
-            lastMessage: {
-              content: 'Welcome to the team chat!',
-              timestamp: new Date(Date.now() - 600000).toISOString(),
-              senderId: user.id
-            },
-            lastActivity: new Date(Date.now() - 600000).toISOString(),
-            unreadCount: 0,
-            createdAt: new Date(Date.now() - 172800000).toISOString() // 2 days ago
-          });
-        }
 
         setConversations(demoConversations);
       } else {
@@ -210,67 +226,74 @@ export default function ChatEnhanced() {
     if (!user) return;
 
     try {
-      // Try to load messages from API
-      let apiMessages = [];
-      try {
-        const response = await api.getMessages(conversationId);
-        apiMessages = response.messages || [];
-      } catch (apiError) {
-        console.log('API messages not available, using demo messages');
-      }
+      let messagesToShow = [];
 
-      // If no API messages, create some demo messages to show functionality
-      if (apiMessages.length === 0) {
-        const otherUser = selectedConversation?.participants.find(p => p.id !== user.id);
-        const demoMessages = [
-          {
-            id: 'demo-1',
-            content: 'Hey! How are you doing?',
-            senderId: otherUser?.id || 'other',
-            senderName: otherUser?.name || 'Other User',
-            timestamp: new Date(Date.now() - 300000).toISOString(), // 5 minutes ago
+      // For groups, load from localStorage
+      if (selectedConversation?.isGroup) {
+        const groupMessages = loadGroupMessages(conversationId);
+        if (groupMessages.length > 0) {
+          messagesToShow = groupMessages;
+        } else {
+          // Create welcome message for new groups
+          const welcomeMessage = {
+            id: `welcome-${conversationId}`,
+            content: `Welcome to ${selectedConversation.name}! Start chatting with your team.`,
+            senderId: 'system',
+            senderName: 'System',
+            timestamp: new Date().toISOString(),
             messageType: 'text' as const,
             isRead: true,
             conversationId: conversationId,
             replyTo: null
-          },
-          {
-            id: 'demo-2',
-            content: 'I\'m doing great, thanks for asking! How about you?',
-            senderId: user.id,
-            senderName: user.name,
-            timestamp: new Date(Date.now() - 240000).toISOString(), // 4 minutes ago
-            messageType: 'text' as const,
-            isRead: true,
-            conversationId: conversationId,
-            replyTo: {
+          };
+          messagesToShow = [welcomeMessage];
+          saveGroupMessages(conversationId, welcomeMessage);
+        }
+      } else {
+        // For direct messages, try API first, then demo
+        try {
+          const response = await api.getMessages(conversationId);
+          messagesToShow = response.messages || [];
+        } catch (apiError) {
+          console.log('API messages not available, using demo messages');
+        }
+
+        // If no API messages for direct chat, create demo messages
+        if (messagesToShow.length === 0) {
+          const otherUser = selectedConversation?.participants.find(p => p.id !== user.id);
+          messagesToShow = [
+            {
               id: 'demo-1',
               content: 'Hey! How are you doing?',
+              senderId: otherUser?.id || 'other',
               senderName: otherUser?.name || 'Other User',
-              senderId: otherUser?.id || 'other'
-            }
-          },
-          {
-            id: 'demo-3',
-            content: 'I\'m also doing well! Working on some exciting projects.',
-            senderId: otherUser?.id || 'other',
-            senderName: otherUser?.name || 'Other User',
-            timestamp: new Date(Date.now() - 180000).toISOString(), // 3 minutes ago
-            messageType: 'text' as const,
-            isRead: true,
-            conversationId: conversationId,
-            replyTo: {
+              timestamp: new Date(Date.now() - 300000).toISOString(),
+              messageType: 'text' as const,
+              isRead: true,
+              conversationId: conversationId,
+              replyTo: null
+            },
+            {
               id: 'demo-2',
               content: 'I\'m doing great, thanks for asking! How about you?',
+              senderId: user.id,
               senderName: user.name,
-              senderId: user.id
+              timestamp: new Date(Date.now() - 240000).toISOString(),
+              messageType: 'text' as const,
+              isRead: true,
+              conversationId: conversationId,
+              replyTo: {
+                id: 'demo-1',
+                content: 'Hey! How are you doing?',
+                senderName: otherUser?.name || 'Other User',
+                senderId: otherUser?.id || 'other'
+              }
             }
-          }
-        ];
-        setMessages(demoMessages);
-      } else {
-        setMessages(apiMessages);
+          ];
+        }
       }
+
+      setMessages(messagesToShow);
 
       try {
         await api.markMessagesAsRead(conversationId, user.id);
@@ -300,9 +323,9 @@ export default function ChatEnhanced() {
     try {
       const messageContent = newMessage.trim();
 
-      // Create a temporary message for immediate UI update
-      const tempMessage = {
-        id: `temp-${Date.now()}`,
+      // Create a permanent message for groups (since backend might not handle groups)
+      const newMessageObj = {
+        id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         content: messageContent,
         senderId: user.id,
         senderName: user.name,
@@ -318,66 +341,92 @@ export default function ChatEnhanced() {
         } : null
       };
 
-      // Add message to UI immediately for better UX
-      setMessages(prev => [...prev, tempMessage]);
+      // Add message to UI immediately
+      setMessages(prev => [...prev, newMessageObj]);
       setNewMessage('');
-      const currentReply = replyingTo;
       setReplyingTo(null);
 
-      // Send to backend
-      const otherUser = selectedConversation.participants.find(p => p.id !== user.id);
-
-      // Prepare message data with proper reply structure
-      const messageData: any = {
-        conversationId: selectedConversation.id,
-        content: messageContent,
-        messageType: 'text',
+      // Update conversation with last message
+      const updatedConversation = {
+        ...selectedConversation,
+        lastMessage: {
+          content: messageContent,
+          timestamp: new Date().toISOString(),
+          senderId: user.id,
+          senderName: user.name
+        },
+        lastActivity: new Date().toISOString()
       };
-
-      // Add reply data if replying
-      if (currentReply) {
-        messageData.replyTo = {
-          id: currentReply.id,
-          content: currentReply.content,
-          senderName: currentReply.senderName,
-          senderId: currentReply.senderId
-        };
-      }
-
-      // Add receiverId for direct conversations
-      if (otherUser) {
-        messageData.receiverId = otherUser.id;
-      }
-
-      const response = await api.sendMessage(user.id, messageData);
-
-      // Replace temp message with real message from server
-      if (response) {
-        setMessages(prev =>
-          prev.map(msg =>
-            msg.id === tempMessage.id ? { ...response, replyTo: currentReply } : msg
-          )
-        );
-      }
 
       setConversations(prev =>
         prev.map(conv =>
-          conv.id === selectedConversation.id
-            ? { ...conv, lastMessage: response || tempMessage, lastActivity: new Date().toISOString() }
-            : conv
+          conv.id === selectedConversation.id ? updatedConversation : conv
         )
       );
+
+      // For groups, save messages to localStorage for persistence
+      if (selectedConversation.isGroup) {
+        saveGroupMessages(selectedConversation.id, newMessageObj);
+      } else {
+        // Try to send to backend for direct messages
+        try {
+          const otherUser = selectedConversation.participants.find(p => p.id !== user.id);
+          const messageData: any = {
+            conversationId: selectedConversation.id,
+            content: messageContent,
+            messageType: 'text',
+          };
+
+          if (replyingTo) {
+            messageData.replyTo = {
+              id: replyingTo.id,
+              content: replyingTo.content,
+              senderName: replyingTo.senderName,
+              senderId: replyingTo.senderId
+            };
+          }
+
+          if (otherUser) {
+            messageData.receiverId = otherUser.id;
+          }
+
+          await api.sendMessage(user.id, messageData);
+        } catch (apiError) {
+          console.log('API send failed, message stored locally:', apiError);
+        }
+      }
 
       refreshUnreadCount();
     } catch (error) {
       console.error('Failed to send message:', error);
-      // Remove temp message on error
-      setMessages(prev => prev.filter(msg => !msg.id.startsWith('temp-')));
       toast({
         title: 'Error',
         description: 'Failed to send message',
         variant: 'destructive',
       });
+    }
+  };
+
+  const saveGroupMessages = (conversationId: string, message: any) => {
+    try {
+      const key = `group-messages-${conversationId}`;
+      const existing = localStorage.getItem(key);
+      const messages = existing ? JSON.parse(existing) : [];
+      messages.push(message);
+      localStorage.setItem(key, JSON.stringify(messages));
+    } catch (error) {
+      console.error('Failed to save group message:', error);
+    }
+  };
+
+  const loadGroupMessages = (conversationId: string) => {
+    try {
+      const key = `group-messages-${conversationId}`;
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      console.error('Failed to load group messages:', error);
+      return [];
     }
   };
 
