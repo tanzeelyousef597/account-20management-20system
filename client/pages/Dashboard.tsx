@@ -237,13 +237,12 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4 lg:gap-6 animate-in slide-in-from-top duration-500">
         <div className="relative">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent drop-shadow-sm">
+          <h2 className="text-2xl md:text-3xl font-semibold text-slate-700">
             Dashboard
           </h2>
-          <p className="text-gray-600 mt-1 text-sm sm:text-base md:text-lg lg:text-lg animate-in slide-in-from-left duration-700" style={{ animationDelay: '200ms' }}>
+          <p className="text-slate-500 mt-1 text-sm md:text-base">
             Overview of submissions and performance
           </p>
-          <div className="absolute -bottom-1 left-0 w-12 sm:w-16 md:w-20 lg:w-24 h-0.5 sm:h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-in slide-in-from-left duration-1000" style={{ animationDelay: '500ms' }}></div>
         </div>
       </div>
 
