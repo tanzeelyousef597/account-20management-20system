@@ -95,7 +95,7 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 bg-white/95 backdrop-blur-xl shadow-2xl border-r border-slate-200/50 transform transition-all duration-500 ease-out",
+        "fixed inset-y-0 left-0 z-50 bg-white shadow-lg border-r border-slate-200 transform transition-all duration-300 ease-out",
         // Responsive width: optimized for all screen sizes
         "w-72 xs:w-64 sm:w-64 md:w-64 lg:w-64 xl:w-72 2xl:w-80 3xl:w-84 4xl:w-96 5xl:w-[26rem]",
         "lg:translate-x-0",
@@ -103,8 +103,7 @@ export default function Layout({ children }: LayoutProps) {
       )}>
         <div className="flex h-full flex-col">
           {/* Header */}
-          <div className="flex h-14 sm:h-16 items-center justify-between border-b border-slate-200/50 px-3 sm:px-4 md:px-6 bg-gradient-to-r from-blue-600 to-purple-600 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-purple-600/90"></div>
+          <div className="flex h-14 sm:h-16 items-center justify-between border-b border-slate-200 px-3 sm:px-4 md:px-6 bg-gradient-to-r from-blue-500 to-indigo-500">
             <div className="flex items-center group relative z-10 min-w-0 flex-1">
               <div className="relative flex-shrink-0">
                 <Building2 className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-lg" />
