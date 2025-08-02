@@ -19,7 +19,13 @@ import {
   CheckCheck,
   Check,
   Circle,
-  MessageSquare
+  MessageSquare,
+  Reply,
+  UserPlus,
+  UserMinus,
+  Settings,
+  Crown,
+  Hash
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
