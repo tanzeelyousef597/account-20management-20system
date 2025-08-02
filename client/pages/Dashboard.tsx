@@ -66,27 +66,20 @@ export default function Dashboard() {
     index?: number
   }) => (
     <div
-      className={`${bgColor} rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 text-white shadow-lg transform hover:scale-[1.02] transition-all duration-300 hover:shadow-xl relative overflow-hidden group animate-in slide-in-from-bottom`}
-      style={{ animationDelay: `${index * 150}ms` }}
+      className={`${bgColor} rounded-xl p-4 md:p-5 text-white shadow-md hover:shadow-lg transition-all duration-200 relative overflow-hidden group`}
     >
-      {/* Background animation */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-      {/* Floating orbs - more subtle */}
-      <div className="absolute -top-2 -right-2 w-8 sm:w-12 md:w-16 h-8 sm:h-12 md:h-16 bg-white/10 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
-      <div className="absolute -bottom-2 -left-2 w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 bg-white/10 rounded-full blur-lg opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
+      {/* Subtle background animation */}
+      <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
       <div className="flex items-center justify-between relative z-10">
-        <div className="space-y-1 min-w-0 flex-1 mr-3">
-          <p className="text-white/90 text-xs sm:text-sm font-medium tracking-wide truncate">{title}</p>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold tabular-nums animate-in zoom-in duration-700 leading-tight break-all" style={{ animationDelay: `${index * 200 + 300}ms` }}>
+        <div className="space-y-2 min-w-0 flex-1 mr-3">
+          <p className="text-white/90 text-sm font-medium truncate">{title}</p>
+          <p className="text-xl md:text-2xl font-semibold tabular-nums leading-tight">
             {value.toLocaleString()}
           </p>
-          <div className="w-6 sm:w-8 md:w-10 h-0.5 bg-white/30 rounded-full group-hover:bg-white/50 transition-colors duration-300"></div>
         </div>
-        <div className="relative flex-shrink-0">
-          <Icon className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 text-white/90 drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
-          <div className="absolute inset-0 bg-white/20 rounded-full blur-xl scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="flex-shrink-0">
+          <Icon className="h-6 w-6 md:h-7 md:w-7 text-white/80" />
         </div>
       </div>
     </div>
