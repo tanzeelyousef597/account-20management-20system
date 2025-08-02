@@ -943,18 +943,18 @@ export default function ChatEnhanced() {
                       </Avatar>
                     )}
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-700 flex items-center gap-2">
-                      {selectedConversation.isGroup && <Hash className="h-4 w-4 text-gray-500" />}
-                      {selectedConversation.name}
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold text-slate-700 flex items-center gap-1 sm:gap-2 text-sm sm:text-base truncate">
+                      {selectedConversation.isGroup && <Hash className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />}
+                      <span className="truncate">{selectedConversation.name}</span>
                       {selectedConversation.isGroup && (
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant="secondary" className="text-xs hidden sm:inline-flex">
                           Group
                         </Badge>
                       )}
                     </h3>
-                    <p className="text-xs text-slate-500">
-                      {selectedConversation.isGroup 
+                    <p className="text-xs text-slate-500 truncate">
+                      {selectedConversation.isGroup
                         ? `${selectedConversation.participants.length} members`
                         : `${selectedConversation.participants.find(p => p.id !== user?.id)?.name || 'User'}`
                       }
