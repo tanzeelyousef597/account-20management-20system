@@ -76,8 +76,10 @@ export default function ChatEnhanced() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const loadConversations = async () => {
+  const loadConversations = async (users?: User[]) => {
     if (!user) return;
+
+    const usersToUse = users || allUsers;
 
     try {
       let apiConversations = [];
@@ -89,7 +91,7 @@ export default function ChatEnhanced() {
       }
 
       // If no API conversations, create demo conversations for testing
-      if (apiConversations.length === 0 && allUsers.length > 0) {
+      if (apiConversations.length === 0 && usersToUse.length > 0) {
         const demoConversations = [
           {
             id: 'demo-conv-1',
