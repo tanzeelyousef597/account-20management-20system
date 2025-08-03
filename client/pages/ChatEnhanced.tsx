@@ -1470,6 +1470,99 @@ export default function ChatEnhanced() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Message Confirmation Dialog */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent className="bg-gradient-to-br from-white to-red-50/30 border border-red-200/60 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-red-700 flex items-center gap-2">
+              <X className="h-5 w-5" />
+              Delete Message
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this message? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+
+          {messageToDelete && (
+            <div className="p-3 bg-gray-50 rounded-lg border border-gray-200 max-h-20 overflow-y-auto">
+              <p className="text-sm text-gray-700 line-clamp-3">{messageToDelete.content}</p>
+            </div>
+          )}
+
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowDeleteDialog(false);
+                setMessageToDelete(null);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                if (messageToDelete) {
+                  handleDeleteMessage(messageToDelete.id);
+                  setShowDeleteDialog(false);
+                  setMessageToDelete(null);
+                }
+              }}
+              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
+            >
+              Delete Message
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Chat Confirmation Dialog */}
+      <Dialog open={showDeleteChatDialog} onOpenChange={setShowDeleteChatDialog}>
+        <DialogContent className="bg-gradient-to-br from-white to-red-50/30 border border-red-200/60 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-red-700 flex items-center gap-2">
+              <X className="h-5 w-5" />
+              Delete Chat
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this entire chat? All messages will be permanently deleted and this action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedConversation && (
+            <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-sm font-medium text-gray-700">
+                {selectedConversation.isGroup ? 'Group: ' : 'Chat with: '}
+                {selectedConversation.name}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {selectedConversation.isGroup
+                  ? `${selectedConversation.participants.length} members`
+                  : 'Direct conversation'
+                }
+              </p>
+            </div>
+          )}
+
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button
+              variant="outline"
+              onClick={() => setShowDeleteChatDialog(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                handleDeleteChat();
+                setShowDeleteChatDialog(false);
+              }}
+              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
+            >
+              Delete Chat
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
