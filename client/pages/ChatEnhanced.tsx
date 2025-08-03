@@ -32,6 +32,33 @@ import {
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
+// Simple encryption utility for basic privacy
+const encryptMessage = (message: string, conversationId: string): string => {
+  try {
+    // Simple XOR encryption with conversation ID as key
+    const key = conversationId.split('').map(c => c.charCodeAt(0)).reduce((a, b) => a + b, 0);
+    const encrypted = message.split('').map(c =>
+      String.fromCharCode(c.charCodeAt(0) ^ (key % 255))
+    ).join('');
+    return btoa(encrypted); // Base64 encode
+  } catch {
+    return message; // Fallback to unencrypted
+  }
+};
+
+const decryptMessage = (encryptedMessage: string, conversationId: string): string => {
+  try {
+    const key = conversationId.split('').map(c => c.charCodeAt(0)).reduce((a, b) => a + b, 0);
+    const decoded = atob(encryptedMessage);
+    const decrypted = decoded.split('').map(c =>
+      String.fromCharCode(c.charCodeAt(0) ^ (key % 255))
+    ).join('');
+    return decrypted;
+  } catch {
+    return encryptedMessage; // Fallback to original
+  }
+};
+
 export default function ChatEnhanced() {
   const { user } = useAuth();
   const { refreshUnreadCount } = useChat();
