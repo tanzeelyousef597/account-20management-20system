@@ -1017,7 +1017,10 @@ export default function ChatEnhanced() {
                           </div>
                         </div>
                         <p className="text-sm text-slate-500 truncate mt-1">
-                          {conversation.lastMessage?.content || 'No messages yet'}
+                          {conversation.lastMessage?.content
+                            ? decryptMessage(conversation.lastMessage.content, conversation.id)
+                            : 'No messages yet'
+                          }
                         </p>
                       </div>
                     </div>
