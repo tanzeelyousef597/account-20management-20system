@@ -150,21 +150,11 @@ export default function ChatEnhanced() {
         console.log('API conversations not available, using demo conversations');
       }
 
-      // Load persisted groups from localStorage
-      const persistedGroups = (() => {
-        try {
-          const saved = localStorage.getItem(`chat-groups-${user.id}`);
-          return saved ? JSON.parse(saved) : [];
-        } catch (error) {
-          console.error('Failed to load persisted groups:', error);
-          return [];
-        }
-      })();
-
-      // If no API conversations, create demo conversations for testing
-      let baseConversations = [];
+      // Only load direct (one-to-one) conversations, no groups
+      let directConversations = [];
       if (apiConversations.length === 0 && usersToUse.length > 0) {
-        baseConversations = [
+        // Create demo direct conversation for testing
+        directConversations = [
           {
             id: 'demo-conv-1',
             name: usersToUse[0]?.name || 'Demo User',
@@ -182,15 +172,11 @@ export default function ChatEnhanced() {
           }
         ];
       } else {
-        baseConversations = apiConversations;
+        // Filter out any group conversations, only keep direct chats
+        directConversations = apiConversations.filter((conv: any) => !conv.isGroup);
       }
 
-      // Merge API conversations with persisted groups, avoiding duplicates
-      const existingIds = baseConversations.map(c => c.id);
-      const newGroups = persistedGroups.filter((g: any) => !existingIds.includes(g.id));
-      const allConversations = [...baseConversations, ...newGroups];
-
-      setConversations(allConversations);
+      setConversations(directConversations);
 
       refreshUnreadCount();
 
