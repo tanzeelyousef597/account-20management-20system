@@ -441,20 +441,7 @@ export default function ChatEnhanced() {
       // Remove from conversations list
       setConversations(prev => prev.filter(conv => conv.id !== selectedConversation.id));
 
-      // If group, remove from localStorage
-      if (selectedConversation.isGroup) {
-        const groupsKey = `chat-groups-${user?.id}`;
-        const messagesKey = `group-messages-${selectedConversation.id}`;
 
-        const existing = localStorage.getItem(groupsKey);
-        if (existing) {
-          const groups = JSON.parse(existing);
-          const updatedGroups = groups.filter((g: any) => g.id !== selectedConversation.id);
-          localStorage.setItem(groupsKey, JSON.stringify(updatedGroups));
-        }
-
-        localStorage.removeItem(messagesKey);
-      }
 
       // Try to delete from API
       try {
