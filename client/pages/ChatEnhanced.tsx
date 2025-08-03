@@ -796,7 +796,7 @@ export default function ChatEnhanced() {
               </div>
 
               {/* Messages */}
-              <ScrollArea className="flex-1 p-4">
+              <ScrollArea className="flex-1 p-2 sm:p-4">
                 <div className="space-y-4">
                   {messages.map((message) => {
                     const isOwnMessage = message.senderId === user?.id;
