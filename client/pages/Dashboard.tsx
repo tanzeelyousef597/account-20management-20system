@@ -207,14 +207,14 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="container-responsive space-responsive">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <div>
-          <h2 className="text-2xl md:text-3xl font-semibold text-slate-700">
+      <div className="flex-responsive-between gap-responsive">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-responsive-xl font-semibold text-slate-700 truncate">
             Dashboard
           </h2>
-          <p className="text-slate-500 mt-1 text-sm md:text-base">
+          <p className="text-slate-500 mt-1 text-responsive">
             Overview of submissions and performance
           </p>
         </div>
