@@ -1052,6 +1052,15 @@ export default function ChatEnhanced() {
                       <Settings className="h-4 w-4" />
                     </Button>
                   )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowDeleteChatDialog(true)}
+                    title="Delete chat"
+                    className="hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 text-red-600 hover:text-red-700"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
 
