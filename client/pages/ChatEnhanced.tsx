@@ -604,10 +604,10 @@ export default function ChatEnhanced() {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h2 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
-            Enhanced Chat System
+            Direct Chat System
           </h2>
           <p className="text-slate-500 mt-1 text-sm md:text-base">
-            WhatsApp-style messaging with group management
+            One-to-one messaging with users from User Management
           </p>
         </div>
       </div>
@@ -973,7 +973,7 @@ export default function ChatEnhanced() {
                 
                 <div className="flex justify-between items-center mt-2">
                   <span className="text-xs text-slate-500">
-                    Double-click any message to reply • Press Esc to cancel
+                    Double-click any message to reply �� Press Esc to cancel
                   </span>
                 </div>
               </div>
