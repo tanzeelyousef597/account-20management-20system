@@ -1199,7 +1199,7 @@ export default function ChatEnhanced() {
                             )}
                             
                             <p className="text-sm break-words leading-relaxed">
-                              {renderMessageWithLinks(message.content)}
+                              {renderMessageWithLinks(decryptMessage(message.content, selectedConversation.id))}
                             </p>
                             
                             <div className="flex items-center justify-between mt-2 gap-2">
