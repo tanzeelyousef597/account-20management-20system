@@ -413,18 +413,7 @@ export default function ChatEnhanced() {
       // Remove message from UI
       setMessages(prev => prev.filter(msg => msg.id !== messageId));
 
-      // For groups, update localStorage
-      if (selectedConversation.isGroup) {
-        const key = `group-messages-${selectedConversation.id}`;
-        const existing = localStorage.getItem(key);
-        if (existing) {
-          const messages = JSON.parse(existing);
-          const updatedMessages = messages.filter((msg: any) => msg.id !== messageId);
-          localStorage.setItem(key, JSON.stringify(updatedMessages));
-        }
-      }
-
-      // For individual chats, try to delete from API
+      // Try to delete from API for direct chats
       try {
         await api.deleteMessage(messageId);
       } catch (apiError) {
