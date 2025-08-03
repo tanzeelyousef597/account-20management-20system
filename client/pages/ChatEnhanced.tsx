@@ -217,7 +217,7 @@ export default function ChatEnhanced() {
 
     try {
       console.log('Making API call to /users...');
-      const response = await api.get('/users');
+      const response = await api.get('/api/users');
       console.log('API response status:', response.status);
       console.log('API response headers:', response.headers);
 
