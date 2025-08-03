@@ -150,32 +150,8 @@ export default function ChatEnhanced() {
         console.log('API conversations not available, using demo conversations');
       }
 
-      // Only load direct (one-to-one) conversations, no groups
-      let directConversations = [];
-      if (apiConversations.length === 0 && usersToUse.length > 0) {
-        // Create demo direct conversation for testing
-        directConversations = [
-          {
-            id: 'demo-conv-1',
-            name: usersToUse[0]?.name || 'Demo User',
-            isGroup: false,
-            participants: [user, usersToUse[0]].filter(Boolean),
-            participantNames: [user.name, usersToUse[0]?.name].filter(Boolean),
-            lastMessage: {
-              content: 'Hey! How are you doing?',
-              timestamp: new Date(Date.now() - 300000).toISOString(),
-              senderId: usersToUse[0]?.id || 'demo'
-            },
-            lastActivity: new Date(Date.now() - 300000).toISOString(),
-            unreadCount: 0,
-            createdAt: new Date(Date.now() - 86400000).toISOString() // 1 day ago
-          }
-        ];
-      } else {
-        // Filter out any group conversations, only keep direct chats
-        directConversations = apiConversations.filter((conv: any) => !conv.isGroup);
-      }
-
+      // Only load direct (one-to-one) conversations, no groups - no demo conversations
+      const directConversations = apiConversations.filter((conv: any) => !conv.isGroup);
       setConversations(directConversations);
 
       refreshUnreadCount();
