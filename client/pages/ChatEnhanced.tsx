@@ -1145,7 +1145,7 @@ export default function ChatEnhanced() {
                                   "text-xs leading-relaxed line-clamp-2",
                                   isOwnMessage ? "text-blue-800" : "text-gray-700"
                                 )}>
-                                  {message.replyTo.content}
+                                  {decryptMessage(message.replyTo.content, selectedConversation.id)}
                                 </div>
                               </div>
                             </div>
