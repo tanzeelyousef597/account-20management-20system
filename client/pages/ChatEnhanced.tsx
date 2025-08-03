@@ -661,6 +661,21 @@ export default function ChatEnhanced() {
           {/* Search Section */}
           {isSearching && (
             <div className="p-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/30 to-indigo-50/30">
+              <div className="mb-2">
+                <p className="text-xs text-gray-600">
+                  {allUsers.length} users available from User Management
+                  {allUsers.length === 0 && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={loadAllUsers}
+                      className="ml-2 h-6 text-xs"
+                    >
+                      Refresh Users
+                    </Button>
+                  )}
+                </p>
+              </div>
               <div className="flex space-x-2">
                 <Input
                   placeholder="Search by email..."
@@ -673,7 +688,7 @@ export default function ChatEnhanced() {
                     }
                   }}
                 />
-                <Button size="sm" onClick={handleSearchUser} disabled={isSearching}>
+                <Button size="sm" onClick={handleSearchUser} disabled={!searchEmail.trim()}>
                   <Search className="h-4 w-4" />
                 </Button>
               </div>
