@@ -667,7 +667,13 @@ export default function ChatEnhanced() {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => setIsSearching(!isSearching)}
+                onClick={() => {
+                  setIsSearching(!isSearching);
+                  // Load users when opening search if not already loaded
+                  if (!isSearching && allUsers.length === 0) {
+                    loadAllUsers();
+                  }
+                }}
                 className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 h-8 w-8 p-0"
                 title="Search users"
               >
