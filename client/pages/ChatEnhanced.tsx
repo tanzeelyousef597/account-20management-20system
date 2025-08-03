@@ -1122,21 +1122,37 @@ export default function ChatEnhanced() {
                                 : "bg-white border border-slate-200 text-slate-700 rounded-bl-sm"
                             )}
                           >
-                            {/* Reply button overlay */}
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className={cn(
-                                "absolute -top-2 -right-2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-md",
-                                isOwnMessage 
-                                  ? "bg-blue-100 hover:bg-blue-200 text-blue-700" 
-                                  : "bg-white hover:bg-gray-50 text-gray-600"
+                            {/* Message action buttons */}
+                            <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className={cn(
+                                  "h-6 w-6 p-0 shadow-md",
+                                  isOwnMessage
+                                    ? "bg-blue-100 hover:bg-blue-200 text-blue-700"
+                                    : "bg-white hover:bg-gray-50 text-gray-600"
+                                )}
+                                onClick={() => setReplyingTo(message)}
+                                title="Reply to this message"
+                              >
+                                <Reply className="h-3 w-3" />
+                              </Button>
+                              {isOwnMessage && (
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-6 w-6 p-0 shadow-md bg-red-100 hover:bg-red-200 text-red-700"
+                                  onClick={() => {
+                                    setMessageToDelete(message);
+                                    setShowDeleteDialog(true);
+                                  }}
+                                  title="Delete this message"
+                                >
+                                  <X className="h-3 w-3" />
+                                </Button>
                               )}
-                              onClick={() => setReplyingTo(message)}
-                              title="Reply to this message"
-                            >
-                              <Reply className="h-3 w-3" />
-                            </Button>
+                            </div>
                             
                             {/* Group chat sender name */}
                             {selectedConversation.isGroup && !isOwnMessage && (
