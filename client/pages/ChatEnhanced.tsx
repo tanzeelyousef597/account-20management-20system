@@ -366,11 +366,11 @@ export default function ChatEnhanced() {
       setNewMessage('');
       setReplyingTo(null);
 
-      // Update conversation with last message
+      // Update conversation with last message (store encrypted for privacy)
       const updatedConversation = {
         ...selectedConversation,
         lastMessage: {
-          content: messageContent,
+          content: encryptedContent,
           timestamp: new Date().toISOString(),
           senderId: user.id,
           senderName: user.name
