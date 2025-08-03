@@ -775,17 +775,6 @@ export default function ChatEnhanced() {
                 </div>
                 
                 <div className="flex items-center space-x-2">
-                  {selectedConversation.isGroup && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleManageGroup}
-                      title="Manage group"
-                      className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50"
-                    >
-                      <Settings className="h-4 w-4" />
-                    </Button>
-                  )}
                   <Button
                     variant="ghost"
                     size="sm"
