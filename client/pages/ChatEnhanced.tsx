@@ -718,14 +718,8 @@ export default function ChatEnhanced() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <div className="font-medium text-slate-700 truncate flex items-center gap-1">
-                            {conversation.isGroup && <Hash className="h-3 w-3 text-gray-500" />}
+                          <div className="font-medium text-slate-700 truncate">
                             {conversation.name || otherUser?.name || 'Unknown'}
-                            {conversation.isGroup && (
-                              <Badge variant="secondary" className="text-xs px-1 py-0 ml-1">
-                                Group
-                              </Badge>
-                            )}
                           </div>
                           <div className="flex items-center gap-2">
                             {conversation.lastMessage && (
