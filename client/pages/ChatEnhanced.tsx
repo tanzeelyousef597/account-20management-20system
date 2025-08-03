@@ -746,7 +746,10 @@ export default function ChatEnhanced() {
         </div>
 
         {/* Chat Area */}
-        <div className="flex-1 flex flex-col bg-gradient-to-br from-white to-blue-50/20 rounded-r-xl">
+        <div className={cn(
+          "flex-1 flex flex-col bg-gradient-to-br from-white to-blue-50/20 rounded-b-xl lg:rounded-r-xl lg:rounded-bl-none",
+          !selectedConversation && "hidden lg:flex"
+        )}>
           {selectedConversation ? (
             <>
               {/* Chat Header */}
