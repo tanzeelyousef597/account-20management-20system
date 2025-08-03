@@ -710,7 +710,23 @@ export default function ChatEnhanced() {
                   <Search className="h-4 w-4" />
                 </Button>
               </div>
-              
+
+              {/* Show available users for easy reference */}
+              {allUsers.length > 0 && (
+                <div className="mt-3">
+                  <p className="text-xs text-gray-600 mb-2">Available users:</p>
+                  <div className="text-xs text-gray-500 space-y-1 max-h-24 overflow-y-auto">
+                    {allUsers.map(u => (
+                      <div key={u.id} className="flex justify-between items-center p-1 hover:bg-blue-50 rounded cursor-pointer"
+                           onClick={() => setSearchEmail(u.email)}>
+                        <span>{u.name}</span>
+                        <span className="text-blue-600">{u.email}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {selectedUser && (
                 <Card className="mt-3 p-3 border-green-200 bg-gradient-to-r from-green-50 to-emerald-50">
                   <div className="flex items-center justify-between">
