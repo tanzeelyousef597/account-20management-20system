@@ -242,17 +242,9 @@ export default function ChatEnhanced() {
       setAllUsers(realUsers);
 
       if (realUsers.length === 0) {
-        toast({
-          title: 'Debug: No Users Found',
-          description: `Found ${users.length} total users, but ${realUsers.length} available for chat after filtering. Current user ID: ${user.id}`,
-          variant: 'destructive',
-        });
+        console.log('No users available for chat after filtering');
       } else {
         console.log(`Successfully loaded ${realUsers.length} users for chat`);
-        toast({
-          title: 'Users Loaded',
-          description: `Successfully loaded ${realUsers.length} users from User Management`,
-        });
       }
 
       return realUsers;
