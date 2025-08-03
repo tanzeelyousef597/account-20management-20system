@@ -473,11 +473,9 @@ export default function ChatEnhanced() {
           description: `Found ${foundUser.name} (${foundUser.email})`,
         });
       } else {
-        const availableEmails = allUsers.map(u => u.email).join(', ');
-        console.log('Available emails:', availableEmails);
         toast({
           title: 'User Not Found',
-          description: `User "${searchEmail.trim()}" not found in User Management. Available users: ${availableEmails || 'None'}`,
+          description: `User "${searchEmail.trim()}" not found in User Management.`,
           variant: 'destructive',
         });
         setSelectedUser(null);
