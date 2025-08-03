@@ -886,12 +886,7 @@ export default function ChatEnhanced() {
                               )}
                             </div>
                             
-                            {/* Group chat sender name */}
-                            {selectedConversation.isGroup && !isOwnMessage && (
-                              <div className="text-xs font-semibold text-blue-600 mb-1">
-                                {senderName}
-                              </div>
-                            )}
+
                             
                             <p className="text-sm break-words leading-relaxed">
                               {renderMessageWithLinks(decryptMessage(message.content, selectedConversation.id))}
