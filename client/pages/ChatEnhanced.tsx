@@ -490,7 +490,7 @@ export default function ChatEnhanced() {
       try {
         const message = await api.sendMessage(user.id, {
           receiverId: targetUser.id,
-          content: `Hello ${targetUser.name}! ���`,
+          content: `Hello ${targetUser.name}! 👋`,
           messageType: 'text',
         });
 
@@ -589,10 +589,11 @@ export default function ChatEnhanced() {
           "w-full h-full md:w-80 md:h-full",
           selectedConversation && "hidden md:flex"
         )}>
-          <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/30">
-            <h3 className="font-semibold text-slate-700 flex items-center gap-2">
-              <MessageSquare className="h-5 w-5 text-blue-500" />
-              Direct Chats
+          <div className="flex h-14 sm:h-16 items-center justify-between px-3 sm:px-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/30">
+            <h3 className="font-semibold text-slate-700 flex items-center gap-1 sm:gap-2 text-sm sm:text-base">
+              <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />
+              <span className="hidden sm:inline">Direct Chats</span>
+              <span className="sm:hidden">Chats</span>
             </h3>
             <div className="flex space-x-1">
               <Button
@@ -605,10 +606,10 @@ export default function ChatEnhanced() {
                     loadAllUsers();
                   }
                 }}
-                className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 h-8 w-8 p-0"
+                className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 h-7 w-7 sm:h-8 sm:w-8 p-0"
                 title="Search users"
               >
-                <Search className="h-4 w-4" />
+                <Search className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
             </div>
           </div>
