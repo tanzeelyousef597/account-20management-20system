@@ -616,22 +616,21 @@ export default function ChatEnhanced() {
 
           {/* Search Section */}
           {isSearching && (
-            <div className="p-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/30 to-indigo-50/30">
-
+            <div className="p-3 sm:p-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/30 to-indigo-50/30">
               <div className="flex space-x-2">
                 <Input
                   placeholder="Enter user email to start chat..."
                   value={searchEmail}
                   onChange={(e) => setSearchEmail(e.target.value)}
-                  className="flex-1 bg-white border-blue-200 focus:border-blue-400"
+                  className="flex-1 bg-white border-blue-200 focus:border-blue-400 text-sm sm:text-base h-9 sm:h-10"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       handleSearchUser();
                     }
                   }}
                 />
-                <Button size="sm" onClick={handleSearchUser} disabled={!searchEmail.trim()}>
-                  <Search className="h-4 w-4" />
+                <Button size="sm" onClick={handleSearchUser} disabled={!searchEmail.trim()} className="h-9 sm:h-10 px-3">
+                  <Search className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               </div>
 
