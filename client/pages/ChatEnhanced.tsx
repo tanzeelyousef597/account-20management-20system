@@ -242,69 +242,46 @@ export default function ChatEnhanced() {
     try {
       let messagesToShow = [];
 
-      // For groups, load from localStorage
-      if (selectedConversation?.isGroup) {
-        const groupMessages = loadGroupMessages(conversationId);
-        if (groupMessages.length > 0) {
-          messagesToShow = groupMessages;
-        } else {
-          // Create welcome message for new groups
-          const welcomeMessage = {
-            id: `welcome-${conversationId}`,
-            content: `Welcome to ${selectedConversation.name}! Start chatting with your team.`,
-            senderId: 'system',
-            senderName: 'System',
-            timestamp: new Date().toISOString(),
+      // For direct messages only, try API first, then demo
+      try {
+        const response = await api.getMessages(conversationId);
+        messagesToShow = response.messages || [];
+      } catch (apiError) {
+        console.log('API messages not available, using demo messages');
+      }
+
+      // If no API messages for direct chat, create demo messages
+      if (messagesToShow.length === 0) {
+        const otherUser = selectedConversation?.participants.find(p => p.id !== user.id);
+        messagesToShow = [
+          {
+            id: 'demo-1',
+            content: 'Hey! How are you doing?',
+            senderId: otherUser?.id || 'other',
+            senderName: otherUser?.name || 'Other User',
+            timestamp: new Date(Date.now() - 300000).toISOString(),
             messageType: 'text' as const,
             isRead: true,
             conversationId: conversationId,
             replyTo: null
-          };
-          messagesToShow = [welcomeMessage];
-          saveGroupMessages(conversationId, welcomeMessage);
-        }
-      } else {
-        // For direct messages, try API first, then demo
-        try {
-          const response = await api.getMessages(conversationId);
-          messagesToShow = response.messages || [];
-        } catch (apiError) {
-          console.log('API messages not available, using demo messages');
-        }
-
-        // If no API messages for direct chat, create demo messages
-        if (messagesToShow.length === 0) {
-          const otherUser = selectedConversation?.participants.find(p => p.id !== user.id);
-          messagesToShow = [
-            {
+          },
+          {
+            id: 'demo-2',
+            content: 'I\'m doing great, thanks for asking! How about you?',
+            senderId: user.id,
+            senderName: user.name,
+            timestamp: new Date(Date.now() - 240000).toISOString(),
+            messageType: 'text' as const,
+            isRead: true,
+            conversationId: conversationId,
+            replyTo: {
               id: 'demo-1',
               content: 'Hey! How are you doing?',
-              senderId: otherUser?.id || 'other',
               senderName: otherUser?.name || 'Other User',
-              timestamp: new Date(Date.now() - 300000).toISOString(),
-              messageType: 'text' as const,
-              isRead: true,
-              conversationId: conversationId,
-              replyTo: null
-            },
-            {
-              id: 'demo-2',
-              content: 'I\'m doing great, thanks for asking! How about you?',
-              senderId: user.id,
-              senderName: user.name,
-              timestamp: new Date(Date.now() - 240000).toISOString(),
-              messageType: 'text' as const,
-              isRead: true,
-              conversationId: conversationId,
-              replyTo: {
-                id: 'demo-1',
-                content: 'Hey! How are you doing?',
-                senderName: otherUser?.name || 'Other User',
-                senderId: otherUser?.id || 'other'
-              }
+              senderId: otherUser?.id || 'other'
             }
-          ];
-        }
+          }
+        ];
       }
 
       setMessages(messagesToShow);
