@@ -22,11 +22,6 @@ import {
   Circle,
   MessageSquare,
   Reply,
-  UserPlus,
-  UserMinus,
-  Settings,
-  Crown,
-  Hash,
   MoreHorizontal
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
