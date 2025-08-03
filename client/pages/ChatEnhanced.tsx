@@ -795,7 +795,7 @@ export default function ChatEnhanced() {
                         id={`message-${message.id}`}
                         className={cn(
                           'flex group transition-colors duration-500',
-                          'max-w-[90%] sm:max-w-[85%] lg:max-w-[80%]',
+                          'max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%]',
                           isOwnMessage ? 'ml-auto justify-end' : 'justify-start'
                         )}
                         onDoubleClick={() => setReplyingTo(message)}
