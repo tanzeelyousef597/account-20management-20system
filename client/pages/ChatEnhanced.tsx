@@ -207,28 +207,53 @@ export default function ChatEnhanced() {
   };
 
   const loadAllUsers = async () => {
-    if (!user) return [];
+    if (!user) {
+      console.log('No user logged in, cannot load users');
+      return [];
+    }
 
+    console.log('Loading users from User Management...');
     try {
       const response = await api.get('/users');
+      console.log('API response status:', response.status);
+
       if (response.ok) {
         const users = await response.json();
+        console.log('Raw users from API:', users);
+
         // Only include users that exist in User Management, excluding current user
         const realUsers = users.filter((u: User) => u.id !== user.id && u.email && u.name);
-        console.log('Loaded real users from User Management:', realUsers);
+        console.log('Filtered real users from User Management:', realUsers);
+        console.log('Current user ID being excluded:', user.id);
+
         setAllUsers(realUsers);
+
+        if (realUsers.length === 0) {
+          toast({
+            title: 'No Users Found',
+            description: 'No other users found in User Management. Add users first to start chatting.',
+            variant: 'destructive',
+          });
+        } else {
+          console.log(`Successfully loaded ${realUsers.length} users for chat`);
+        }
+
         return realUsers;
       } else {
         console.warn('API response not ok, status:', response.status);
+        toast({
+          title: 'API Error',
+          description: `Failed to load users (Status: ${response.status}). Please try refreshing the page.`,
+          variant: 'destructive',
+        });
         setAllUsers([]);
         return [];
       }
     } catch (error) {
       console.error('Failed to load users from User Management:', error);
-      // Show toast only if this is a real network error
       toast({
         title: 'Network Error',
-        description: 'Could not load users. Please check your connection and try again.',
+        description: 'Could not load users from User Management. Please check your connection and try again.',
         variant: 'destructive',
       });
       setAllUsers([]);
