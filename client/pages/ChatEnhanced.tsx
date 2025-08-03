@@ -473,18 +473,31 @@ export default function ChatEnhanced() {
 
     setIsSearching(true);
     try {
-      const foundUser = await api.searchUserByEmail(searchEmail.trim(), user.id);
-      setSelectedUser(foundUser);
-      setSearchEmail('');
-      toast({
-        title: 'User Found',
-        description: `Found ${foundUser.name} (${foundUser.email})`,
-      });
+      // Search only among users from User Management
+      const foundUser = allUsers.find(u =>
+        u.email.toLowerCase() === searchEmail.trim().toLowerCase()
+      );
+
+      if (foundUser) {
+        setSelectedUser(foundUser);
+        setSearchEmail('');
+        toast({
+          title: 'User Found',
+          description: `Found ${foundUser.name} (${foundUser.email})`,
+        });
+      } else {
+        toast({
+          title: 'User Not Found',
+          description: 'User not found in User Management. Only existing users can be added to chat.',
+          variant: 'destructive',
+        });
+        setSelectedUser(null);
+      }
     } catch (error: any) {
       console.error('Search error:', error);
       toast({
-        title: 'User Not Found',
-        description: 'User not found in teams',
+        title: 'Search Error',
+        description: 'Failed to search for user',
         variant: 'destructive',
       });
       setSelectedUser(null);
