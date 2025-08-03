@@ -53,6 +53,9 @@ export default function ChatEnhanced() {
   const [replyingTo, setReplyingTo] = useState<ChatMessage | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [groupMembers, setGroupMembers] = useState<User[]>([]);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState<ChatMessage | null>(null);
+  const [showDeleteChatDialog, setShowDeleteChatDialog] = useState(false);
 
   useEffect(() => {
     if (user) {
