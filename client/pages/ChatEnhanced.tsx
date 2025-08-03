@@ -624,23 +624,9 @@ export default function ChatEnhanced() {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => {
-                  setIsCreateGroupOpen(true);
-                  // Refresh users when opening dialog
-                  if (allUsers.length === 0) {
-                    loadAllUsers();
-                  }
-                }}
-                title="Create group"
-                className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 h-8 w-8 p-0"
-              >
-                <UserPlus className="h-4 w-4" />
-              </Button>
-              <Button 
-                size="sm" 
-                variant="ghost"
                 onClick={() => setIsSearching(!isSearching)}
                 className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 h-8 w-8 p-0"
+                title="Search users"
               >
                 <Search className="h-4 w-4" />
               </Button>
