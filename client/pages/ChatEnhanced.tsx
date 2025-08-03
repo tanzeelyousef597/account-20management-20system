@@ -27,15 +27,14 @@ import {
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
-// Simple encryption utility for basic privacy
+// Improved encryption utility that preserves Unicode characters
 const encryptMessage = (message: string, conversationId: string): string => {
   try {
-    // Simple XOR encryption with conversation ID as key
-    const key = conversationId.split('').map(c => c.charCodeAt(0)).reduce((a, b) => a + b, 0);
-    const encrypted = message.split('').map(c =>
-      String.fromCharCode(c.charCodeAt(0) ^ (key % 255))
-    ).join('');
-    return btoa(encrypted); // Base64 encode
+    // Use UTF-8 safe encoding to prevent language corruption
+    const key = conversationId.length % 10; // Simple key
+    const utf8Bytes = new TextEncoder().encode(message);
+    const encrypted = Array.from(utf8Bytes).map(byte => byte ^ key);
+    return btoa(String.fromCharCode(...encrypted));
   } catch {
     return message; // Fallback to unencrypted
   }
@@ -43,12 +42,11 @@ const encryptMessage = (message: string, conversationId: string): string => {
 
 const decryptMessage = (encryptedMessage: string, conversationId: string): string => {
   try {
-    const key = conversationId.split('').map(c => c.charCodeAt(0)).reduce((a, b) => a + b, 0);
+    const key = conversationId.length % 10; // Same simple key
     const decoded = atob(encryptedMessage);
-    const decrypted = decoded.split('').map(c =>
-      String.fromCharCode(c.charCodeAt(0) ^ (key % 255))
-    ).join('');
-    return decrypted;
+    const encrypted = Array.from(decoded).map(c => c.charCodeAt(0));
+    const decrypted = encrypted.map(byte => byte ^ key);
+    return new TextDecoder().decode(new Uint8Array(decrypted));
   } catch {
     return encryptedMessage; // Fallback to original
   }
