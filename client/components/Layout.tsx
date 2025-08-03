@@ -261,7 +261,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </header>
 
-        <main className="p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10 2xl:p-12 3xl:p-16 4xl:p-20 5xl:p-24 animate-fade-in relative min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] bg-gradient-to-br from-slate-50/80 via-white/60 to-blue-50/40 overflow-hidden">
+        <main className="p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10 2xl:p-12 animate-fade-in relative min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] bg-gradient-to-br from-slate-50/80 via-white/60 to-blue-50/40 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(59,130,246,0.03)_0%,_transparent_70%)] pointer-events-none"></div>
           <div className="relative z-10 max-w-full 3xl:max-w-[2000px] 4xl:max-w-[2400px] 5xl:max-w-[2800px] mx-auto">
             <div className="animate-scale-in">
