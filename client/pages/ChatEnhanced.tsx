@@ -734,8 +734,8 @@ export default function ChatEnhanced() {
 
         {/* Chat Area */}
         <div className={cn(
-          "flex-1 flex flex-col bg-gradient-to-br from-white to-blue-50/20 rounded-b-xl lg:rounded-r-xl lg:rounded-bl-none",
-          !selectedConversation && "hidden lg:flex"
+          "flex-1 flex flex-col bg-gradient-to-br from-white to-blue-50/20 rounded-b-xl md:rounded-r-xl md:rounded-bl-none",
+          !selectedConversation && "hidden md:flex"
         )}>
           {selectedConversation ? (
             <>
