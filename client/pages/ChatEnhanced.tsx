@@ -115,6 +115,15 @@ export default function ChatEnhanced() {
   useEffect(() => {
     if (selectedConversation) {
       loadMessages(selectedConversation.id);
+
+      // Set up message refresh for current conversation
+      const messageRefreshInterval = setInterval(() => {
+        if (selectedConversation && user) {
+          loadMessages(selectedConversation.id);
+        }
+      }, 10000); // Refresh messages every 10 seconds
+
+      return () => clearInterval(messageRefreshInterval);
     }
   }, [selectedConversation, user]);
 
