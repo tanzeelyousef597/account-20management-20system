@@ -144,10 +144,10 @@ export default function Fines() {
   // Remove local formatCurrency function - using global currency context
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900">Fine Management</h2>
+    <div className="container-responsive space-responsive">
+      <div className="flex-responsive-between gap-responsive">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-responsive-xl font-bold text-gray-900 truncate">Fine Management</h2>
           <p className="text-gray-600 mt-1">Manage and track worker fines</p>
         </div>
         
