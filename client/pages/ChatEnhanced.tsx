@@ -985,13 +985,13 @@ export default function ChatEnhanced() {
                   <MessageSquare className="h-16 w-16 text-blue-500" />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-700">Select a conversation</h3>
-                <p className="text-slate-500">Choose a conversation to start messaging</p>
-                <Button 
-                  onClick={() => setIsCreateGroupOpen(true)}
+                <p className="text-slate-500">Choose a conversation to start messaging or search for a user by email</p>
+                <Button
+                  onClick={() => setIsSearching(true)}
                   className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
                 >
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  Create Group Chat
+                  <Search className="h-4 w-4 mr-2" />
+                  Find User by Email
                 </Button>
               </div>
             </div>
