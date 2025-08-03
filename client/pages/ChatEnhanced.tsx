@@ -73,13 +73,8 @@ export default function ChatEnhanced() {
   const [onlineStatus, setOnlineStatus] = useState<Record<string, boolean>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isMobileConversationOpen, setIsMobileConversationOpen] = useState(false);
-  const [isCreateGroupOpen, setIsCreateGroupOpen] = useState(false);
-  const [isManageGroupOpen, setIsManageGroupOpen] = useState(false);
-  const [groupName, setGroupName] = useState('');
-  const [selectedGroupMembers, setSelectedGroupMembers] = useState<string[]>([]);
   const [replyingTo, setReplyingTo] = useState<ChatMessage | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
-  const [groupMembers, setGroupMembers] = useState<User[]>([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState<ChatMessage | null>(null);
   const [showDeleteChatDialog, setShowDeleteChatDialog] = useState(false);
