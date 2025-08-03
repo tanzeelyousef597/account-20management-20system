@@ -496,12 +496,30 @@ export default function ChatEnhanced() {
   const handleSearchUser = async () => {
     if (!searchEmail.trim() || !user) return;
 
-    setIsSearching(true);
+    console.log('Searching for user with email:', searchEmail.trim());
+    console.log('Available users:', allUsers.map(u => ({ id: u.id, name: u.name, email: u.email })));
+
+    // If no users loaded, try to refresh them first
+    if (allUsers.length === 0) {
+      console.log('No users loaded, attempting to refresh...');
+      const refreshedUsers = await loadAllUsers();
+      if (refreshedUsers.length === 0) {
+        toast({
+          title: 'No Users Available',
+          description: 'No users found in User Management. Please add users first.',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+
     try {
       // Search only among users from User Management
       const foundUser = allUsers.find(u =>
         u.email.toLowerCase() === searchEmail.trim().toLowerCase()
       );
+
+      console.log('Search result:', foundUser);
 
       if (foundUser) {
         setSelectedUser(foundUser);
@@ -511,9 +529,11 @@ export default function ChatEnhanced() {
           description: `Found ${foundUser.name} (${foundUser.email})`,
         });
       } else {
+        const availableEmails = allUsers.map(u => u.email).join(', ');
+        console.log('Available emails:', availableEmails);
         toast({
           title: 'User Not Found',
-          description: 'User not found in User Management. Only existing users can be added to chat.',
+          description: `User "${searchEmail.trim()}" not found in User Management. Available users: ${availableEmails || 'None'}`,
           variant: 'destructive',
         });
         setSelectedUser(null);
@@ -526,8 +546,6 @@ export default function ChatEnhanced() {
         variant: 'destructive',
       });
       setSelectedUser(null);
-    } finally {
-      setIsSearching(false);
     }
   };
 
