@@ -182,46 +182,32 @@ export default function ChatEnhanced() {
   };
 
   const loadAllUsers = async () => {
+    if (!user) return [];
+
     try {
       const response = await api.get('/users');
       if (response.ok) {
         const users = await response.json();
-        const filteredUsers = users.filter((u: User) => u.id !== user?.id);
-        setAllUsers(filteredUsers);
-        return filteredUsers;
+        // Only include users that exist in User Management, excluding current user
+        const realUsers = users.filter((u: User) => u.id !== user.id && u.email && u.name);
+        console.log('Loaded real users from User Management:', realUsers);
+        setAllUsers(realUsers);
+        return realUsers;
+      } else {
+        console.warn('API response not ok, status:', response.status);
+        setAllUsers([]);
+        return [];
       }
     } catch (error) {
-      console.error('Failed to load users:', error);
-      // Create mock users for demo if API fails
-      const mockUsers: User[] = [
-        {
-          id: 'user-2',
-          name: 'John Worker',
-          email: 'worker@mtwebexperts.com',
-          role: 'Worker',
-          whatsappNumber: '+923280909654',
-          createdAt: new Date().toISOString(),
-        },
-        {
-          id: 'user-3',
-          name: 'Jane Admin',
-          email: 'jane@mtwebexperts.com',
-          role: 'Admin',
-          whatsappNumber: '+923189046143',
-          createdAt: new Date().toISOString(),
-        },
-        {
-          id: 'user-4',
-          name: 'Mike Developer',
-          email: 'mike@mtwebexperts.com',
-          role: 'Worker',
-          whatsappNumber: '+923189046144',
-          createdAt: new Date().toISOString(),
-        }
-      ];
-      const filteredMockUsers = mockUsers.filter(u => u.id !== user?.id);
-      setAllUsers(filteredMockUsers);
-      return filteredMockUsers;
+      console.error('Failed to load users from User Management:', error);
+      // Show toast only if this is a real network error
+      toast({
+        title: 'Network Error',
+        description: 'Could not load users. Please check your connection and try again.',
+        variant: 'destructive',
+      });
+      setAllUsers([]);
+      return [];
     }
   };
 
