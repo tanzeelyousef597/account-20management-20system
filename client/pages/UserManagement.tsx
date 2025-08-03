@@ -324,8 +324,8 @@ export default function UserManagement() {
         </CardHeader>
         <CardContent>
           {users.length > 0 ? (
-            <div className="overflow-x-auto">
-              <Table>
+            <div className="table-responsive">
+              <Table className="table-responsive min-w-[600px]">
                 <TableHeader>
                   <TableRow>
                     <TableHead className="whitespace-nowrap">User</TableHead>
