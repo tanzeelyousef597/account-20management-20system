@@ -685,24 +685,7 @@ export default function ChatEnhanced() {
           {/* Search Section */}
           {isSearching && (
             <div className="p-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/30 to-indigo-50/30">
-              <div className="mb-2">
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-gray-600">
-                    {allUsers.length} users available from User Management
-                  </p>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      console.log('Manual refresh clicked');
-                      loadAllUsers();
-                    }}
-                    className="h-6 text-xs"
-                  >
-                    Refresh Users
-                  </Button>
-                </div>
-              </div>
+
               <div className="flex space-x-2">
                 <Input
                   placeholder="Search by email..."
