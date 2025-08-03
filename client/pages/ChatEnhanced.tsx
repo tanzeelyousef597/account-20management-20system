@@ -380,10 +380,20 @@ export default function ChatEnhanced() {
         } : null
       };
 
-      // Add message to UI immediately
-      setMessages(prev => [...prev, newMessageObj]);
+      // Add message to UI immediately and force re-render
+      setMessages(prev => {
+        const updated = [...prev, newMessageObj];
+        // Force scroll to bottom after state update
+        setTimeout(() => scrollToBottom(), 100);
+        return updated;
+      });
       setNewMessage('');
       setReplyingTo(null);
+
+      // Force conversations list update
+      setTimeout(() => {
+        setConversations(prev => [...prev]);
+      }, 100);
 
       // Update conversation with last message (store encrypted for privacy)
       const updatedConversation = {
