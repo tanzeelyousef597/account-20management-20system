@@ -595,9 +595,13 @@ export default function ChatEnhanced() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 rounded-xl border border-slate-200/60 shadow-lg backdrop-blur-sm h-[700px] flex">
+      <div className="bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 rounded-xl border border-slate-200/60 shadow-lg backdrop-blur-sm h-[500px] sm:h-[600px] lg:h-[700px] flex flex-col lg:flex-row">
         {/* Conversations Sidebar */}
-        <div className="w-80 bg-gradient-to-br from-white to-slate-50/50 border-r border-slate-200/60 flex flex-col rounded-l-xl">
+        <div className={cn(
+          "bg-gradient-to-br from-white to-slate-50/50 border-b lg:border-b-0 lg:border-r border-slate-200/60 flex flex-col rounded-t-xl lg:rounded-l-xl lg:rounded-tr-none",
+          "w-full h-1/2 lg:w-80 lg:h-full",
+          selectedConversation && "hidden lg:flex"
+        )}>
           <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/30">
             <h3 className="font-semibold text-slate-700 flex items-center gap-2">
               <MessageSquare className="h-5 w-5 text-blue-500" />
