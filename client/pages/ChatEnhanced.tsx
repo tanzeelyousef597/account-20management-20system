@@ -490,7 +490,7 @@ export default function ChatEnhanced() {
       try {
         const message = await api.sendMessage(user.id, {
           receiverId: targetUser.id,
-          content: `Hello ${targetUser.name}! 👋`,
+          content: `Hello ${targetUser.name}! ���`,
           messageType: 'text',
         });
 
@@ -582,12 +582,12 @@ export default function ChatEnhanced() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 rounded-xl border border-slate-200/60 shadow-lg backdrop-blur-sm h-[500px] sm:h-[600px] lg:h-[700px] flex flex-col lg:flex-row">
+      <div className="bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 rounded-xl border border-slate-200/60 shadow-lg backdrop-blur-sm h-[calc(100vh-200px)] sm:h-[calc(100vh-150px)] md:h-[600px] lg:h-[700px] flex flex-col md:flex-row">
         {/* Conversations Sidebar */}
         <div className={cn(
-          "bg-gradient-to-br from-white to-slate-50/50 border-b lg:border-b-0 lg:border-r border-slate-200/60 flex flex-col rounded-t-xl lg:rounded-l-xl lg:rounded-tr-none",
-          "w-full h-1/2 lg:w-80 lg:h-full",
-          selectedConversation && "hidden lg:flex"
+          "bg-gradient-to-br from-white to-slate-50/50 border-b md:border-b-0 md:border-r border-slate-200/60 flex flex-col rounded-t-xl md:rounded-l-xl md:rounded-tr-none",
+          "w-full h-full md:w-80 md:h-full",
+          selectedConversation && "hidden md:flex"
         )}>
           <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/30">
             <h3 className="font-semibold text-slate-700 flex items-center gap-2">
