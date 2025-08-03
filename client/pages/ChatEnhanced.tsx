@@ -709,23 +709,12 @@ export default function ChatEnhanced() {
                   >
                     <div className="flex items-center space-x-3">
                       <div className="flex-shrink-0 relative">
-                        {conversation.isGroup ? (
-                          <div className="h-10 w-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                            <Hash className="h-5 w-5 text-white" />
-                          </div>
-                        ) : (
-                          <Avatar className="h-10 w-10">
-                            <AvatarImage src={otherUser?.profilePhoto} />
-                            <AvatarFallback>
-                              {otherUser ? getUserInitials(otherUser.name) : 'U'}
-                            </AvatarFallback>
-                          </Avatar>
-                        )}
-                        {conversation.isGroup && (
-                          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                            <span className="text-white text-xs font-bold">{conversation.participants.length}</span>
-                          </div>
-                        )}
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={otherUser?.profilePhoto} />
+                          <AvatarFallback>
+                            {otherUser ? getUserInitials(otherUser.name) : 'U'}
+                          </AvatarFallback>
+                        </Avatar>
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
