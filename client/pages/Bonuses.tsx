@@ -151,11 +151,11 @@ export default function Bonuses() {
   // Remove local formatCurrency function - using global currency context
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl md:text-3xl font-semibold text-slate-700">Bonus Management</h2>
-        <p className="text-slate-500 mt-1 text-sm md:text-base">Manage and track worker bonuses</p>
+    <div className="container-responsive space-responsive">
+      <div className="flex-responsive-between gap-responsive">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-responsive-xl font-semibold text-slate-700 truncate">Bonus Management</h2>
+          <p className="text-slate-500 mt-1 text-responsive">Manage and track worker bonuses</p>
         </div>
         
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
