@@ -740,16 +740,16 @@ export default function ChatEnhanced() {
           {selectedConversation ? (
             <>
               {/* Chat Header */}
-              <div className="flex h-14 sm:h-16 items-center justify-between px-3 sm:px-4 border-b border-slate-200/50 bg-gradient-to-r from-white/80 to-blue-50/30 backdrop-blur-sm rounded-t-xl lg:rounded-tr-xl">
+              <div className="flex h-12 sm:h-14 md:h-16 items-center justify-between px-2 sm:px-3 md:px-4 border-b border-slate-200/50 bg-gradient-to-r from-white/80 to-blue-50/30 backdrop-blur-sm rounded-t-xl md:rounded-tr-xl">
                 <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
                   {/* Mobile Back Button */}
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setSelectedConversation(null)}
-                    className="lg:hidden h-8 w-8 p-0 flex-shrink-0"
+                    className="md:hidden h-7 w-7 sm:h-8 sm:w-8 p-0 flex-shrink-0"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                   <div className="flex-shrink-0">
                     <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
