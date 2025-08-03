@@ -618,6 +618,92 @@ export default function ChatEnhanced() {
     }
   };
 
+  const handleDeleteMessage = async (messageId: string) => {
+    if (!selectedConversation) return;
+
+    try {
+      // Remove message from UI
+      setMessages(prev => prev.filter(msg => msg.id !== messageId));
+
+      // For groups, update localStorage
+      if (selectedConversation.isGroup) {
+        const key = `group-messages-${selectedConversation.id}`;
+        const existing = localStorage.getItem(key);
+        if (existing) {
+          const messages = JSON.parse(existing);
+          const updatedMessages = messages.filter((msg: any) => msg.id !== messageId);
+          localStorage.setItem(key, JSON.stringify(updatedMessages));
+        }
+      }
+
+      // For individual chats, try to delete from API
+      try {
+        await api.deleteMessage(messageId);
+      } catch (apiError) {
+        console.log('API delete failed, message removed locally');
+      }
+
+      toast({
+        title: 'Message Deleted',
+        description: 'Message has been deleted successfully',
+      });
+    } catch (error) {
+      console.error('Failed to delete message:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete message',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleDeleteChat = async () => {
+    if (!selectedConversation) return;
+
+    try {
+      // Remove from conversations list
+      setConversations(prev => prev.filter(conv => conv.id !== selectedConversation.id));
+
+      // If group, remove from localStorage
+      if (selectedConversation.isGroup) {
+        const groupsKey = `chat-groups-${user?.id}`;
+        const messagesKey = `group-messages-${selectedConversation.id}`;
+
+        const existing = localStorage.getItem(groupsKey);
+        if (existing) {
+          const groups = JSON.parse(existing);
+          const updatedGroups = groups.filter((g: any) => g.id !== selectedConversation.id);
+          localStorage.setItem(groupsKey, JSON.stringify(updatedGroups));
+        }
+
+        localStorage.removeItem(messagesKey);
+      }
+
+      // Try to delete from API
+      try {
+        await api.deleteConversation(selectedConversation.id);
+      } catch (apiError) {
+        console.log('API delete failed, conversation removed locally');
+      }
+
+      // Clear selected conversation
+      setSelectedConversation(null);
+      setMessages([]);
+
+      toast({
+        title: 'Chat Deleted',
+        description: 'Chat has been deleted successfully',
+      });
+    } catch (error) {
+      console.error('Failed to delete chat:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete chat',
+        variant: 'destructive',
+      });
+    }
+  };
+
   const handleSearchUser = async () => {
     if (!searchEmail.trim() || !user) return;
 
