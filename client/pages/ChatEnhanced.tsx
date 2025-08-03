@@ -216,63 +216,46 @@ export default function ChatEnhanced() {
     console.log('Current logged-in user:', { id: user.id, name: user.name, email: user.email, role: user.role });
 
     try {
-      console.log('Making API call to /users...');
-      const response = await api.get('/api/users');
-      console.log('API response status:', response.status);
-      console.log('API response headers:', response.headers);
+      console.log('Making API call to get users...');
+      const users = await api.getUsers();
+      console.log('Raw users from API:', users);
+      console.log('Number of users from API:', users.length);
+      console.log('Users details:', users.map((u: any) => ({ id: u.id, name: u.name, email: u.email, role: u.role })));
 
-      if (response.ok) {
-        const users = await response.json();
-        console.log('Raw users from API:', users);
-        console.log('Number of users from API:', users.length);
-        console.log('Users details:', users.map((u: any) => ({ id: u.id, name: u.name, email: u.email, role: u.role })));
+      // Debug filtering step by step
+      console.log('Filtering users...');
+      console.log('Current user ID to exclude:', user.id, typeof user.id);
 
-        // Debug filtering step by step
-        console.log('Filtering users...');
-        console.log('Current user ID to exclude:', user.id, typeof user.id);
+      const usersExcludingCurrent = users.filter((u: User) => u.id !== user.id);
+      console.log('After excluding current user:', usersExcludingCurrent.length, usersExcludingCurrent.map((u: any) => ({ id: u.id, name: u.name })));
 
-        const usersExcludingCurrent = users.filter((u: User) => u.id !== user.id);
-        console.log('After excluding current user:', usersExcludingCurrent.length, usersExcludingCurrent.map((u: any) => ({ id: u.id, name: u.name })));
+      const usersWithEmail = usersExcludingCurrent.filter((u: User) => u.email);
+      console.log('After requiring email:', usersWithEmail.length, usersWithEmail.map((u: any) => ({ id: u.id, email: u.email })));
 
-        const usersWithEmail = usersExcludingCurrent.filter((u: User) => u.email);
-        console.log('After requiring email:', usersWithEmail.length, usersWithEmail.map((u: any) => ({ id: u.id, email: u.email })));
+      const usersWithName = usersWithEmail.filter((u: User) => u.name);
+      console.log('After requiring name:', usersWithName.length, usersWithName.map((u: any) => ({ id: u.id, name: u.name })));
 
-        const usersWithName = usersWithEmail.filter((u: User) => u.name);
-        console.log('After requiring name:', usersWithName.length, usersWithName.map((u: any) => ({ id: u.id, name: u.name })));
+      const realUsers = users.filter((u: User) => u.id !== user.id && u.email && u.name);
+      console.log('Final filtered real users from User Management:', realUsers);
+      console.log('Final user count for chat:', realUsers.length);
 
-        const realUsers = users.filter((u: User) => u.id !== user.id && u.email && u.name);
-        console.log('Final filtered real users from User Management:', realUsers);
-        console.log('Final user count for chat:', realUsers.length);
+      setAllUsers(realUsers);
 
-        setAllUsers(realUsers);
-
-        if (realUsers.length === 0) {
-          toast({
-            title: 'Debug: No Users Found',
-            description: `Found ${users.length} total users, but ${realUsers.length} available for chat after filtering. Current user ID: ${user.id}`,
-            variant: 'destructive',
-          });
-        } else {
-          console.log(`Successfully loaded ${realUsers.length} users for chat`);
-          toast({
-            title: 'Users Loaded',
-            description: `Successfully loaded ${realUsers.length} users from User Management`,
-          });
-        }
-
-        return realUsers;
-      } else {
-        console.warn('API response not ok, status:', response.status);
-        const errorText = await response.text();
-        console.log('Error response body:', errorText);
+      if (realUsers.length === 0) {
         toast({
-          title: 'API Error',
-          description: `Failed to load users (Status: ${response.status}). Error: ${errorText}`,
+          title: 'Debug: No Users Found',
+          description: `Found ${users.length} total users, but ${realUsers.length} available for chat after filtering. Current user ID: ${user.id}`,
           variant: 'destructive',
         });
-        setAllUsers([]);
-        return [];
+      } else {
+        console.log(`Successfully loaded ${realUsers.length} users for chat`);
+        toast({
+          title: 'Users Loaded',
+          description: `Successfully loaded ${realUsers.length} users from User Management`,
+        });
       }
+
+      return realUsers;
     } catch (error) {
       console.error('Failed to load users from User Management:', error);
       console.error('Error details:', error);
