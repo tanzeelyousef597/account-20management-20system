@@ -366,36 +366,31 @@ export default function ChatEnhanced() {
         )
       );
 
-      // For groups, save messages to localStorage for persistence
-      if (selectedConversation.isGroup) {
-        saveGroupMessages(selectedConversation.id, newMessageObj);
-      } else {
-        // Try to send to backend for direct messages
-        try {
-          const otherUser = selectedConversation.participants.find(p => p.id !== user.id);
-          const messageData: any = {
-            conversationId: selectedConversation.id,
-            content: messageContent,
-            messageType: 'text',
+      // Try to send to backend for direct messages only
+      try {
+        const otherUser = selectedConversation.participants.find(p => p.id !== user.id);
+        const messageData: any = {
+          conversationId: selectedConversation.id,
+          content: messageContent,
+          messageType: 'text',
+        };
+
+        if (replyingTo) {
+          messageData.replyTo = {
+            id: replyingTo.id,
+            content: replyingTo.content,
+            senderName: replyingTo.senderName,
+            senderId: replyingTo.senderId
           };
-
-          if (replyingTo) {
-            messageData.replyTo = {
-              id: replyingTo.id,
-              content: replyingTo.content,
-              senderName: replyingTo.senderName,
-              senderId: replyingTo.senderId
-            };
-          }
-
-          if (otherUser) {
-            messageData.receiverId = otherUser.id;
-          }
-
-          await api.sendMessage(user.id, messageData);
-        } catch (apiError) {
-          console.log('API send failed, message stored locally:', apiError);
         }
+
+        if (otherUser) {
+          messageData.receiverId = otherUser.id;
+        }
+
+        await api.sendMessage(user.id, messageData);
+      } catch (apiError) {
+        console.log('API send failed, message stored locally:', apiError);
       }
 
       refreshUnreadCount();
