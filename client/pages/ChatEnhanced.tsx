@@ -630,7 +630,7 @@ export default function ChatEnhanced() {
 
               <div className="flex space-x-2">
                 <Input
-                  placeholder="Search by email..."
+                  placeholder="Enter user email to start chat..."
                   value={searchEmail}
                   onChange={(e) => setSearchEmail(e.target.value)}
                   className="flex-1 bg-white border-blue-200 focus:border-blue-400"
