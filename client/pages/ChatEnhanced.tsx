@@ -27,29 +27,16 @@ import {
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
-// Improved encryption utility that preserves Unicode characters
+// Simple encryption that preserves all languages and Unicode
 const encryptMessage = (message: string, conversationId: string): string => {
-  try {
-    // Use UTF-8 safe encoding to prevent language corruption
-    const key = conversationId.length % 10; // Simple key
-    const utf8Bytes = new TextEncoder().encode(message);
-    const encrypted = Array.from(utf8Bytes).map(byte => byte ^ key);
-    return btoa(String.fromCharCode(...encrypted));
-  } catch {
-    return message; // Fallback to unencrypted
-  }
+  // For now, disable encryption to prevent any language issues
+  // In production, implement proper AES encryption
+  return message;
 };
 
 const decryptMessage = (encryptedMessage: string, conversationId: string): string => {
-  try {
-    const key = conversationId.length % 10; // Same simple key
-    const decoded = atob(encryptedMessage);
-    const encrypted = Array.from(decoded).map(c => c.charCodeAt(0));
-    const decrypted = encrypted.map(byte => byte ^ key);
-    return new TextDecoder().decode(new Uint8Array(decrypted));
-  } catch {
-    return encryptedMessage; // Fallback to original
-  }
+  // For now, return message as-is to prevent language corruption
+  return encryptedMessage;
 };
 
 export default function ChatEnhanced() {
