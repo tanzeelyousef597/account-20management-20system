@@ -2,6 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Responsive table utilities */
+@layer utilities {
+  .table-responsive {
+    @apply w-full overflow-x-auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(203 213 225) rgb(248 250 252);
+  }
+
+  .table-responsive::-webkit-scrollbar {
+    @apply h-2;
+  }
+
+  .table-responsive::-webkit-scrollbar-track {
+    @apply bg-slate-100 rounded;
+  }
+
+  .table-responsive::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded hover:bg-slate-400;
+  }
+
+  /* Responsive card utilities */
+  .card-responsive {
+    @apply p-3 sm:p-4 lg:p-6 rounded-lg sm:rounded-xl;
+  }
+
+  /* Responsive text utilities */
+  .text-responsive {
+    @apply text-sm sm:text-base;
+  }
+
+  .text-responsive-lg {
+    @apply text-base sm:text-lg lg:text-xl;
+  }
+
+  .text-responsive-xl {
+    @apply text-lg sm:text-xl lg:text-2xl xl:text-3xl;
+  }
+
+  /* Responsive spacing utilities */
+  .space-responsive {
+    @apply space-y-3 sm:space-y-4 lg:space-y-6;
+  }
+
+  .gap-responsive {
+    @apply gap-3 sm:gap-4 lg:gap-6;
+  }
+
+  /* Responsive grid utilities */
+  .grid-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+
+  .grid-responsive-2 {
+    @apply grid grid-cols-1 lg:grid-cols-2;
+  }
+
+  /* Responsive flex utilities */
+  .flex-responsive {
+    @apply flex flex-col sm:flex-row sm:items-center;
+  }
+
+  .flex-responsive-between {
+    @apply flex flex-col sm:flex-row sm:justify-between sm:items-center;
+  }
+
+  /* Mobile-friendly button sizes */
+  .btn-responsive {
+    @apply px-3 py-2 sm:px-4 sm:py-2.5 text-sm sm:text-base min-h-[44px] sm:min-h-[40px];
+  }
+
+  .btn-responsive-sm {
+    @apply px-2 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm min-h-[40px] sm:min-h-[36px];
+  }
+
+  /* Container utilities */
+  .container-responsive {
+    @apply w-full max-w-full px-3 sm:px-4 md:px-6 lg:px-8;
+  }
+
+  /* Form utilities */
+  .form-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6;
+  }
+
+  .form-responsive-2 {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6;
+  }
+}
+
 /* Responsive enhancements for all screen sizes */
 @layer base {
   /* Ensure smooth scrolling */
