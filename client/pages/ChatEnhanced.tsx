@@ -752,7 +752,7 @@ export default function ChatEnhanced() {
                     <X className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                   <div className="flex-shrink-0">
-                    <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
+                    <Avatar className="h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10">
                       <AvatarImage src={selectedConversation.participants.find(p => p.id !== user?.id)?.profilePhoto} />
                       <AvatarFallback className="text-xs sm:text-sm">
                         {getUserInitials(selectedConversation.participants.find(p => p.id !== user?.id)?.name || 'U')}
@@ -760,7 +760,7 @@ export default function ChatEnhanced() {
                     </Avatar>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-slate-700 text-sm sm:text-base truncate">
+                    <h3 className="font-semibold text-slate-700 text-xs sm:text-sm md:text-base truncate">
                       {selectedConversation.name}
                     </h3>
                     <p className="text-xs text-slate-500 truncate">
