@@ -618,7 +618,7 @@ export default function ChatEnhanced() {
           <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/30">
             <h3 className="font-semibold text-slate-700 flex items-center gap-2">
               <MessageSquare className="h-5 w-5 text-blue-500" />
-              Conversations
+              Direct Chats
             </h3>
             <div className="flex space-x-1">
               <Button
@@ -973,7 +973,7 @@ export default function ChatEnhanced() {
                 
                 <div className="flex justify-between items-center mt-2">
                   <span className="text-xs text-slate-500">
-                    Double-click any message to reply �� Press Esc to cancel
+                    Double-click any message to reply • Press Esc to cancel
                   </span>
                 </div>
               </div>
