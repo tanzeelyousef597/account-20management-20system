@@ -343,9 +343,10 @@ export default function ChatEnhanced() {
       const messageContent = newMessage.trim();
 
       // Create a permanent message for groups (since backend might not handle groups)
+      const encryptedContent = encryptMessage(messageContent, selectedConversation.id);
       const newMessageObj = {
         id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        content: messageContent,
+        content: encryptedContent,
         senderId: user.id,
         senderName: user.name,
         timestamp: new Date().toISOString(),
@@ -354,7 +355,7 @@ export default function ChatEnhanced() {
         conversationId: selectedConversation.id,
         replyTo: replyingTo ? {
           id: replyingTo.id,
-          content: replyingTo.content,
+          content: encryptMessage(replyingTo.content, selectedConversation.id),
           senderName: replyingTo.senderName,
           senderId: replyingTo.senderId
         } : null
