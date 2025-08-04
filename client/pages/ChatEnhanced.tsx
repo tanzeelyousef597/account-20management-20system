@@ -684,7 +684,8 @@ export default function ChatEnhanced() {
                     key={conversation.id}
                     className={cn(
                       "p-2 sm:p-3 cursor-pointer transition-all duration-200 hover:shadow-md border border-slate-200/60 group",
-                      "min-h-[60px] sm:min-h-[70px]", // Ensure minimum touch target size
+                      "min-h-[64px] sm:min-h-[70px] md:min-h-[76px]", // Better touch target sizes
+                      "active:scale-95 active:bg-slate-50", // Mobile touch feedback
                       selectedConversation?.id === conversation.id
                         ? "bg-gradient-to-r from-blue-100 to-blue-50 border-blue-300 shadow-md"
                         : "bg-white hover:bg-gradient-to-r hover:from-slate-50 hover:to-blue-50/30"
