@@ -674,7 +674,7 @@ export default function ChatEnhanced() {
           )}
 
           {/* Conversations List */}
-          <ScrollArea className="flex-1 p-1 sm:p-2">
+          <ScrollArea className="flex-1 p-1 sm:p-2 overflow-y-auto overscroll-contain">
             <div className="space-y-1 sm:space-y-2">
               {conversations.map((conversation) => {
                 const otherUser = conversation.participants.find(p => p.id !== user?.id);
