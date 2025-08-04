@@ -691,18 +691,18 @@ export default function ChatEnhanced() {
                     )}
                     onClick={() => setSelectedConversation(conversation)}
                   >
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
                       <div className="flex-shrink-0 relative">
-                        <Avatar className="h-10 w-10">
+                        <Avatar className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10">
                           <AvatarImage src={otherUser?.profilePhoto} />
-                          <AvatarFallback>
+                          <AvatarFallback className="text-xs sm:text-sm">
                             {otherUser ? getUserInitials(otherUser.name) : 'U'}
                           </AvatarFallback>
                         </Avatar>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <div className="font-medium text-slate-700 truncate">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="font-medium text-slate-700 truncate text-sm sm:text-base">
                             {conversation.name || otherUser?.name || 'Unknown'}
                           </div>
                           <div className="flex items-center gap-2">
