@@ -705,14 +705,14 @@ export default function ChatEnhanced() {
                           <div className="font-medium text-slate-700 truncate text-sm sm:text-base">
                             {conversation.name || otherUser?.name || 'Unknown'}
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                             {conversation.lastMessage && (
-                              <span className="text-xs text-slate-400">
+                              <span className="text-xs text-slate-400 hidden sm:inline">
                                 {formatTime(conversation.lastMessage.timestamp)}
                               </span>
                             )}
                             {conversation.unreadCount > 0 && (
-                              <Badge className="bg-gradient-to-r from-red-400 to-red-500 text-white text-xs min-w-5 h-5 flex items-center justify-center">
+                              <Badge className="bg-gradient-to-r from-red-400 to-red-500 text-white text-xs min-w-4 sm:min-w-5 h-4 sm:h-5 flex items-center justify-center px-1">
                                 {conversation.unreadCount > 99 ? '99+' : conversation.unreadCount}
                               </Badge>
                             )}
