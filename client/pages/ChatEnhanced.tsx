@@ -986,18 +986,19 @@ export default function ChatEnhanced() {
             </>
           ) : (
             <div className="flex-1 flex items-center justify-center">
-              <div className="text-center space-y-4">
-                <div className="bg-gradient-to-r from-blue-100 to-indigo-200 p-6 rounded-full w-fit mx-auto">
-                  <MessageSquare className="h-16 w-16 text-blue-500" />
+              <div className="text-center space-y-3 sm:space-y-4 p-4">
+                <div className="bg-gradient-to-r from-blue-100 to-indigo-200 p-4 sm:p-6 rounded-full w-fit mx-auto">
+                  <MessageSquare className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-blue-500" />
                 </div>
-                <h3 className="text-xl font-semibold text-slate-700">Select a conversation</h3>
-                <p className="text-slate-500">Choose a conversation to start messaging or search for a user by email</p>
+                <h3 className="text-lg sm:text-xl font-semibold text-slate-700">Select a conversation</h3>
+                <p className="text-slate-500 text-sm sm:text-base px-2">Choose a conversation to start messaging or search for a user by email</p>
                 <Button
                   onClick={() => setIsSearching(true)}
-                  className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
+                  className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 w-full sm:w-auto"
+                  size="sm"
                 >
-                  <Search className="h-4 w-4 mr-2" />
-                  Find User by Email
+                  <Search className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+                  <span className="text-sm sm:text-base">Find User by Email</span>
                 </Button>
               </div>
             </div>
