@@ -718,12 +718,20 @@ export default function ChatEnhanced() {
                             )}
                           </div>
                         </div>
-                        <p className="text-sm text-slate-500 truncate mt-1">
-                          {conversation.lastMessage?.content
-                            ? decryptMessage(conversation.lastMessage.content, conversation.id)
-                            : 'No messages yet'
-                          }
-                        </p>
+                        <div className="flex items-center justify-between mt-1 gap-2">
+                          <p className="text-xs sm:text-sm text-slate-500 truncate flex-1">
+                            {conversation.lastMessage?.content
+                              ? decryptMessage(conversation.lastMessage.content, conversation.id)
+                              : 'No messages yet'
+                            }
+                          </p>
+                          {/* Show timestamp on mobile */}
+                          {conversation.lastMessage && (
+                            <span className="text-xs text-slate-400 sm:hidden flex-shrink-0">
+                              {formatTime(conversation.lastMessage.timestamp)}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </Card>
