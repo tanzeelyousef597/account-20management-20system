@@ -674,16 +674,17 @@ export default function ChatEnhanced() {
           )}
 
           {/* Conversations List */}
-          <ScrollArea className="flex-1 p-2">
-            <div className="space-y-2">
+          <ScrollArea className="flex-1 p-1 sm:p-2">
+            <div className="space-y-1 sm:space-y-2">
               {conversations.map((conversation) => {
                 const otherUser = conversation.participants.find(p => p.id !== user?.id);
-                
+
                 return (
                   <Card
                     key={conversation.id}
                     className={cn(
-                      "p-3 cursor-pointer transition-all duration-200 hover:shadow-md border border-slate-200/60 group",
+                      "p-2 sm:p-3 cursor-pointer transition-all duration-200 hover:shadow-md border border-slate-200/60 group",
+                      "min-h-[60px] sm:min-h-[70px]", // Ensure minimum touch target size
                       selectedConversation?.id === conversation.id
                         ? "bg-gradient-to-r from-blue-100 to-blue-50 border-blue-300 shadow-md"
                         : "bg-white hover:bg-gradient-to-r hover:from-slate-50 hover:to-blue-50/30"
