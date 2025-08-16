@@ -135,6 +135,8 @@ export const api = {
     apiClient.get(`/api/chat/messages/${conversationId}?page=${page}&limit=${limit}`),
   sendMessage: (senderId: string, messageData: any) => apiClient.post(`/api/chat/send/${senderId}`, messageData),
   markMessagesAsRead: (conversationId: string, userId: string) => apiClient.put(`/api/chat/mark-read/${conversationId}`, { userId }),
+  deleteMessage: (messageId: string, options?: any) => apiClient.delete(`/api/chat/messages/${messageId}`, options),
+  deleteConversation: (conversationId: string) => apiClient.delete(`/api/chat/conversations/${conversationId}`),
   uploadChatFile: (fileType: 'image' | 'file') => apiClient.post('/api/chat/upload-file', { fileType }),
   getOnlineStatus: (userIds: string[]) => apiClient.post('/api/chat/online-status', { userIds }),
   createGroupChat: (data: any) => apiClient.post('/api/chat/group', data),
