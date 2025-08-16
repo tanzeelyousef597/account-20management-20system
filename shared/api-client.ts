@@ -68,8 +68,11 @@ export class ApiClient {
     });
   }
 
-  async delete<T>(endpoint: string): Promise<T> {
-    return this.makeRequest<T>(endpoint, { method: 'DELETE' });
+  async delete<T>(endpoint: string, data?: any): Promise<T> {
+    return this.makeRequest<T>(endpoint, {
+      method: 'DELETE',
+      body: data ? JSON.stringify(data) : undefined,
+    });
   }
 }
 
@@ -137,6 +140,7 @@ export const api = {
   markMessagesAsRead: (conversationId: string, userId: string) => apiClient.put(`/api/chat/mark-read/${conversationId}`, { userId }),
   deleteMessage: (messageId: string, options?: any) => apiClient.delete(`/api/chat/messages/${messageId}`, options),
   deleteConversation: (conversationId: string) => apiClient.delete(`/api/chat/conversations/${conversationId}`),
+  uploadFileWithData: (fileData: any) => apiClient.post('/api/chat/upload-file-data', fileData),
   uploadChatFile: (fileType: 'image' | 'file') => apiClient.post('/api/chat/upload-file', { fileType }),
   getOnlineStatus: (userIds: string[]) => apiClient.post('/api/chat/online-status', { userIds }),
   createGroupChat: (data: any) => apiClient.post('/api/chat/group', data),
