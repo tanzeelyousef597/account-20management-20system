@@ -419,8 +419,6 @@ export default function ChatEnhanced() {
       // Remove from conversations list
       setConversations(prev => prev.filter(conv => conv.id !== selectedConversation.id));
 
-
-
       // Try to delete from API
       try {
         await api.deleteConversation(selectedConversation.id);
@@ -443,6 +441,81 @@ export default function ChatEnhanced() {
         description: 'Failed to delete chat',
         variant: 'destructive',
       });
+    }
+  };
+
+  const handleFileUpload = async (file: File) => {
+    if (!selectedConversation || !user) return;
+
+    setIsUploadingFile(true);
+    setUploadProgress(0);
+
+    try {
+      // Create a FormData object for file upload
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('conversationId', selectedConversation.id);
+
+      // Simulate upload progress
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 200);
+
+      // Upload file with proper headers
+      const response = await fetch('/api/chat/upload-file', {
+        method: 'POST',
+        body: formData,
+      });
+
+      clearInterval(progressInterval);
+      setUploadProgress(100);
+
+      if (response.ok) {
+        const result = await response.json();
+
+        // Create file message
+        const fileMessageObj = {
+          id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          content: `📎 ${file.name}`,
+          senderId: user.id,
+          senderName: user.name,
+          timestamp: new Date().toISOString(),
+          messageType: 'file' as const,
+          isRead: false,
+          conversationId: selectedConversation.id,
+          fileUrl: result.url,
+          fileName: file.name,
+          fileSize: file.size,
+          fileType: file.type,
+          replyTo: null
+        };
+
+        // Add file message to UI
+        setMessages(prev => [...prev, fileMessageObj]);
+
+        toast({
+          title: 'File Sent',
+          description: `${file.name} uploaded successfully`,
+        });
+      } else {
+        throw new Error('Upload failed');
+      }
+    } catch (error) {
+      console.error('File upload error:', error);
+      toast({
+        title: 'Upload Failed',
+        description: 'Failed to upload file. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsUploadingFile(false);
+      setUploadProgress(0);
     }
   };
 
