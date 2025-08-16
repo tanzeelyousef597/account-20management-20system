@@ -361,24 +361,45 @@ export default function ChatEnhanced() {
 
 
 
-  const handleDeleteMessage = async (messageId: string) => {
+  const handleDeleteMessage = async (messageId: string, deleteForEveryone: boolean = false) => {
     if (!selectedConversation) return;
 
     try {
-      // Remove message from UI
-      setMessages(prev => prev.filter(msg => msg.id !== messageId));
+      if (deleteForEveryone) {
+        // Delete for everyone - remove from all participants
+        setMessages(prev => prev.filter(msg => msg.id !== messageId));
 
-      // Try to delete from API for direct chats
-      try {
-        await api.deleteMessage(messageId);
-      } catch (apiError) {
-        console.log('API delete failed, message removed locally');
+        // Try to delete from API for all users
+        try {
+          await api.deleteMessage(messageId, { deleteForEveryone: true });
+        } catch (apiError) {
+          console.log('API delete for everyone failed, message removed locally');
+        }
+
+        toast({
+          title: 'Message Deleted',
+          description: 'Message deleted for everyone',
+        });
+      } else {
+        // Delete for me only - mark as deleted for current user
+        setMessages(prev => prev.map(msg =>
+          msg.id === messageId
+            ? { ...msg, deletedForMe: true, content: 'This message was deleted' }
+            : msg
+        ));
+
+        // Try to mark as deleted for current user in API
+        try {
+          await api.deleteMessage(messageId, { deleteForMe: true, userId: user?.id });
+        } catch (apiError) {
+          console.log('API delete for me failed, message marked locally');
+        }
+
+        toast({
+          title: 'Message Deleted',
+          description: 'Message deleted for you',
+        });
       }
-
-      toast({
-        title: 'Message Deleted',
-        description: 'Message has been deleted successfully',
-      });
     } catch (error) {
       console.error('Failed to delete message:', error);
       toast({
