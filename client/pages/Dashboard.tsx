@@ -154,7 +154,7 @@ export default function Dashboard() {
                 const minHeight = value > 0 ? Math.max(heightPercentage, 3) : 0;
 
                 return (
-                  <div key={index} className="flex flex-col items-center flex-1 max-w-16">
+                  <div key={index} className="flex flex-col items-center flex-1 max-w-20 sm:max-w-24">
                     {/* Value label above bar */}
                     {value > 0 && (
                       <div className="text-xs font-semibold text-slate-700 mb-1 bg-white px-2 py-1 rounded shadow-sm border border-slate-200">
