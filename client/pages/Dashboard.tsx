@@ -157,7 +157,7 @@ export default function Dashboard() {
                   <div key={index} className="flex flex-col items-center flex-1 max-w-20 sm:max-w-24">
                     {/* Value label above bar */}
                     {value > 0 && (
-                      <div className="text-xs font-semibold text-slate-700 mb-1 bg-white px-2 py-1 rounded shadow-sm border border-slate-200">
+                      <div className="text-xs sm:text-sm font-bold text-slate-700 mb-2 bg-white px-3 py-1.5 rounded-lg shadow-md border border-slate-200/80 backdrop-blur-sm">
                         {value}
                       </div>
                     )}
