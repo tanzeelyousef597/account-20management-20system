@@ -58,6 +58,7 @@ export default function ChatEnhanced() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState<ChatMessage | null>(null);
   const [showDeleteChatDialog, setShowDeleteChatDialog] = useState(false);
+  const [deleteForEveryone, setDeleteForEveryone] = useState(false);
 
   useEffect(() => {
     if (user) {
