@@ -1057,7 +1057,47 @@ export default function ChatEnhanced() {
                   </div>
                 )}
                 
+                {/* File upload progress */}
+                {isUploadingFile && (
+                  <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-blue-700">Uploading file...</span>
+                      <span className="text-sm text-blue-600">{uploadProgress}%</span>
+                    </div>
+                    <div className="w-full bg-blue-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${uploadProgress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex space-x-2">
+                  {/* File upload button */}
+                  <label className="cursor-pointer">
+                    <input
+                      type="file"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleFileUpload(file);
+                        }
+                      }}
+                      disabled={isUploadingFile}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={isUploadingFile}
+                      className="rounded-full h-9 w-9 sm:h-10 sm:w-10 p-0 border-slate-300 hover:bg-slate-50"
+                    >
+                      <Paperclip className="h-3 w-3 sm:h-4 sm:w-4" />
+                    </Button>
+                  </label>
+
                   <Input
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
@@ -1071,10 +1111,11 @@ export default function ChatEnhanced() {
                       }
                     }}
                     className="flex-1 bg-white border-slate-300 focus:border-blue-400 rounded-full px-3 sm:px-4 text-sm sm:text-base"
+                    disabled={isUploadingFile}
                   />
                   <Button
                     onClick={handleSendMessage}
-                    disabled={!newMessage.trim()}
+                    disabled={!newMessage.trim() || isUploadingFile}
                     className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 rounded-full h-9 w-9 sm:h-10 sm:w-10 p-0 flex-shrink-0"
                   >
                     <Send className="h-3 w-3 sm:h-4 sm:w-4" />
