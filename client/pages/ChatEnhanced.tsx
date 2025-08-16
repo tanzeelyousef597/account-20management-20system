@@ -59,6 +59,8 @@ export default function ChatEnhanced() {
   const [messageToDelete, setMessageToDelete] = useState<ChatMessage | null>(null);
   const [showDeleteChatDialog, setShowDeleteChatDialog] = useState(false);
   const [deleteForEveryone, setDeleteForEveryone] = useState(false);
+  const [isUploadingFile, setIsUploadingFile] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     if (user) {
