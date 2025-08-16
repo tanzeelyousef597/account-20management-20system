@@ -371,14 +371,27 @@ export default function ChatEnhanced() {
 
     try {
       if (deleteForEveryone) {
-        // Delete for everyone - remove from all participants
+        // Delete for everyone - remove from all participants immediately
         setMessages(prev => prev.filter(msg => msg.id !== messageId));
 
-        // Try to delete from API for all users
+        // Send deletion to all participants in the conversation
+        const participantIds = selectedConversation.participants.map(p => p.id);
+
         try {
-          await api.deleteMessage(messageId, { deleteForEveryone: true });
+          await api.deleteMessage(messageId, {
+            deleteForEveryone: true,
+            conversationId: selectedConversation.id,
+            participantIds: participantIds,
+            senderId: user?.id
+          });
+
+          // Simulate real-time deletion for other participants
+          // In a real app, this would be handled by WebSocket/real-time updates
+          console.log('Message deleted for all participants:', participantIds);
+
         } catch (apiError) {
-          console.log('API delete for everyone failed, message removed locally');
+          console.log('API delete for everyone failed, message removed locally:', apiError);
+          // Still remove locally even if API fails
         }
 
         toast({
@@ -389,15 +402,19 @@ export default function ChatEnhanced() {
         // Delete for me only - mark as deleted for current user
         setMessages(prev => prev.map(msg =>
           msg.id === messageId
-            ? { ...msg, deletedForMe: true, content: 'This message was deleted' }
+            ? { ...msg, deletedForMe: true, content: 'This message was deleted', isDeleted: true }
             : msg
         ));
 
         // Try to mark as deleted for current user in API
         try {
-          await api.deleteMessage(messageId, { deleteForMe: true, userId: user?.id });
+          await api.deleteMessage(messageId, {
+            deleteForMe: true,
+            userId: user?.id,
+            conversationId: selectedConversation.id
+          });
         } catch (apiError) {
-          console.log('API delete for me failed, message marked locally');
+          console.log('API delete for me failed, message marked locally:', apiError);
         }
 
         toast({
