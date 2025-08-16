@@ -720,9 +720,13 @@ export default function ChatEnhanced() {
                           </div>
                         </div>
                         <div className="flex items-center justify-between mt-1 gap-2">
-                          <p className="text-xs sm:text-sm text-slate-500 truncate flex-1">
+                          <p className="text-xs sm:text-sm text-slate-500 flex-1 line-clamp-1 break-all">
                             {conversation.lastMessage?.content
-                              ? decryptMessage(conversation.lastMessage.content, conversation.id)
+                              ? (() => {
+                                  const content = decryptMessage(conversation.lastMessage.content, conversation.id);
+                                  // Truncate long messages with ellipsis
+                                  return content.length > 35 ? content.substring(0, 35) + '...' : content;
+                                })()
                               : 'No messages yet'
                             }
                           </p>
