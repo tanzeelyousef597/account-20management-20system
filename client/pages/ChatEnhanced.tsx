@@ -371,56 +371,67 @@ export default function ChatEnhanced() {
 
     try {
       if (deleteForEveryone) {
-        // Delete for everyone - remove from all participants immediately
-        setMessages(prev => prev.filter(msg => msg.id !== messageId));
-
-        // Send deletion to all participants in the conversation
+        // Send deletion to backend first
         const participantIds = selectedConversation.participants.map(p => p.id);
 
         try {
-          await api.deleteMessage(messageId, {
+          const response = await api.deleteMessage(messageId, {
             deleteForEveryone: true,
             conversationId: selectedConversation.id,
             participantIds: participantIds,
             senderId: user?.id
           });
 
-          // Simulate real-time deletion for other participants
-          // In a real app, this would be handled by WebSocket/real-time updates
-          console.log('Message deleted for all participants:', participantIds);
+          if (response.success) {
+            // Only remove from UI after successful backend deletion
+            setMessages(prev => prev.filter(msg => msg.id !== messageId));
 
+            console.log('Message permanently deleted for all participants:', participantIds);
+
+            toast({
+              title: 'Message Deleted',
+              description: 'Message deleted for everyone permanently',
+            });
+          }
         } catch (apiError) {
-          console.log('API delete for everyone failed, message removed locally:', apiError);
-          // Still remove locally even if API fails
+          console.error('Failed to delete message for everyone:', apiError);
+          toast({
+            title: 'Error',
+            description: 'Failed to delete message for everyone',
+            variant: 'destructive',
+          });
+          return;
         }
-
-        toast({
-          title: 'Message Deleted',
-          description: 'Message deleted for everyone',
-        });
       } else {
-        // Delete for me only - mark as deleted for current user
-        setMessages(prev => prev.map(msg =>
-          msg.id === messageId
-            ? { ...msg, deletedForMe: true, content: 'This message was deleted', isDeleted: true }
-            : msg
-        ));
-
-        // Try to mark as deleted for current user in API
+        // Delete for me only
         try {
-          await api.deleteMessage(messageId, {
+          const response = await api.deleteMessage(messageId, {
             deleteForMe: true,
             userId: user?.id,
             conversationId: selectedConversation.id
           });
-        } catch (apiError) {
-          console.log('API delete for me failed, message marked locally:', apiError);
-        }
 
-        toast({
-          title: 'Message Deleted',
-          description: 'Message deleted for you',
-        });
+          if (response.success) {
+            // Mark as deleted for current user only
+            setMessages(prev => prev.map(msg =>
+              msg.id === messageId
+                ? { ...msg, deletedForMe: true, content: 'This message was deleted', isDeleted: true }
+                : msg
+            ));
+
+            toast({
+              title: 'Message Deleted',
+              description: 'Message deleted for you',
+            });
+          }
+        } catch (apiError) {
+          console.error('Failed to delete message for me:', apiError);
+          toast({
+            title: 'Error',
+            description: 'Failed to delete message',
+            variant: 'destructive',
+          });
+        }
       }
     } catch (error) {
       console.error('Failed to delete message:', error);
@@ -482,16 +493,35 @@ export default function ChatEnhanced() {
     setUploadProgress(0);
 
     try {
-      // Convert file to base64 to prevent corruption
+      // Convert file to base64 with better error handling
       const fileBase64 = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => {
-          const result = reader.result as string;
-          resolve(result.split(',')[1]); // Remove data:type;base64, prefix
+          try {
+            const result = reader.result as string;
+            if (!result || !result.includes(',')) {
+              throw new Error('Invalid file data');
+            }
+            // Remove data:type;base64, prefix and ensure clean base64
+            const base64Data = result.split(',')[1];
+            if (!base64Data) {
+              throw new Error('Failed to extract base64 data');
+            }
+            resolve(base64Data);
+          } catch (err) {
+            reject(err);
+          }
         };
-        reader.onerror = reject;
+        reader.onerror = () => reject(new Error('Failed to read file'));
         reader.readAsDataURL(file);
       });
+
+      // Validate base64 data
+      try {
+        atob(fileBase64); // Test if valid base64
+      } catch (base64Error) {
+        throw new Error('Invalid file encoding');
+      }
 
       // Simulate upload progress
       const progressInterval = setInterval(() => {
@@ -514,21 +544,14 @@ export default function ChatEnhanced() {
         senderId: user.id
       };
 
-      const response = await fetch('/api/chat/upload-file', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(fileData),
-      });
+      // Use the new upload endpoint
+      const response = await api.uploadFileWithData(fileData);
 
       clearInterval(progressInterval);
       setUploadProgress(100);
 
-      if (response.ok) {
-        const result = await response.json();
-
-        // Create file message with proper metadata
+      if (response.success) {
+        // Create file message with proper metadata and reliable data storage
         const fileMessageObj = {
           id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           content: `📎 ${file.name}`,
@@ -538,11 +561,11 @@ export default function ChatEnhanced() {
           messageType: 'file' as const,
           isRead: false,
           conversationId: selectedConversation.id,
-          fileUrl: result.url || result.fileId,
+          fileUrl: response.url || response.fileId,
           fileName: file.name,
           fileSize: file.size,
           fileType: file.type,
-          fileData: fileBase64, // Store for reliable download
+          fileData: fileBase64, // Store clean base64 for reliable download
           originalName: file.name,
           replyTo: null
         };
@@ -555,8 +578,7 @@ export default function ChatEnhanced() {
           description: `${file.name} uploaded successfully`,
         });
       } else {
-        const errorData = await response.text();
-        throw new Error(`Upload failed: ${errorData}`);
+        throw new Error('Upload response indicates failure');
       }
     } catch (error) {
       console.error('File upload error:', error);
@@ -1083,28 +1105,67 @@ export default function ChatEnhanced() {
                                         const fileType = (message as any).fileType || 'application/octet-stream';
 
                                         if ((message as any).fileData) {
-                                          // Use base64 data for reliable download
-                                          const base64Data = (message as any).fileData;
-                                          const binaryString = atob(base64Data);
-                                          const bytes = new Uint8Array(binaryString.length);
-                                          for (let i = 0; i < binaryString.length; i++) {
-                                            bytes[i] = binaryString.charCodeAt(i);
-                                          }
-                                          const blob = new Blob([bytes], { type: fileType });
-                                          const url = URL.createObjectURL(blob);
+                                          // Use base64 data for reliable download with enhanced error handling
+                                          try {
+                                            const base64Data = (message as any).fileData;
 
-                                          const link = document.createElement('a');
-                                          link.href = url;
-                                          link.download = fileName;
-                                          document.body.appendChild(link);
-                                          link.click();
-                                          document.body.removeChild(link);
-                                          URL.revokeObjectURL(url);
+                                            // Validate base64 data
+                                            if (!base64Data || typeof base64Data !== 'string') {
+                                              throw new Error('Invalid file data');
+                                            }
+
+                                            // Convert base64 to binary with proper error handling
+                                            const binaryString = atob(base64Data);
+                                            const bytes = new Uint8Array(binaryString.length);
+
+                                            for (let i = 0; i < binaryString.length; i++) {
+                                              bytes[i] = binaryString.charCodeAt(i);
+                                            }
+
+                                            // Create blob with proper MIME type
+                                            const blob = new Blob([bytes], {
+                                              type: fileType || 'application/octet-stream'
+                                            });
+
+                                            // Validate blob
+                                            if (blob.size === 0) {
+                                              throw new Error('Created blob is empty');
+                                            }
+
+                                            const url = URL.createObjectURL(blob);
+
+                                            const link = document.createElement('a');
+                                            link.href = url;
+                                            link.download = fileName;
+                                            link.style.display = 'none';
+                                            document.body.appendChild(link);
+                                            link.click();
+                                            document.body.removeChild(link);
+
+                                            // Clean up URL after a short delay
+                                            setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                                          } catch (downloadError) {
+                                            console.error('Base64 download failed:', downloadError);
+                                            // Fallback to URL download
+                                            if ((message as any).fileUrl) {
+                                              const link = document.createElement('a');
+                                              link.href = (message as any).fileUrl;
+                                              link.download = fileName;
+                                              link.style.display = 'none';
+                                              document.body.appendChild(link);
+                                              link.click();
+                                              document.body.removeChild(link);
+                                            } else {
+                                              throw downloadError;
+                                            }
+                                          }
                                         } else {
                                           // Fallback to URL download
                                           const link = document.createElement('a');
                                           link.href = (message as any).fileUrl;
                                           link.download = fileName;
+                                          link.style.display = 'none';
                                           document.body.appendChild(link);
                                           link.click();
                                           document.body.removeChild(link);
