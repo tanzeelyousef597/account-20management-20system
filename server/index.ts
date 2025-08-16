@@ -54,7 +54,10 @@ import {
   handleMarkAsRead,
   handleUploadChatFile,
   handleGetOnlineStatus,
-  handleCreateGroupChat
+  handleCreateGroupChat,
+  handleDeleteMessage,
+  handleDeleteConversation,
+  handleUploadFileWithData
 } from "./routes/chat";
 
 export function createServer() {
@@ -133,6 +136,9 @@ export function createServer() {
   app.post("/api/chat/send/:senderId", handleSendMessage);
   app.put("/api/chat/mark-read/:conversationId", handleMarkAsRead);
   app.post("/api/chat/upload-file", handleUploadChatFile);
+  app.post("/api/chat/upload-file-data", handleUploadFileWithData);
+  app.delete("/api/chat/messages/:messageId", handleDeleteMessage);
+  app.delete("/api/chat/conversations/:conversationId", handleDeleteConversation);
   app.post("/api/chat/online-status", handleGetOnlineStatus);
   app.post("/api/chat/group", handleCreateGroupChat);
 
