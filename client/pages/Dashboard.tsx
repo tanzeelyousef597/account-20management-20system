@@ -164,18 +164,25 @@ export default function Dashboard() {
 
                     {/* Bar */}
                     <div
-                      className="w-12 rounded-t-lg transition-all duration-500 hover:opacity-90 relative group transform hover:scale-105 animate-slide-up shadow-lg"
+                      className="w-16 sm:w-18 md:w-20 rounded-t-xl transition-all duration-500 hover:opacity-90 relative group transform hover:scale-105 animate-slide-up shadow-xl border-2 border-white/20"
                       style={{
-                        background: `linear-gradient(45deg, ${category.color}, ${category.color}dd)`,
+                        background: `linear-gradient(135deg, ${category.color}, ${category.color}cc, ${category.color}dd)`,
                         height: `${minHeight}%`,
-                        minHeight: value > 0 ? '8px' : '0px',
-                        animationDelay: `${index * 100}ms`
+                        minHeight: value > 0 ? '12px' : '0px',
+                        animationDelay: `${index * 100}ms`,
+                        boxShadow: `0 4px 20px ${category.color}40, 0 8px 40px ${category.color}20`
                       }}
                     >
                       {/* Enhanced hover effects */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-white/30 opacity-0 group-hover:opacity-100 rounded-t-lg transition-all duration-300"></div>
-                      <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 rounded-t-lg transition-opacity duration-200"></div>
-                      <div className="absolute -top-px left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-white/15 to-white/35 opacity-0 group-hover:opacity-100 rounded-t-xl transition-all duration-300"></div>
+                      <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-25 rounded-t-xl transition-opacity duration-200"></div>
+                      <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-xl"></div>
+
+                      {/* Subtle inner glow */}
+                      <div className="absolute inset-2 rounded-t-lg bg-gradient-to-t from-transparent to-white/10 opacity-60"></div>
+
+                      {/* Top highlight */}
+                      <div className="absolute top-0 left-2 right-2 h-3 bg-white/20 rounded-t-lg"></div>
                     </div>
 
                     {/* Category label */}
