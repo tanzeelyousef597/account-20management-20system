@@ -186,7 +186,7 @@ export default function Dashboard() {
                     </div>
 
                     {/* Category label */}
-                    <div className="text-xs font-medium text-slate-600 text-center mt-2 leading-tight">
+                    <div className="text-xs sm:text-sm font-semibold text-slate-700 text-center mt-3 leading-tight px-1">
                       {category.name}
                     </div>
                   </div>
