@@ -1073,17 +1073,55 @@ export default function ChatEnhanced() {
                                     {(message as any).fileSize ? `${Math.round((message as any).fileSize / 1024)} KB` : 'Unknown size'}
                                   </p>
                                 </div>
-                                {(message as any).fileUrl && (
+                                {((message as any).fileUrl || (message as any).fileData) && (
                                   <Button
                                     size="sm"
                                     variant="ghost"
-                                    onClick={() => {
-                                      const link = document.createElement('a');
-                                      link.href = (message as any).fileUrl;
-                                      link.download = (message as any).fileName || 'file';
-                                      document.body.appendChild(link);
-                                      link.click();
-                                      document.body.removeChild(link);
+                                    onClick={async () => {
+                                      try {
+                                        const fileName = (message as any).fileName || 'file';
+                                        const fileType = (message as any).fileType || 'application/octet-stream';
+
+                                        if ((message as any).fileData) {
+                                          // Use base64 data for reliable download
+                                          const base64Data = (message as any).fileData;
+                                          const binaryString = atob(base64Data);
+                                          const bytes = new Uint8Array(binaryString.length);
+                                          for (let i = 0; i < binaryString.length; i++) {
+                                            bytes[i] = binaryString.charCodeAt(i);
+                                          }
+                                          const blob = new Blob([bytes], { type: fileType });
+                                          const url = URL.createObjectURL(blob);
+
+                                          const link = document.createElement('a');
+                                          link.href = url;
+                                          link.download = fileName;
+                                          document.body.appendChild(link);
+                                          link.click();
+                                          document.body.removeChild(link);
+                                          URL.revokeObjectURL(url);
+                                        } else {
+                                          // Fallback to URL download
+                                          const link = document.createElement('a');
+                                          link.href = (message as any).fileUrl;
+                                          link.download = fileName;
+                                          document.body.appendChild(link);
+                                          link.click();
+                                          document.body.removeChild(link);
+                                        }
+
+                                        toast({
+                                          title: 'Download Started',
+                                          description: `Downloading ${fileName}`,
+                                        });
+                                      } catch (error) {
+                                        console.error('Download error:', error);
+                                        toast({
+                                          title: 'Download Failed',
+                                          description: 'Failed to download file',
+                                          variant: 'destructive',
+                                        });
+                                      }
                                     }}
                                     className={cn(
                                       "h-8 w-8 p-0",
