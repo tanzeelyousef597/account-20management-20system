@@ -215,7 +215,7 @@ export const handleSendMessage: RequestHandler = (req, res) => {
   }
 
   // Create new message
-  const newMessage: ChatMessage = {
+  const newMessage: ExtendedChatMessage = {
     id: nextMessageId.toString(),
     senderId,
     senderName: sender.name,
