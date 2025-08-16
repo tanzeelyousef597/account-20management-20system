@@ -154,39 +154,43 @@ export default function Dashboard() {
                 const minHeight = value > 0 ? Math.max(heightPercentage, 3) : 0;
 
                 return (
-                  <div key={index} className="flex flex-col items-center flex-1 max-w-20 sm:max-w-24">
+                  <div key={index} className="flex flex-col items-center flex-1 max-w-24 sm:max-w-28 md:max-w-32 lg:max-w-36">
                     {/* Value label above bar */}
                     {value > 0 && (
-                      <div className="text-xs sm:text-sm font-bold text-slate-700 mb-2 bg-white px-3 py-1.5 rounded-lg shadow-md border border-slate-200/80 backdrop-blur-sm">
+                      <div className="text-sm sm:text-base font-bold text-slate-700 mb-3 bg-white px-4 py-2 rounded-lg shadow-lg border border-slate-200/80 backdrop-blur-sm">
                         {value}
                       </div>
                     )}
 
                     {/* Bar */}
                     <div
-                      className="w-16 sm:w-18 md:w-20 rounded-t-xl transition-all duration-500 hover:opacity-90 relative group transform hover:scale-105 animate-slide-up shadow-xl border-2 border-white/20"
+                      className="w-20 sm:w-24 md:w-28 lg:w-32 rounded-t-xl transition-all duration-500 hover:opacity-90 relative group transform hover:scale-105 animate-slide-up shadow-xl border-2 border-white/20"
                       style={{
                         background: `linear-gradient(135deg, ${category.color}, ${category.color}cc, ${category.color}dd)`,
                         height: `${minHeight}%`,
-                        minHeight: value > 0 ? '12px' : '0px',
+                        minHeight: value > 0 ? '16px' : '0px',
                         animationDelay: `${index * 100}ms`,
-                        boxShadow: `0 4px 20px ${category.color}40, 0 8px 40px ${category.color}20`
+                        boxShadow: `0 6px 25px ${category.color}50, 0 12px 50px ${category.color}30`
                       }}
                     >
                       {/* Enhanced hover effects */}
                       <div className="absolute inset-0 bg-gradient-to-t from-white/15 to-white/35 opacity-0 group-hover:opacity-100 rounded-t-xl transition-all duration-300"></div>
                       <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-25 rounded-t-xl transition-opacity duration-200"></div>
-                      <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-xl"></div>
+                      <div className="absolute -top-px left-0 right-0 h-2 bg-gradient-to-r from-transparent via-white/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-xl"></div>
 
                       {/* Subtle inner glow */}
-                      <div className="absolute inset-2 rounded-t-lg bg-gradient-to-t from-transparent to-white/10 opacity-60"></div>
+                      <div className="absolute inset-3 rounded-t-lg bg-gradient-to-t from-transparent to-white/15 opacity-70"></div>
 
-                      {/* Top highlight */}
-                      <div className="absolute top-0 left-2 right-2 h-3 bg-white/20 rounded-t-lg"></div>
+                      {/* Top highlight - enhanced */}
+                      <div className="absolute top-0 left-3 right-3 h-4 bg-white/25 rounded-t-lg"></div>
+
+                      {/* Side highlights for 3D effect */}
+                      <div className="absolute top-0 bottom-0 left-0 w-1 bg-gradient-to-b from-white/30 to-transparent rounded-tl-xl"></div>
+                      <div className="absolute top-0 bottom-0 right-0 w-1 bg-gradient-to-b from-white/30 to-transparent rounded-tr-xl"></div>
                     </div>
 
                     {/* Category label */}
-                    <div className="text-xs sm:text-sm font-semibold text-slate-700 text-center mt-3 leading-tight px-1">
+                    <div className="text-sm sm:text-base font-semibold text-slate-700 text-center mt-4 leading-tight px-2">
                       {category.name}
                     </div>
                   </div>
@@ -197,15 +201,18 @@ export default function Dashboard() {
         </div>
 
         {/* Legend */}
-        <div className="flex flex-wrap justify-center gap-4 mt-6 pt-4 border-t border-slate-100">
+        <div className="flex flex-wrap justify-center gap-6 mt-8 pt-6 border-t border-slate-100">
           {categories.map((category, index) => (
-            <div key={index} className="flex items-center gap-2">
+            <div key={index} className="flex items-center gap-3">
               <div
-                className="w-3 h-3 rounded"
-                style={{ backgroundColor: category.color }}
+                className="w-4 h-4 rounded-md shadow-sm"
+                style={{
+                  backgroundColor: category.color,
+                  boxShadow: `0 2px 8px ${category.color}40`
+                }}
               />
-              <span className="text-sm text-slate-600">{category.name}</span>
-              <span className="text-xs text-slate-400">({category.value})</span>
+              <span className="text-sm font-medium text-slate-600">{category.name}</span>
+              <span className="text-sm text-slate-500 font-semibold">({category.value})</span>
             </div>
           ))}
         </div>
