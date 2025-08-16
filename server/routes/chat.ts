@@ -8,7 +8,7 @@ interface ExtendedChatMessage extends ChatMessage {
 }
 
 // Mock database - In production, use a real database
-let messages: ChatMessage[] = [];
+let messages: ExtendedChatMessage[] = [];
 let conversations: ChatConversation[] = [];
 let nextMessageId = 1;
 let nextConversationId = 1;
