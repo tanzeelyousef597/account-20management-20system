@@ -22,7 +22,10 @@ import {
   Circle,
   MessageSquare,
   Reply,
-  MoreHorizontal
+  MoreHorizontal,
+  Paperclip,
+  File,
+  Download
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
