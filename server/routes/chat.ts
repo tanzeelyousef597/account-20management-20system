@@ -2,6 +2,11 @@ import { RequestHandler } from "express";
 import { ChatMessage, ChatConversation, SendMessageRequest, User, CreateGroupChatRequest } from "@shared/types";
 import { users } from "./users";
 
+// Extend ChatMessage type to include deletedFor array
+interface ExtendedChatMessage extends ChatMessage {
+  deletedFor?: string[];
+}
+
 // Mock database - In production, use a real database
 let messages: ChatMessage[] = [];
 let conversations: ChatConversation[] = [];
@@ -282,10 +287,108 @@ export const handleUploadChatFile: RequestHandler = (req, res) => {
   }
 };
 
+// Delete message
+export const handleDeleteMessage: RequestHandler = (req, res) => {
+  const { messageId } = req.params;
+  const { deleteForEveryone, deleteForMe, userId, conversationId, participantIds, senderId } = req.body;
+
+  if (!messageId) {
+    return res.status(400).json({ error: 'Message ID is required' });
+  }
+
+  const messageIndex = messages.findIndex(msg => msg.id === messageId);
+  if (messageIndex === -1) {
+    return res.status(404).json({ error: 'Message not found' });
+  }
+
+  const message = messages[messageIndex];
+
+  if (deleteForEveryone) {
+    // Delete for everyone - remove message completely
+    messages.splice(messageIndex, 1);
+    console.log(`Message ${messageId} deleted for everyone by user ${senderId}`);
+
+    res.json({
+      success: true,
+      deletedForEveryone: true,
+      messageId,
+      participantIds: participantIds || []
+    });
+  } else if (deleteForMe && userId) {
+    // Delete for me only - mark as deleted for this user
+    if (!message.deletedFor) {
+      message.deletedFor = [];
+    }
+    if (!message.deletedFor.includes(userId)) {
+      message.deletedFor.push(userId);
+    }
+
+    res.json({
+      success: true,
+      deletedForMe: true,
+      messageId,
+      userId
+    });
+  } else {
+    return res.status(400).json({ error: 'Either deleteForEveryone or deleteForMe with userId is required' });
+  }
+};
+
+// Delete conversation
+export const handleDeleteConversation: RequestHandler = (req, res) => {
+  const { conversationId } = req.params;
+  const { userId } = req.body;
+
+  if (!conversationId) {
+    return res.status(400).json({ error: 'Conversation ID is required' });
+  }
+
+  const conversationIndex = conversations.findIndex(conv => conv.id === conversationId);
+  if (conversationIndex === -1) {
+    return res.status(404).json({ error: 'Conversation not found' });
+  }
+
+  // Remove conversation
+  conversations.splice(conversationIndex, 1);
+
+  // Remove all messages in this conversation
+  messages = messages.filter(msg => msg.conversationId !== conversationId);
+
+  res.json({
+    success: true,
+    conversationId
+  });
+};
+
+// Upload file with base64 data
+export const handleUploadFileWithData: RequestHandler = (req, res) => {
+  const { fileName, fileSize, fileType, fileData, conversationId, senderId } = req.body;
+
+  if (!fileName || !fileData || !fileType) {
+    return res.status(400).json({ error: 'File name, data, and type are required' });
+  }
+
+  // Store file data with unique ID
+  const fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+  // In production, save fileData to proper storage
+  // For now, we'll just return success with the file metadata
+
+  res.json({
+    success: true,
+    fileId,
+    fileName,
+    fileSize,
+    fileType,
+    url: `/api/download/${fileId}`,
+    message: 'File uploaded successfully'
+  });
+};
+
 // Get online status (mock implementation)
 export const handleGetOnlineStatus: RequestHandler = (req, res) => {
   const { userIds } = req.body;
-  
+
   if (!Array.isArray(userIds)) {
     return res.status(400).json({ error: 'userIds must be an array' });
   }
