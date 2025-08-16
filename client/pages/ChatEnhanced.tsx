@@ -998,9 +998,63 @@ export default function ChatEnhanced() {
                             
 
                             
-                            <p className="text-sm break-words leading-relaxed">
-                              {renderMessageWithLinks(decryptMessage(message.content, selectedConversation.id))}
-                            </p>
+                            {/* Render file message */}
+                            {(message as any).messageType === 'file' ? (
+                              <div className="flex items-center space-x-3 p-2">
+                                <div className={cn(
+                                  "p-2 rounded-lg",
+                                  isOwnMessage ? "bg-blue-400" : "bg-slate-100"
+                                )}>
+                                  <File className={cn(
+                                    "h-5 w-5",
+                                    isOwnMessage ? "text-white" : "text-slate-600"
+                                  )} />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className={cn(
+                                    "text-sm font-medium truncate",
+                                    isOwnMessage ? "text-white" : "text-slate-700"
+                                  )}>
+                                    {(message as any).fileName || 'File'}
+                                  </p>
+                                  <p className={cn(
+                                    "text-xs",
+                                    isOwnMessage ? "text-blue-100" : "text-slate-500"
+                                  )}>
+                                    {(message as any).fileSize ? `${Math.round((message as any).fileSize / 1024)} KB` : 'Unknown size'}
+                                  </p>
+                                </div>
+                                {(message as any).fileUrl && (
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => {
+                                      const link = document.createElement('a');
+                                      link.href = (message as any).fileUrl;
+                                      link.download = (message as any).fileName || 'file';
+                                      document.body.appendChild(link);
+                                      link.click();
+                                      document.body.removeChild(link);
+                                    }}
+                                    className={cn(
+                                      "h-8 w-8 p-0",
+                                      isOwnMessage
+                                        ? "text-white hover:bg-blue-400"
+                                        : "text-slate-600 hover:bg-slate-100"
+                                    )}
+                                  >
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                )}
+                              </div>
+                            ) : (
+                              <p className="text-sm break-words leading-relaxed">
+                                {(message as any).deletedForMe
+                                  ? "This message was deleted"
+                                  : renderMessageWithLinks(decryptMessage(message.content, selectedConversation.id))
+                                }
+                              </p>
+                            )}
                             
                             <div className="flex items-center justify-between mt-2 gap-2">
                               <span className={cn(
