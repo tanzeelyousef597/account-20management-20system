@@ -1053,28 +1053,48 @@ export default function ChatEnhanced() {
             </div>
           )}
 
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setShowDeleteDialog(false);
-                setMessageToDelete(null);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                if (messageToDelete) {
-                  handleDeleteMessage(messageToDelete.id);
+          <div className="space-y-3 pt-4">
+            <div className="text-sm text-gray-600 mb-3">
+              Choose deletion option:
+            </div>
+            <div className="flex flex-col space-y-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (messageToDelete) {
+                    handleDeleteMessage(messageToDelete.id, false); // Delete for me
+                    setShowDeleteDialog(false);
+                    setMessageToDelete(null);
+                  }
+                }}
+                className="w-full justify-start text-orange-600 border-orange-200 hover:bg-orange-50"
+              >
+                Delete for Me
+              </Button>
+              <Button
+                onClick={() => {
+                  if (messageToDelete) {
+                    handleDeleteMessage(messageToDelete.id, true); // Delete for everyone
+                    setShowDeleteDialog(false);
+                    setMessageToDelete(null);
+                  }
+                }}
+                className="w-full justify-start bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
+              >
+                Delete for Everyone
+              </Button>
+            </div>
+            <div className="flex justify-end pt-2">
+              <Button
+                variant="outline"
+                onClick={() => {
                   setShowDeleteDialog(false);
                   setMessageToDelete(null);
-                }
-              }}
-              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
-            >
-              Delete Message
-            </Button>
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
