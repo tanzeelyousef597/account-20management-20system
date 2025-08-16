@@ -467,14 +467,31 @@ export default function ChatEnhanced() {
   const handleFileUpload = async (file: File) => {
     if (!selectedConversation || !user) return;
 
+    // File size validation (limit to 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      toast({
+        title: 'File Too Large',
+        description: 'Please select a file smaller than 10MB',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsUploadingFile(true);
     setUploadProgress(0);
 
     try {
-      // Create a FormData object for file upload
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('conversationId', selectedConversation.id);
+      // Convert file to base64 to prevent corruption
+      const fileBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          resolve(result.split(',')[1]); // Remove data:type;base64, prefix
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
 
       // Simulate upload progress
       const progressInterval = setInterval(() => {
@@ -487,10 +504,22 @@ export default function ChatEnhanced() {
         });
       }, 200);
 
-      // Upload file with proper headers
+      // Send file data with proper encoding
+      const fileData = {
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type,
+        fileData: fileBase64,
+        conversationId: selectedConversation.id,
+        senderId: user.id
+      };
+
       const response = await fetch('/api/chat/upload-file', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(fileData),
       });
 
       clearInterval(progressInterval);
@@ -499,7 +528,7 @@ export default function ChatEnhanced() {
       if (response.ok) {
         const result = await response.json();
 
-        // Create file message
+        // Create file message with proper metadata
         const fileMessageObj = {
           id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           content: `📎 ${file.name}`,
@@ -509,10 +538,12 @@ export default function ChatEnhanced() {
           messageType: 'file' as const,
           isRead: false,
           conversationId: selectedConversation.id,
-          fileUrl: result.url,
+          fileUrl: result.url || result.fileId,
           fileName: file.name,
           fileSize: file.size,
           fileType: file.type,
+          fileData: fileBase64, // Store for reliable download
+          originalName: file.name,
           replyTo: null
         };
 
@@ -524,13 +555,14 @@ export default function ChatEnhanced() {
           description: `${file.name} uploaded successfully`,
         });
       } else {
-        throw new Error('Upload failed');
+        const errorData = await response.text();
+        throw new Error(`Upload failed: ${errorData}`);
       }
     } catch (error) {
       console.error('File upload error:', error);
       toast({
         title: 'Upload Failed',
-        description: 'Failed to upload file. Please try again.',
+        description: error instanceof Error ? error.message : 'Failed to upload file. Please try again.',
         variant: 'destructive',
       });
     } finally {
