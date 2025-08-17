@@ -69,52 +69,106 @@ export default function AssignedOrders() {
 
   const handleFileDownload = async (url: string, filename: string) => {
     try {
-      console.log('Starting download for:', url, filename);
-      
+      console.log('Starting download for:', { url, filename });
+
+      // Validate URL
+      if (!url || url.trim() === '') {
+        console.error('Empty or invalid URL provided:', url);
+        alert('Invalid file URL. Cannot download file.');
+        return;
+      }
+
       // For local API endpoints, fetch directly
       if (url.startsWith('/api/download/')) {
+        console.log('Fetching from local API endpoint:', url);
+
         const response = await fetch(url);
+        console.log('Download response status:', response.status, response.statusText);
+
         if (response.ok) {
           const blob = await response.blob();
-          
+          console.log('Blob created, size:', blob.size, 'type:', blob.type);
+
+          if (blob.size === 0) {
+            console.error('Downloaded file is empty');
+            alert('Downloaded file is empty. Please check if the file exists.');
+            return;
+          }
+
           // Create a temporary URL for the blob
           const blobUrl = window.URL.createObjectURL(blob);
-          
+
           // Create a temporary anchor element and trigger download
           const link = document.createElement('a');
           link.href = blobUrl;
-          link.download = filename;
+          link.download = filename || 'download';
           link.style.display = 'none';
           document.body.appendChild(link);
           link.click();
-          
+
           // Clean up
           document.body.removeChild(link);
           window.URL.revokeObjectURL(blobUrl);
-          console.log('Download completed successfully');
+          console.log('Download completed successfully for file:', filename);
+          alert(`File "${filename}" downloaded successfully!`);
+          return;
+        } else {
+          const errorText = await response.text();
+          console.error('Download failed with status:', response.status, 'Error:', errorText);
+          alert(`Download failed: ${response.status} - ${errorText || 'Unknown error'}`);
           return;
         }
       }
-      
-      // For external URLs or fallback, create a simple text file for demo
-      const content = `MT Web Experts - Work Order File\n\nFilename: ${filename}\nGenerated: ${new Date().toISOString()}\n\nThis is a sample file for demonstration purposes.\nIn production, this would be the actual uploaded file content.`;
+
+      // For external URLs, try direct download first
+      if (url.startsWith('http')) {
+        console.log('Attempting direct download for external URL:', url);
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = filename || 'download';
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+            console.log('External URL download completed successfully');
+            alert(`File "${filename}" downloaded successfully!`);
+            return;
+          }
+        } catch (externalError) {
+          console.log('External download failed, falling back to demo content:', externalError);
+        }
+      }
+
+      // Fallback: create a demo file
+      console.log('Creating fallback demo file for:', filename);
+      const content = `MT Web Experts - Work Order File\n\nOriginal Filename: ${filename}\nDownload Date: ${new Date().toLocaleString()}\nStatus: Fallback Demo File\n\nNote: This is a demonstration file. The original file could not be downloaded.\nPossible reasons:\n- File not found on server\n- Network connectivity issues\n- File permissions\n\nPlease contact support if this issue persists.`;
+
       const blob = new Blob([content], { type: 'text/plain' });
       const blobUrl = window.URL.createObjectURL(blob);
-      
+
       const link = document.createElement('a');
       link.href = blobUrl;
       link.download = filename.endsWith('.txt') ? filename : filename.replace(/\.[^/.]+$/, '') + '.txt';
       link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
-      
+
       document.body.removeChild(link);
       window.URL.revokeObjectURL(blobUrl);
       console.log('Fallback download completed');
-      
+      alert(`Demo file created for "${filename}". Original file could not be downloaded.`);
+
     } catch (error) {
-      console.error('Download failed:', error);
-      alert('Download failed. Please try again.');
+      console.error('Download failed with error:', error);
+      alert(`Download failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again or contact support.`);
     }
   };
 
