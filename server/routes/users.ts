@@ -1,6 +1,25 @@
 import { RequestHandler } from "express";
 import { User, CreateUserRequest } from "@shared/types";
 import { addActivityLog } from "./activity-logs";
+import multer from 'multer';
+import { Request } from 'express';
+
+// Configure multer for file uploads with increased size limits
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 100 * 1024 * 1024, // 100MB limit
+    fieldSize: 100 * 1024 * 1024
+  },
+  fileFilter: (req, file, cb) => {
+    // Allow all file types
+    cb(null, true);
+  }
+});
+
+// Export multer middleware for use in routes
+export const uploadMiddleware = upload.single('file');
 
 // Mock database - In production, use a real database
 let users: User[] = [
@@ -136,93 +155,91 @@ const fileStorage = new Map<string, {
   size?: number;
 }>();
 
-export const handleUploadWorkOrderFile: RequestHandler = (req, res) => {
+export const handleUploadWorkOrderFile: RequestHandler = (req: Request & { file?: Express.Multer.File }, res) => {
   try {
-    // In a real implementation, you would handle multipart/form-data here
-    // For demo, we'll create a proper file entry that matches what was "uploaded"
-    const fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const originalFileName = req.body?.fileName || `work-order-${Date.now()}`;
+    console.log('Upload request received');
+    console.log('Request body:', req.body);
+    console.log('Request file:', req.file ? {
+      originalname: req.file.originalname,
+      size: req.file.size,
+      mimetype: req.file.mimetype
+    } : 'No file');
 
-    // Get file extension or default to .txt for compatibility
-    const fileExt = originalFileName.includes('.') ? originalFileName.split('.').pop() : 'txt';
-    const fileName = originalFileName.includes('.') ? originalFileName : `${originalFileName}.txt`;
-
-    // Create proper file content based on type
-    let fileContent: string;
-    let mimeType: string;
-
-    if (fileExt === 'xlsx' || fileExt === 'xls') {
-      // For Excel files, create a simple CSV format that opens in Excel
-      fileContent = `Name,Category,Status,Date,Description
-"Work Order 1","Web Development","Completed","${new Date().toLocaleDateString()}","Sample work order created by MT Web Experts"
-"Work Order 2","SEO Optimization","In Progress","${new Date().toLocaleDateString()}","SEO analysis and optimization tasks"
-"Work Order 3","Content Writing","Under Review","${new Date().toLocaleDateString()}","Blog posts and website content creation"`;
-      mimeType = 'text/csv';
-    } else if (fileExt === 'pdf') {
-      // Create a simple text file for PDF uploads (since generating real PDFs is complex)
-      fileContent = `MT Web Experts - Work Order Document
-
-Document Type: PDF Work Order
-Generated: ${new Date().toLocaleString()}
-
-This document contains work order details and requirements.
-It has been successfully uploaded and stored in the system.
-
-Work Order Information:
-- Client: Sample Client
-- Project: Sample Project
-- Status: Active
-- Created: ${new Date().toLocaleDateString()}
-
-For more information, please contact MT Web Experts.`;
-      mimeType = 'text/plain';
-    } else {
-      // Default text file content
-      fileContent = `MT Web Experts - Work Order File
-
-File Name: ${fileName}
-Uploaded: ${new Date().toLocaleString()}
-File Type: ${fileExt.toUpperCase()}
-
-This file has been successfully uploaded to the work order system.
-The file contains the original data that was uploaded by the user.
-
-Original Content Summary:
-- Document type: ${fileExt.toUpperCase()} file
-- Upload timestamp: ${new Date().toISOString()}
-- File size: Preserved
-- Content: Maintained as uploaded
-
-MT Web Experts - Professional Service Management`;
-      mimeType = 'text/plain';
+    // Check if file was uploaded
+    if (!req.file && !req.body.fileName) {
+      return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    // Create buffer with proper encoding
-    const fileBuffer = Buffer.from(fileContent, 'utf8');
+    const fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    let fileName: string;
+    let fileBuffer: Buffer;
+    let mimeType: string;
+    let originalName: string;
+
+    if (req.file) {
+      // Real file upload - preserve original file data
+      fileName = req.file.originalname;
+      fileBuffer = req.file.buffer;
+      mimeType = req.file.mimetype;
+      originalName = req.file.originalname;
+
+      console.log(`Processing real file: ${fileName}, Size: ${fileBuffer.length} bytes, Type: ${mimeType}`);
+    } else {
+      // Fallback for filename-only uploads (for compatibility)
+      originalName = req.body.fileName || `work-order-${Date.now()}.txt`;
+      fileName = originalName;
+
+      // Create minimal placeholder content
+      const fileContent = `MT Web Experts - Work Order File\n\nOriginal filename: ${originalName}\nUploaded: ${new Date().toLocaleString()}\n\nThis file was uploaded to the work order system.`;
+      fileBuffer = Buffer.from(fileContent, 'utf8');
+      mimeType = 'text/plain';
+
+      console.log(`Processing filename-only upload: ${fileName}`);
+    }
+
+    // Validate file size
+    if (fileBuffer.length > 100 * 1024 * 1024) { // 100MB
+      return res.status(413).json({ error: 'File too large. Maximum size is 100MB.' });
+    }
 
     // Store file in memory with complete metadata
     fileStorage.set(fileId, {
       name: fileName,
       data: fileBuffer,
       mimeType: mimeType,
-      originalName: originalFileName,
+      originalName: originalName,
       uploadedAt: new Date(),
       size: fileBuffer.length
     });
 
-    console.log(`File stored: ${fileId}, Name: ${fileName}, Size: ${fileBuffer.length} bytes`);
+    console.log(`File stored successfully: ${fileId}, Name: ${fileName}, Size: ${fileBuffer.length} bytes`);
 
     const downloadUrl = `/api/download/${fileId}`;
     res.json({
       url: downloadUrl,
       fileId: fileId,
       fileName: fileName,
-      originalName: originalFileName,
-      size: fileBuffer.length
+      originalName: originalName,
+      size: fileBuffer.length,
+      success: true
     });
   } catch (error) {
     console.error('Upload error:', error);
-    res.status(500).json({ error: 'Upload failed' });
+
+    // More specific error messages
+    if (error instanceof Error) {
+      if (error.message.includes('File too large')) {
+        return res.status(413).json({ error: 'File too large. Please select a smaller file.' });
+      }
+      if (error.message.includes('Unexpected field')) {
+        return res.status(400).json({ error: 'Invalid file upload format.' });
+      }
+    }
+
+    res.status(500).json({
+      error: 'Error creating file, please try again.',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 };
 
