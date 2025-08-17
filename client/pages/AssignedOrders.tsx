@@ -1262,6 +1262,30 @@ export default function AssignedOrders() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Debug Info Display */}
+      {showDebug && debugInfo && (
+        <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <h3 className="text-lg font-semibold mb-2">Debug Information</h3>
+          <p><strong>Total Files in Storage:</strong> {debugInfo.totalFiles}</p>
+          <div className="mt-2">
+            <strong>Available Files:</strong>
+            <ul className="list-disc list-inside mt-1">
+              {debugInfo.files.map((file: any) => (
+                <li key={file.id} className="text-sm">
+                  {file.id} - {file.name} ({file.size} bytes)
+                </li>
+              ))}
+            </ul>
+          </div>
+          <button
+            onClick={() => setShowDebug(false)}
+            className="mt-2 px-3 py-1 bg-yellow-200 hover:bg-yellow-300 rounded text-sm"
+          >
+            Hide Debug Info
+          </button>
+        </div>
+      )}
     </div>
   );
 }
