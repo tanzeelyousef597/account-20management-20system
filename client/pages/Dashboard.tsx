@@ -10,6 +10,7 @@ import {
   Calendar,
   BarChart3
 } from 'lucide-react';
+import { containerResponsive, gridResponsive, textResponsive, cardResponsive, spaceResponsive } from '@/utils/responsive';
 
 interface DashboardData {
   totalSubmissions: number;
@@ -221,21 +222,21 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="container-responsive space-responsive">
+    <div className={`${containerResponsive} ${spaceResponsive}`}>
       {/* Header */}
-      <div className="flex-responsive-between gap-responsive">
+      <div className="flex flex-col xs:flex-row xs:justify-between xs:items-center gap-3 xs:gap-4">
         <div className="min-w-0 flex-1">
-          <h2 className="text-responsive-xl font-semibold text-slate-700 truncate">
+          <h2 className={`${textResponsive.xl} font-semibold text-slate-700 truncate`}>
             Dashboard
           </h2>
-          <p className="text-slate-500 mt-1 text-responsive">
+          <p className={`text-slate-500 mt-1 ${textResponsive.base}`}>
             Overview of submissions and performance
           </p>
         </div>
       </div>
 
       {/* Metric Cards */}
-      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8 gap-2 xs:gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-7 2xl:gap-8 3xl:gap-10">
+      <div className={`grid ${gridResponsive.auto} gap-3 xs:gap-4 sm:gap-6`}>
         <MetricCard
           icon={FileText}
           title="Total Submissions"
@@ -286,13 +287,14 @@ export default function Dashboard() {
 
         {/* Chart Section */}
         <Card className="shadow-lg border border-slate-200/60 bg-gradient-to-br from-white via-slate-50/30 to-blue-50/30 backdrop-blur-sm animate-scale-in">
-          <CardHeader className="pb-4 px-6 border-b border-slate-100/50 bg-gradient-to-r from-slate-50/30 to-blue-50/30">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <CardTitle className="text-lg font-semibold bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text text-transparent">
-                Work Categories / Submissions by Time
+          <CardHeader className={`${cardResponsive} pb-4 border-b border-slate-100/50 bg-gradient-to-r from-slate-50/30 to-blue-50/30`}>
+            <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-3 xs:gap-4">
+              <CardTitle className={`${textResponsive.lg} font-semibold bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text text-transparent truncate`}>
+                <span className="hidden sm:inline">Work Categories / Submissions by Time</span>
+                <span className="sm:hidden">Work Categories</span>
               </CardTitle>
               <Select value={selectedFilter} onValueChange={setSelectedFilter}>
-                <SelectTrigger className="w-full sm:w-40 bg-white border-slate-300 focus:border-blue-400 transition-colors duration-200">
+                <SelectTrigger className="w-full xs:w-auto xs:min-w-32 sm:w-40 bg-white border-slate-300 focus:border-blue-400 transition-colors duration-200">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-slate-200 shadow-lg">
@@ -304,7 +306,7 @@ export default function Dashboard() {
               </Select>
             </div>
           </CardHeader>
-          <CardContent className="p-6">
+          <CardContent className={cardResponsive}>
             <ModernBarChart data={dashboardData.categories} />
           </CardContent>
         </Card>
