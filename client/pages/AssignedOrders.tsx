@@ -66,6 +66,8 @@ export default function AssignedOrders() {
   
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
+  const [debugInfo, setDebugInfo] = useState<any>(null);
+  const [showDebug, setShowDebug] = useState(false);
 
   const handleFileDownload = async (url: string, filename: string) => {
     try {
