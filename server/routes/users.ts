@@ -290,5 +290,26 @@ export const handleDownloadFile: RequestHandler = async (req, res) => {
   }
 };
 
+// Debug endpoint to list all stored files
+export const handleListFiles: RequestHandler = (req, res) => {
+  try {
+    const files = Array.from(fileStorage.entries()).map(([id, data]) => ({
+      id,
+      name: data.name,
+      originalName: data.originalName,
+      size: data.size,
+      mimeType: data.mimeType,
+      uploadedAt: data.uploadedAt
+    }));
+
+    res.json({
+      totalFiles: fileStorage.size,
+      files: files
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to list files' });
+  }
+};
+
 // Export for auth route
 export { users, userPasswords };
