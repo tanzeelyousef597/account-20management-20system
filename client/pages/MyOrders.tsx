@@ -108,10 +108,12 @@ export default function MyOrders() {
     e.preventDefault();
 
     try {
+      console.log('Starting worker submission...');
       let submissionFileUrl = '';
 
       // Upload file if provided
       if (submissionFile) {
+        console.log('Uploading file:', submissionFile.name, 'Size:', submissionFile.size);
         const fileFormData = new FormData();
         fileFormData.append('file', submissionFile);
 
@@ -123,8 +125,22 @@ export default function MyOrders() {
         if (uploadResponse.ok) {
           const uploadData = await uploadResponse.json();
           submissionFileUrl = uploadData.url;
+          console.log('File uploaded successfully:', uploadData);
+        } else {
+          const errorText = await uploadResponse.text();
+          console.error('File upload failed:', errorText);
+          alert('File upload failed: ' + errorText);
+          return;
         }
       }
+
+      console.log('Submitting work order with data:', {
+        ...formData,
+        submittedBy: user?.id,
+        submittedByName: user?.name,
+        submissionFileUrl,
+        submissionFileName: submissionFile?.name || '',
+      });
 
       const response = await fetch('/api/work-orders/worker-submit', {
         method: 'POST',
@@ -139,12 +155,20 @@ export default function MyOrders() {
       });
 
       if (response.ok) {
+        const result = await response.json();
+        console.log('Work order submitted successfully:', result);
+        alert('Work order submitted successfully! It will appear in the admin\'s "Orders from Workers" section for review.');
         fetchMyOrders();
         setIsCreateDialogOpen(false);
         resetForm();
+      } else {
+        const errorText = await response.text();
+        console.error('Work order submission failed:', errorText);
+        alert('Work order submission failed: ' + errorText);
       }
     } catch (error) {
       console.error('Error submitting order:', error);
+      alert('Error submitting order: ' + (error instanceof Error ? error.message : 'Unknown error'));
     }
   };
 
