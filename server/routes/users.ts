@@ -248,13 +248,20 @@ export const handleDownloadFile: RequestHandler = async (req, res) => {
 
   try {
     console.log(`Download request for file: ${fileId}`);
+    console.log(`Total files in storage: ${fileStorage.size}`);
+    console.log(`Available file IDs:`, Array.from(fileStorage.keys()));
 
     // Get file from storage
     const fileData = fileStorage.get(fileId);
 
     if (!fileData) {
       console.log(`File not found: ${fileId}`);
-      return res.status(404).json({ error: 'File not found' });
+      console.log(`Available files:`, Array.from(fileStorage.entries()).map(([id, data]) => ({ id, name: data.name, size: data.size })));
+      return res.status(404).json({
+        error: 'File not found',
+        fileId: fileId,
+        availableFiles: Array.from(fileStorage.keys())
+      });
     }
 
     console.log(`Found file: ${fileData.name}, Size: ${fileData.data.length} bytes, Type: ${fileData.mimeType}`);
