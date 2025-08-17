@@ -20,6 +20,7 @@ import {
   handleUploadProfilePhoto,
   handleUploadWorkOrderFile,
   handleDownloadFile,
+  handleListFiles,
   uploadMiddleware
 } from "./routes/users";
 import {
@@ -102,6 +103,7 @@ export function createServer() {
   app.post("/api/upload/profile-photo", handleUploadProfilePhoto);
   app.post("/api/upload/work-order-file", uploadMiddleware, handleUploadWorkOrderFile);
   app.get("/api/download/:fileId", handleDownloadFile);
+  app.get("/api/debug/files", handleListFiles);
   app.get("/api/users/:id/stats", handleGetUserStats);
 
   // Bonuses routes
