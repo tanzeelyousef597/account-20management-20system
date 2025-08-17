@@ -174,6 +174,24 @@ export default function AssignedOrders() {
     }
   };
 
+  const handleDebugFiles = async () => {
+    try {
+      const response = await fetch('/api/debug/files');
+      if (response.ok) {
+        const data = await response.json();
+        setDebugInfo(data);
+        setShowDebug(true);
+        console.log('Debug file info:', data);
+      } else {
+        const errorText = await response.text();
+        alert(`Debug request failed: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Debug request error:', error);
+      alert('Debug request failed');
+    }
+  };
+
   useEffect(() => {
     fetchWorkOrders();
     fetchUsers();
