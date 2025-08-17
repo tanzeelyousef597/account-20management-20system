@@ -223,6 +223,87 @@
     white-space: nowrap;
     overflow: hidden;
   }
+
+  /* Enhanced 4D Animation utilities */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .animate-3d-rotate {
+    animation: rotate3d 20s linear infinite;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .transform-3d {
+    transform-style: preserve-3d;
+  }
+
+  /* Enhanced keyframes for 4D effects */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    }
+    to {
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.8), 0 0 40px rgba(59, 130, 246, 0.4);
+    }
+  }
+
+  @keyframes rotate3d {
+    from {
+      transform: rotateY(0deg);
+    }
+    to {
+      transform: rotateY(360deg);
+    }
+  }
+
+  /* Enhanced 3D effects */
+  .card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+  }
+
+  .card-3d:hover {
+    transform: rotateY(5deg) rotateX(5deg) translateZ(20px);
+  }
+
+  /* Glassmorphism effects */
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Enhanced shadows for depth */
+  .shadow-3d {
+    box-shadow:
+      0 10px 25px rgba(0, 0, 0, 0.1),
+      0 20px 40px rgba(0, 0, 0, 0.05),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+
+  .shadow-3d-hover:hover {
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.15),
+      0 40px 80px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  }
 }
 
 @layer base {
