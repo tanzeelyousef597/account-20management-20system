@@ -67,23 +67,27 @@ export default function Dashboard() {
     index?: number
   }) => (
     <div
-      className={`${bgColor} rounded-xl p-4 md:p-5 text-white shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group transform hover:scale-105 animate-scale-in`}
+      className={`${bgColor} rounded-2xl p-5 md:p-6 lg:p-7 text-white shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden group transform hover:scale-[1.02] animate-scale-in min-w-[280px] sm:min-w-[320px] md:min-w-[350px]`}
       style={{ animationDelay: `${index * 100}ms` }}
     >
       {/* Enhanced background animations */}
       <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
+      <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
       <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
 
+      {/* Decorative corner elements */}
+      <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -translate-y-10 translate-x-10"></div>
+      <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/5 rounded-full translate-y-8 -translate-x-8"></div>
+
       <div className="flex items-center justify-between relative z-10">
-        <div className="space-y-2 min-w-0 flex-1 mr-3">
-          <p className="text-white/90 text-sm font-medium truncate">{title}</p>
-          <p className="text-xl md:text-2xl font-semibold tabular-nums leading-tight">
+        <div className="space-y-3 flex-1 mr-4">
+          <p className="text-white/95 text-base md:text-lg font-semibold leading-relaxed">{title}</p>
+          <p className="text-2xl md:text-3xl lg:text-4xl font-bold tabular-nums leading-tight tracking-tight">
             {value.toLocaleString()}
           </p>
         </div>
-        <div className="flex-shrink-0">
-          <Icon className="h-6 w-6 md:h-7 md:w-7 text-white/80" />
+        <div className="flex-shrink-0 p-3 bg-white/15 rounded-2xl backdrop-blur-sm">
+          <Icon className="h-7 w-7 md:h-8 md:w-8 lg:h-9 lg:w-9 text-white drop-shadow-sm" />
         </div>
       </div>
     </div>
@@ -236,7 +240,7 @@ export default function Dashboard() {
       </div>
 
       {/* Metric Cards */}
-      <div className={`grid ${gridResponsive.auto} gap-3 xs:gap-4 sm:gap-6`}>
+      <div className="flex flex-wrap gap-4 md:gap-6 lg:gap-8 justify-center lg:justify-start">
         <MetricCard
           icon={FileText}
           title="Total Submissions"
