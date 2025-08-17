@@ -19,7 +19,8 @@ import {
   handleDeleteUser,
   handleUploadProfilePhoto,
   handleUploadWorkOrderFile,
-  handleDownloadFile
+  handleDownloadFile,
+  uploadMiddleware
 } from "./routes/users";
 import {
   handleGetBonuses,
@@ -99,7 +100,7 @@ export function createServer() {
   app.put("/api/users/:id", handleUpdateUser);
   app.delete("/api/users/:id", handleDeleteUser);
   app.post("/api/upload/profile-photo", handleUploadProfilePhoto);
-  app.post("/api/upload/work-order-file", handleUploadWorkOrderFile);
+  app.post("/api/upload/work-order-file", uploadMiddleware, handleUploadWorkOrderFile);
   app.get("/api/download/:fileId", handleDownloadFile);
   app.get("/api/users/:id/stats", handleGetUserStats);
 
