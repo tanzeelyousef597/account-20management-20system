@@ -110,6 +110,8 @@ export default function OrdersFromWorkers() {
       const response = await fetch('/api/work-orders');
       if (response.ok) {
         const data = await response.json();
+        console.log('All work orders fetched:', data);
+        console.log('Worker submissions (non-admin):', data.filter((order: WorkOrder) => order.createdBy !== 'admin'));
         setWorkOrders(data);
       }
     } catch (error) {
@@ -234,21 +236,23 @@ export default function OrdersFromWorkers() {
 
   // Filter for Under QA orders with search
   const underQAOrders = useMemo(() => {
-    let filtered = workOrders.filter(order => 
+    let filtered = workOrders.filter(order =>
       order.createdBy !== 'admin' && order.status === 'Under QA'
     );
-    
+
+    console.log('Filtered worker orders (Under QA):', filtered);
+
     // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(order => 
+      filtered = filtered.filter(order =>
         order.title?.toLowerCase().includes(query) ||
         order.description?.toLowerCase().includes(query) ||
         order.category?.toLowerCase().includes(query) ||
         users.find(user => user.id === order.createdBy)?.name?.toLowerCase().includes(query)
       );
     }
-    
+
     return filtered;
   }, [workOrders, users, searchQuery]);
 
