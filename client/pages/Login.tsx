@@ -173,16 +173,6 @@ export default function Login() {
               </Button>
             </form>
 
-            {/* Demo credentials hint */}
-            <div className="text-center">
-              <p className="text-white/60 text-sm">
-                Demo Credentials
-              </p>
-              <div className="text-white/80 text-xs mt-1 space-y-1">
-                <p>Admin: admin@mtwebexperts.com / admin123</p>
-                <p>Worker: worker@mtwebexperts.com / worker123</p>
-              </div>
-            </div>
           </CardContent>
         </Card>
       </div>
