@@ -259,25 +259,22 @@ export const handleDownloadFile: RequestHandler = async (req, res) => {
 
     console.log(`Found file: ${fileData.name}, Size: ${fileData.data.length} bytes, Type: ${fileData.mimeType}`);
 
+    // Sanitize filename for download
+    const safeFilename = fileData.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+
     // Set comprehensive headers for proper file download
-    res.setHeader('Content-Type', fileData.mimeType);
-    res.setHeader('Content-Disposition', `attachment; filename="${fileData.name}"`);
+    res.setHeader('Content-Type', fileData.mimeType || 'application/octet-stream');
+    res.setHeader('Content-Disposition', `attachment; filename="${safeFilename}"; filename*=UTF-8''${encodeURIComponent(fileData.name)}`);
     res.setHeader('Content-Length', fileData.data.length.toString());
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition, Content-Length, Content-Type');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
 
-    // For text files, use utf8 encoding
-    if (fileData.mimeType.startsWith('text/')) {
-      res.setHeader('Content-Transfer-Encoding', 'utf8');
-      res.send(fileData.data.toString('utf8'));
-    } else {
-      // For binary files, send as buffer
-      res.setHeader('Content-Transfer-Encoding', 'binary');
-      res.send(fileData.data);
-    }
+    // Send file data as buffer to preserve binary data integrity
+    res.send(fileData.data);
 
     console.log(`File download completed: ${fileData.name}`);
   } catch (error) {
