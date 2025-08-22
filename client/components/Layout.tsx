@@ -151,7 +151,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 space-y-2 p-4 relative overflow-hidden">
+          <nav className="flex-1 space-y-2 p-4 relative overflow-y-auto overflow-x-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-blue-50/20 via-transparent to-indigo-50/20 pointer-events-none"></div>
             <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-blue-200/50 to-transparent"></div>
             {navItems.map((item, index) => {
